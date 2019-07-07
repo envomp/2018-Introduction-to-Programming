@@ -86,6 +86,7 @@ codes = {'AS', '2S', '3S', '4S', '5S', '6S', '7S', '8S', '9S', '0S', 'JS', 'QS',
  valmis genereeritud tagavara kaardipakist. Kasutada *https://deckofcardsapi.com/api/deck/<<deck_id>>/draw/?count={n}*
  
  `def _request(self, url: str):` Saab sisendiks URL-i, millele saata päring.
+ Päringute tegemiseks soovitatav kasutada `requests` teeki (olemas ka testeris)
  Eduka päringu korral peaks salvestama `deck_id` -> `id` ning `shuffled` ja `remaining` väljade väärtused 
  samanimelistesse muutujatesse
  **Tagastada tuleb json objekt**
