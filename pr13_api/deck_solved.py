@@ -33,11 +33,11 @@ class Deck:
         self.deck_count = deck_count
         self.is_shuffled = shuffle
         self.id = None
-        self._backup_pile = list(itertools.chain(*[self._generate_backup_pile() for _ in range(deck_count)]))
-        self.remaining = len(self._backup_pile)
+        self._backup_deck = list(itertools.chain(*[self._generate_backup_pile() for _ in range(deck_count)]))
+        self.remaining = len(self._backup_deck)
 
         if shuffle:
-            random.shuffle(self._backup_pile)
+            random.shuffle(self._backup_deck)
 
         self._request(self.DECK_BASE_API + f"new/{'shuffle' if shuffle else ''}/?deck_count={deck_count}")
 
@@ -46,7 +46,7 @@ class Deck:
         if self.id:
             self._request(self.DECK_BASE_API + f"{self.id}/shuffle")
 
-        random.shuffle(self._backup_pile)
+        random.shuffle(self._backup_deck)
 
     def draw_card(self) -> Card:
         """
@@ -58,11 +58,13 @@ class Deck:
             resp = self._request(self.DECK_BASE_API + f"{self.id}/draw/?count=1").json()
             try:
                 card = Card(resp["cards"][0]["value"], resp["cards"][0]["suit"], resp["cards"][0]["code"])
+                self._backup_deck.remove(card)
             except ValueError:
-                card = self._backup_pile.pop()
+                card = self._backup_deck.pop()
+                self.remaining = len(self._backup_deck)
         else:
-            card = self._backup_pile.pop()
-        self._backup_pile.remove(card)
+            card = self._backup_deck.pop()
+            self.remaining = len(self._backup_deck)
         return card
 
     def _request(self, url: str):
@@ -90,7 +92,7 @@ if __name__ == '__main__':
     d = Deck(shuffle=True)
     print(d.remaining)  # 52
     card1 = d.draw_card()  # Random card
-    print(card1 in d._backup_pile)  # False
-    print(d._backup_pile)  # 51 shuffled cards
+    print(card1 in d._backup_deck)  # False
+    print(d._backup_deck)  # 51 shuffled cards
     d2 = Deck(deck_count=2)
-    print(d2._backup_pile)  # 104 ordered cards (deck after deck)
+    print(d2._backup_deck)  # 104 ordered cards (deck after deck)

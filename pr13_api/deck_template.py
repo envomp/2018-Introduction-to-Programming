@@ -7,13 +7,10 @@ class Card:
 
     def __init__(self, value: str, suit: str, code: str):
         """Constructor."""
-        self.value = value
-        self.suit = suit
-        self.code = code
 
     def __repr__(self) -> str:
         """Repr."""
-        return self.code
+        return ""
 
     def __eq__(self, o) -> bool:
         """Eq."""
@@ -27,7 +24,8 @@ class Deck:
 
     def __init__(self, deck_count: int = 1, shuffle: bool = False):
         """Constructor."""
-        self._backup_pile = []
+        self._backup_deck = []
+        self.remaining = -1
         pass
 
     def shuffle(self) -> None:
@@ -56,7 +54,7 @@ if __name__ == '__main__':
     d = Deck(shuffle=True)
     print(d.remaining)  # 52
     card1 = d.draw_card()  # Random card
-    print(card1 in d._backup_pile)  # False
-    print(d._backup_pile)  # 51 shuffled cards
+    print(card1 in d._backup_deck)  # False
+    print(d._backup_deck)  # 51 shuffled cards
     d2 = Deck(deck_count=2)
-    print(d2._backup_pile)  # 104 ordered cards (deck after deck)
+    print(d2._backup_deck)  # 104 ordered cards (deck after deck)

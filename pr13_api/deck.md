@@ -30,7 +30,8 @@ mille mugavaks kasutamiseks tuleb sul kirjutada klassid `Card` ja `Deck`
 Lihtne klass andmete hoidmiseks. Sisendväärtuseid ei pea kontrollima.
 
 `def __init__(self, value: str, suit: str, code: str):`
-Konstruktor teeb kaardi objekti, võttes sisendparameetriteks kaardi väärtuse, masti ja koodi. Väärtused peab salvestama sama nimega isendiväljadele (card, suit, code).
+Konstruktor teeb kaardi objekti, võttes sisendparameetriteks kaardi väärtuse, masti ja koodi. 
+Väärtused peab salvestama sama nimega isendiväljadele (card, suit, code).
 
 `def __repr(self)__ -> str:`
 Tagastab code-väljal oleva väärtuse.
@@ -71,19 +72,22 @@ codes = {'AS', '2S', '3S', '4S', '5S', '6S', '7S', '8S', '9S', '0S', 'JS', 'QS',
 `def __init__(self, deck_count: int = 1, shuffle: bool = False):` Konstruktor teeb deck objekti. Saab sisendiks pakkide
  arvu (mitu 52 kaardist pakki on) ja boolean muutuja, mis määrab, kas deckid peavad olema segatud või ei.
  Salvestada tuleb deck_count ning ka shuffeled väärtused. Viimase salvestamiseks kasutata muutujat nimega
- `is_shuffled`
+ `is_shuffled` Lisaks peab muutujas nimega `remaining` hoidma kaardipakis olevate kaartide arvu (võib kasutada ka propertid)
+ Kaardipaki genereerimiseks kasutada *https://deckofcardsapi.com/api/deck/new/?deck_count={n}* või
+  *https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count={n}*
  
  Kuna klass peab toimima ka ilma interneti ühenduseta, siis on mõttekas valmis genereerida ka n-ö tagavara
- kaardipakk, mida saaks kasutada kui api lõpetab töötamise. Tagavara kaardipakk salvestada muutujasse `backup_pile`
+ kaardipakk, mida saaks kasutada kui api lõpetab töötamise. Tagavara kaardipakk salvestada muutujasse `_backup_deck`
  
- `def shuffle(self) -> None:` Segab kaardipaki
+ `def shuffle(self) -> None:` Segab kaardipaki, kasutada *https://deckofcardsapi.com/api/deck/<<deck_id>>/shuffle/*
  
  `def draw_card(self) -> Card:` Tagastab kaardi kasutades API-t. Kui api ei tööta tuleb tagastada suvaline sobiv kaart
  ise. Et vältida olukorda, kus tagastatakse ühte kaarti korduvalt on mõistlik tagastada neid eelnevalt 
- valmis genereeritud tagavara kaardipakist.
+ valmis genereeritud tagavara kaardipakist. Kasutada *https://deckofcardsapi.com/api/deck/<<deck_id>>/draw/?count={n}*
  
  `def _request(self, url: str):` Saab sisendiks URL-i, millele saata päring.
- Eduka päringu korral peaks salvestama `deck_id` ning `shuffled` ja `remaining` väljade väärtused
+ Eduka päringu korral peaks salvestama `deck_id` -> `id` ning `shuffled` ja `remaining` väljade väärtused 
+ samanimelistesse muutujatesse
  **Tagastada tuleb json objekt**
 
 ### Mall
@@ -98,17 +102,14 @@ class Card:
 
     def __init__(self, value: str, suit: str, code: str):
         """Constructor."""
-        self.value = value
-        self.suit = suit
-        self.code = code
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Repr."""
-        return self.code
+        return ""
 
-    def __eq__(self, o):
+    def __eq__(self, o) -> bool:
         """Eq."""
-        return isinstance(o, Card) and self.value == o.value and self.suit == o.suit and self.code == o.code
+        return False
 
 
 class Deck:
@@ -118,7 +119,8 @@ class Deck:
 
     def __init__(self, deck_count: int = 1, shuffle: bool = False):
         """Constructor."""
-        self._backup_pile = []
+        self._backup_deck = []
+        self.remaining = -1
         pass
 
     def shuffle(self) -> None:
@@ -147,10 +149,10 @@ if __name__ == '__main__':
     d = Deck(shuffle=True)
     print(d.remaining)  # 52
     card1 = d.draw_card()  # Random card
-    print(card1 in d._backup_pile)  # False
-    print(d._backup_pile)  # 51 shuffled cards
+    print(card1 in d._backup_deck)  # False
+    print(d._backup_deck)  # 51 shuffled cards
     d2 = Deck(deck_count=2)
-    print(d2._backup_pile)  # 104 ordered cards (deck after deck)
+    print(d2._backup_deck)  # 104 ordered cards (deck after deck)
 
 ```
 
