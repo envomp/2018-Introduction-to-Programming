@@ -18,6 +18,8 @@ Püütonisse on json juba sisse ehitatud, seega teeke lisada pole vaja.
 
 ## Ülesanne
 
+Fail Gitis: `pr13_api/deck.py`
+
 ### Taust
 
 Selle nädala kodutööks (ex13) on kirjutada lihtne Blackjack kaardimäng.
