@@ -25,6 +25,8 @@ Järjend on omakorda .... Sõne on ka nagu järjend onju.
 
 ## Ülesanne
 
+Fail Gitis: `exnn_abc`
+
 ### Taust
 
 Elas kord üks poni. Tal oli üksi igav. Ja nii neid saigi terve külatäis. Külatäis ponisid. Ja sa pead neid aitama, sest ...

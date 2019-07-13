@@ -40,7 +40,7 @@ class Deck:
         """
         pass
 
-    def _request(self, url: str):
+    def _request(self, url: str) -> dict:
         """Update deck."""
         pass
 
