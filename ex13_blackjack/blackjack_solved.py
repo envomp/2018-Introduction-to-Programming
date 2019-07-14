@@ -80,9 +80,9 @@ class Player:
         """Join table."""
         self.hands = [Hand()]
 
-    def play_move(self) -> Move:
+    def play_move(self, hand: Hand) -> Move:
         """Play move."""
-        return self.strategy.play_move()
+        return self.strategy.play_move(hand)
 
     def split_hand(self):
         """Split hand."""
@@ -112,12 +112,14 @@ class GameController:
         strategies = self.load_strategies()
 
         self.deck = Deck(decks_count, True)
+        self.house = Hand()
+
         for i in range(players_count):
-            player = Player(self.view.ask_name(i + 1), HumanStrategy(self.players, self.view), self.PLAYER_START_COINS)
+            player = Player(self.view.ask_name(i + 1), HumanStrategy(self.players, self.house, self.view), self.PLAYER_START_COINS)
             self.players.append(player)
 
         for i in range(bots_count):
-            bot = Player(f"Bot #{i}", random.choice(strategies)(self.players), self.PLAYER_START_COINS)
+            bot = Player(f"Bot #{i + 1}", random.choice(strategies)(self.players, self.house), self.PLAYER_START_COINS)
             self.players.append(bot)
 
     def play_round(self) -> bool:
@@ -133,13 +135,17 @@ class GameController:
                     hand.add_card(self.deck.draw_card())
                     hand.add_card(self.deck.draw_card())  # Add 2 cards
 
-            self.house = Hand()
-            self.house.add_card(self.deck.draw_card())
-            self.house.add_card(self.deck.draw_card(top_down=True))
+        self.house.add_card(self.deck.draw_card())
+
+        for p in self.players:
+            p.strategy.house = self.house
+
+        self.house = Hand(self.house.cards)
+        self.house.add_card(self.deck.draw_card(top_down=True))
 
         for player in self.players:
             self.view.show_table(self.players, self.house, player)
-            move = player.play_move()
+            move = player.play_move(player.hands[0])
 
             if move == Move.SPLIT:
                 player.split_hand()
@@ -147,7 +153,7 @@ class GameController:
                     while len(h.cards) < 2:
                         h.add_card(self.deck.draw_card())
                 self.view.show_table(self.players, self.house, player)
-                move = player.play_move()
+                move = player.play_move(player.hands[0])
 
             for hand in player.hands:
                 playing = True
@@ -170,9 +176,12 @@ class GameController:
 
                     if playing or player.hands.index(hand) < len(player.hands) - 1:
                         self.view.show_table(self.players, self.house, player)
-                        move = player.play_move()
+                        move = player.play_move(hand)
 
         # Basic house logic
+        for p in self.players:
+            p.strategy.house = self.house
+
         for c in self.house.cards:
             c.top_down = False
         while self.house.score <= 16 or (self.house.score <= 17 and self.house.is_soft_hand):
@@ -190,6 +199,9 @@ class GameController:
                     player.coins += self.BUY_IN_COST * 4 if hand.is_double_down else self.BUY_IN_COST * 2
                 elif self.house.score == hand.score:
                     player.coins += self.BUY_IN_COST
+
+            player.strategy.on_game_end()
+            self.house = Hand()
 
         return True
 
