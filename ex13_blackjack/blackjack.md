@@ -13,6 +13,10 @@ Plaan on ka tudengite programmide vahel korraldada võistlus.
 
 ### Sisu
 
+Esmalt tasub kausta `ex13_blackjack` kopeerida allpool olevad mallid `strategy.py` ja `game_view.py` 
+omanimelistesse failidesse. Neid faile rohkem muutma ei pea (soovi korral võib, aga programm peab toimima ka antud failidega)
+. Strategy failis on strateegijad ja Game_view failis liidesed kasutajaga suhtlemiseks.
+
 #### Klass Hand
 
 `def __init__(self, cards: list = None):` Tuleb deklareerida järgnevad muutujad: `self.cards` -> tühi list või argument cards, kui viimane pole None
@@ -51,7 +55,16 @@ Mängijalt tuleb `self.view` läbi küsida kaardipakkide arv, inimeste arv ja bo
 mäng valmis seada.
 
 `def play_round(self) -> bool:` Mängib kõigi mängijatega, kellel on piisavalt raha ühe raundi. 
-Raundi lõpus tuleb ka võidud laiali jagada.
+Raundi lõpus tuleb ka võidud laiali jagada. 
+Maja peab võtma kaarte juurde kuni "kõva" käe väärtus on alla 17
+või pehme käe väärtus alla 18.
+
+Raha jagamisel: <br>
+ + **SURRENDER** -> saab pool raha tagasi
+ + **BLACKJACK** -> saab raha tagasi ja 1.5 korda samapalju veel
+ + **WIN** -> saab oma raha tagasi ja samapalju veel
+ + **DRAW** -> saab oma raha tagasi
+
 
 `def load_strategies() -> list:` Seda funktsiooni pole vaja näppida. Soovitatav kasutada bottide laadimisel
 
