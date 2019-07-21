@@ -84,9 +84,10 @@ class Player:
         """Play move."""
         return self.strategy.play_move(hand)
 
-    def split_hand(self):
+    def split_hand(self, hand: Hand):
         """Split hand."""
-        self.hands.append(self.hands[0].split())
+        if hand in self.hands:
+            self.hands.append(hand.split())
 
 
 class GameController:
@@ -147,13 +148,14 @@ class GameController:
             self.view.show_table(self.players, self.house, player)
             move = player.play_move(player.hands[0])
 
-            if move == Move.SPLIT:
+            """if move == Move.SPLIT:
                 player.split_hand()
+                player.coins -= self.BUY_IN_COST
                 for h in player.hands:
                     while len(h.cards) < 2:
                         h.add_card(self.deck.draw_card())
                 self.view.show_table(self.players, self.house, player)
-                move = player.play_move(player.hands[0])
+                move = player.play_move(player.hands[0])"""
 
             for hand in player.hands:
                 playing = True
@@ -161,7 +163,14 @@ class GameController:
                     if move == Move.HIT:
                         hand.add_card(self.deck.draw_card())
                     elif move == Move.SPLIT:
-                        print("CANNOT SPLIT NOW")
+                        if hand.can_split:
+                            player.split_hand(hand)
+                            player.coins -= self.BUY_IN_COST
+                            for h in player.hands:
+                                while len(h.cards) < 2:
+                                    h.add_card(self.deck.draw_card())
+                        else:
+                            print("CANNOT SPLIT NOW")
                     elif move == Move.DOUBLE_DOWN:
                         player.coins -= self.BUY_IN_COST
                         hand.double_down(self.deck.draw_card())
