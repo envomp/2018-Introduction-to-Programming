@@ -433,17 +433,19 @@ class FancyView(GameView):
                 p.append(' ' * len(p[0]))
 
         for i, p in enumerate(players):
-            width = len(player_templates[i][0])
+            width = len(player_templates[i][0]) - player_templates[i][0].count("\t\x1b[93mx\x1b[91m\t") * 10
+            width += 4 * int((width - 17) / 10) if width > 20 else 0
             name = p.name if len(p.name) < width else p.name[:width]
             color = Color.Fg.pink if p == playing else Color.Fg.cyan
-            print(f"{color}{name: ^{width}}", end='')
+            print(f"{color}{name:^{width}}", end='')
             print(f"\t{Color.Fg.orange}#\t" if i < len(players) - 1 else '', end='')
         print(Color.Fg.light_red)  # TODO: highlight / colors for hands
         for l in zip(*player_templates):
             print(f"\t{Color.Fg.orange}#{Color.Fg.light_red}\t".join(l))
         print(Color.reset, end='')
         for i, p in enumerate(players):
-            width = len(player_templates[i][0])
+            width = len(player_templates[i][0]) - player_templates[i][0].count("\t\x1b[93mx\x1b[91m\t") * 10
+            width += 4 * int((width - 17) / 10) if width > 20 else 0
             color = Color.Fg.pink if p == playing else Color.Fg.cyan
             print(f"{color}{str(p.coins) + '$': ^{width}}", end='')
             print(f"\t{Color.Fg.orange}#\t" if i < len(players) - 1 else '', end='')

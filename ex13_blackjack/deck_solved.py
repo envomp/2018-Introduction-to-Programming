@@ -59,7 +59,7 @@ class Deck:
 
         :return: card instance.
         """
-        if id:
+        if self.id:
             resp = self._request(self.DECK_BASE_API + f"{self.id}/draw/?count=1")
             try:
                 card = Card(resp["cards"][0]["value"], resp["cards"][0]["suit"], resp["cards"][0]["code"])
