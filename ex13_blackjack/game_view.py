@@ -179,6 +179,7 @@ class FancyView(GameView):
 
     class CardTemplate:
         """Card templates."""
+        template_width = 7
         templates = dict()
         templates['AS'] = """_____
 |A .  |
@@ -385,7 +386,7 @@ class FancyView(GameView):
         color = Color.Fg.orange if player_nr % 2 == 0 else Color.Fg.yellow
         return input(f"{color}Enter name for player {player_nr}: {Color.Fg.orange}")
 
-    def show_table(self, players: list, house, playing) -> None:
+    def show_table(self, players: list, house, current_hand) -> None:
         """Print table."""
         ascii_suits = {'S': '♠', 'H': '♥', 'C': '♣', 'D': '♦'}
         print(Color.Fg.orange + '-' * 20 * len(players))
@@ -406,9 +407,15 @@ class FancyView(GameView):
         print(f"{Color.Fg.light_green}Players:{Color.reset}")
 
         player_templates = []
+        hand_lengths = []
+        for p in players:
+            for h in p.hands:
+                hand_lengths.append(len(h.cards))
+        hand_length = max(hand_lengths) * 8
         for p in players:
             hand_templates = []
             for h in p.hands:
+                hand_color = Color.Fg.pink if h == current_hand else Color.Fg.light_red
                 cards = ''
                 for c in h.cards:
                     cards += '\n' if cards != '' else ''
@@ -416,37 +423,30 @@ class FancyView(GameView):
                         cards += self.CardTemplate.templates[str(c)]
                     else:
                         cards += self.CardTemplate.templates[str(c)[0]].replace('^', ascii_suits[str(c)[-1]])
-                hand_templates.append(cards.split('\n'))
+                for _ in range(hand_length - len(h.cards) * 8):
+                    cards += '\n' + ' ' * self.CardTemplate.template_width
+                hand_templates.append([hand_color + c for c in cards.split('\n')])
 
-            hand_length = len(max(hand_templates, key=lambda x: len(x)))
-            for h in hand_templates:
-                while len(h) < hand_length:
-                    h.append(' ' * len(h[0]))
             player = ''
             for l in zip(*hand_templates):
                 player += f'\t{Color.Fg.yellow}x{Color.Fg.light_red}\t'.join(l) + '\n'
             player_templates.append(player.rstrip().split('\n'))
 
-        player_length = len(max(player_templates, key=lambda x: len(x)))
-        for p in player_templates:
-            while len(p) < player_length:
-                p.append(' ' * len(p[0]))
-
         for i, p in enumerate(players):
-            width = len(player_templates[i][0]) - player_templates[i][0].count("\t\x1b[93mx\x1b[91m\t") * 10
-            width += 4 * int((width - 17) / 10) if width > 20 else 0
+            width = len(p.hands) * self.CardTemplate.template_width + (len(p.hands) - 1) * 5
             name = p.name if len(p.name) < width else p.name[:width]
-            color = Color.Fg.pink if p == playing else Color.Fg.cyan
+            color = Color.Fg.purple if current_hand in p.hands else Color.Fg.cyan
             print(f"{color}{name:^{width}}", end='')
             print(f"\t{Color.Fg.orange}#\t" if i < len(players) - 1 else '', end='')
-        print(Color.Fg.light_red)  # TODO: highlight / colors for hands
+
+        print(Color.reset)
         for l in zip(*player_templates):
-            print(f"\t{Color.Fg.orange}#{Color.Fg.light_red}\t".join(l))
+            print(f"\t{Color.Fg.orange}#{Color.reset}\t".join(l))
         print(Color.reset, end='')
+
         for i, p in enumerate(players):
-            width = len(player_templates[i][0]) - player_templates[i][0].count("\t\x1b[93mx\x1b[91m\t") * 10
-            width += 4 * int((width - 17) / 10) if width > 20 else 0
-            color = Color.Fg.pink if p == playing else Color.Fg.cyan
+            width = len(p.hands) * self.CardTemplate.template_width + (len(p.hands) - 1) * 5
+            color = Color.Fg.purple if current_hand in p.hands else Color.Fg.cyan
             print(f"{color}{str(p.coins) + '$': ^{width}}", end='')
             print(f"\t{Color.Fg.orange}#\t" if i < len(players) - 1 else '', end='')
         print(Color.reset)

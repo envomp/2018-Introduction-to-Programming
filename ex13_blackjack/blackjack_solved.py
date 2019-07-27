@@ -145,21 +145,13 @@ class GameController:
         self.house.add_card(self.deck.draw_card(top_down=True))
 
         for player in self.players:
-            self.view.show_table(self.players, self.house, player)
-            move = player.play_move(player.hands[0])
-
-            """if move == Move.SPLIT:
-                player.split_hand()
-                player.coins -= self.BUY_IN_COST
-                for h in player.hands:
-                    while len(h.cards) < 2:
-                        h.add_card(self.deck.draw_card())
-                self.view.show_table(self.players, self.house, player)
-                move = player.play_move(player.hands[0])"""
 
             for hand in player.hands:
                 playing = True
                 while playing:
+                    self.view.show_table(self.players, self.house, hand)
+                    move = player.play_move(player.hands[0])
+
                     if move == Move.HIT:
                         hand.add_card(self.deck.draw_card())
                     elif move == Move.SPLIT:
@@ -182,10 +174,6 @@ class GameController:
                         hand.is_surrendered = True
                     else:
                         raise ValueError("Illegal move!")
-
-                    if playing or player.hands.index(hand) < len(player.hands) - 1:
-                        self.view.show_table(self.players, self.house, player)
-                        move = player.play_move(hand)
 
         # Basic house logic
         for p in self.players:
