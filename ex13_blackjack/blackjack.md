@@ -397,6 +397,7 @@ class FancyView(GameView):
 
     class CardTemplate:
         """Card templates."""
+        template_width = 7
         templates = dict()
         templates['AS'] = """_____
 |A .  |
@@ -575,10 +576,10 @@ class FancyView(GameView):
         """Ask decks count."""
         while True:
             count = input(f"{Color.Fg.light_blue}Please enter decks count: {Color.reset}")
-            if count.isdigit():
+            if count.isdigit() and 0 < int(count) <= 8:
                 return int(count)
             else:
-                print(f"{Color.Fg.red}Value must be numeric! {Color.reset}")
+                print(f"{Color.Fg.red}Value must be numeric and between 1-8! {Color.reset}")
 
     def ask_players_count(self) -> int:
         """Ask players count."""
@@ -603,7 +604,7 @@ class FancyView(GameView):
         color = Color.Fg.orange if player_nr % 2 == 0 else Color.Fg.yellow
         return input(f"{color}Enter name for player {player_nr}: {Color.Fg.orange}")
 
-    def show_table(self, players: list, house, playing) -> None:
+    def show_table(self, players: list, house, current_hand) -> None:
         """Print table."""
         ascii_suits = {'S': '♠', 'H': '♥', 'C': '♣', 'D': '♦'}
         print(Color.Fg.orange + '-' * 20 * len(players))
@@ -624,9 +625,15 @@ class FancyView(GameView):
         print(f"{Color.Fg.light_green}Players:{Color.reset}")
 
         player_templates = []
+        hand_lengths = []
+        for p in players:
+            for h in p.hands:
+                hand_lengths.append(len(h.cards))
+        hand_length = max(hand_lengths) * 8
         for p in players:
             hand_templates = []
             for h in p.hands:
+                hand_color = Color.Fg.pink if h == current_hand else Color.Fg.light_red
                 cards = ''
                 for c in h.cards:
                     cards += '\n' if cards != '' else ''
@@ -634,37 +641,34 @@ class FancyView(GameView):
                         cards += self.CardTemplate.templates[str(c)]
                     else:
                         cards += self.CardTemplate.templates[str(c)[0]].replace('^', ascii_suits[str(c)[-1]])
-                hand_templates.append(cards.split('\n'))
+                for _ in range(hand_length - len(h.cards) * 8):
+                    cards += '\n' + ' ' * self.CardTemplate.template_width
+                hand_templates.append([hand_color + c for c in cards.split('\n')])
 
-            hand_length = len(max(hand_templates, key=lambda x: len(x)))
-            for h in hand_templates:
-                while len(h) < hand_length:
-                    h.append(' ' * len(h[0]))
             player = ''
             for l in zip(*hand_templates):
-                player += f'\t{Color.Fg.yellow}x{Color.Fg.light_red}\t'.join(l) + '\n'
+                player += f'\t{Color.Fg.light_green}x{Color.reset}\t'.join(l) + '\n'
             player_templates.append(player.rstrip().split('\n'))
 
-        player_length = len(max(player_templates, key=lambda x: len(x)))
-        for p in player_templates:
-            while len(p) < player_length:
-                p.append(' ' * len(p[0]))
+        total_width = 0
+        for i, p in enumerate(players):
+            width = len(p.hands) * self.CardTemplate.template_width + (len(p.hands) - 1) * 5
+            total_width += width if total_width == 0 else width + 5
+            name = p.name if len(p.name) < width else p.name[:width]
+            color = Color.Fg.purple if current_hand in p.hands else Color.Fg.cyan
+            print(f"{color}{name:^{width}}", end='')
+            print(f"\t{Color.Fg.orange}#\t" if i < len(players) - 1 else '', end='')
+
+        print('\n' + Color.Fg.orange + '-' * total_width + Color.reset)
+        for l in zip(*player_templates):
+            print(f"\t{Color.Fg.orange}#{Color.reset}\t".join(l))
+        print(Color.Fg.orange + '-' * total_width + Color.reset)
 
         for i, p in enumerate(players):
-            width = len(player_templates[i][0])
-            name = p.name if len(p.name) < width else p.name[:width]
-            color = Color.Fg.pink if p == playing else Color.Fg.cyan
-            print(f"{color}{name: ^{width}}", end='')
-            print(f"\t {Color.Fg.orange}#\t" if i < len(players) - 1 else '', end='')
-        print(Color.Fg.light_red)  # TODO: highlight / colors for hands
-        for l in zip(*player_templates):
-            print(f"\t {Color.Fg.orange}#{Color.Fg.light_red}\t".join(l))
-        print(Color.reset, end='')
-        for i, p in enumerate(players):
-            width = len(player_templates[i][0])
-            color = Color.Fg.pink if p == playing else Color.Fg.cyan
+            width = len(p.hands) * self.CardTemplate.template_width + (len(p.hands) - 1) * 5
+            color = Color.Fg.purple if current_hand in p.hands else Color.Fg.cyan
             print(f"{color}{str(p.coins) + '$': ^{width}}", end='')
-            print(f"\t {Color.Fg.orange}#\t" if i < len(players) - 1 else '', end='')
+            print(f"\t{Color.Fg.orange}#\t" if i < len(players) - 1 else '', end='')
         print(Color.reset)
 
     def show_help(self):

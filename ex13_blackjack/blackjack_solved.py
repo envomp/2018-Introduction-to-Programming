@@ -116,7 +116,9 @@ class GameController:
         self.house = Hand()
 
         for i in range(players_count):
-            player = Player(self.view.ask_name(i + 1), HumanStrategy(self.players, self.house, self.view), self.PLAYER_START_COINS)
+            player = Player(self.view.ask_name(i + 1),
+                            HumanStrategy(self.players, self.house, self.view),
+                            self.PLAYER_START_COINS)
             self.players.append(player)
 
         for i in range(bots_count):
