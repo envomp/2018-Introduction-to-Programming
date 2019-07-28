@@ -358,10 +358,10 @@ class FancyView(GameView):
         """Ask decks count."""
         while True:
             count = input(f"{Color.Fg.light_blue}Please enter decks count: {Color.reset}")
-            if count.isdigit():
+            if count.isdigit() and 0 < int(count) <= 8:
                 return int(count)
             else:
-                print(f"{Color.Fg.red}Value must be numeric! {Color.reset}")
+                print(f"{Color.Fg.red}Value must be numeric and between 1-8! {Color.reset}")
 
     def ask_players_count(self) -> int:
         """Ask players count."""
@@ -429,20 +429,22 @@ class FancyView(GameView):
 
             player = ''
             for l in zip(*hand_templates):
-                player += f'\t{Color.Fg.yellow}x{Color.Fg.light_red}\t'.join(l) + '\n'
+                player += f'\t{Color.Fg.light_green}x{Color.reset}\t'.join(l) + '\n'
             player_templates.append(player.rstrip().split('\n'))
 
+        total_width = 0
         for i, p in enumerate(players):
             width = len(p.hands) * self.CardTemplate.template_width + (len(p.hands) - 1) * 5
+            total_width += width if total_width == 0 else width + 5
             name = p.name if len(p.name) < width else p.name[:width]
             color = Color.Fg.purple if current_hand in p.hands else Color.Fg.cyan
             print(f"{color}{name:^{width}}", end='')
             print(f"\t{Color.Fg.orange}#\t" if i < len(players) - 1 else '', end='')
 
-        print(Color.reset)
+        print('\n' + Color.Fg.orange + '-' * total_width + Color.reset)
         for l in zip(*player_templates):
             print(f"\t{Color.Fg.orange}#{Color.reset}\t".join(l))
-        print(Color.reset, end='')
+        print(Color.Fg.orange + '-' * total_width + Color.reset)
 
         for i, p in enumerate(players):
             width = len(p.hands) * self.CardTemplate.template_width + (len(p.hands) - 1) * 5

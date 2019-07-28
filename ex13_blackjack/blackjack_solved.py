@@ -175,6 +175,9 @@ class GameController:
                     else:
                         raise ValueError("Illegal move!")
 
+                    if hand.score > 21:
+                        playing = False
+
         # Basic house logic
         for p in self.players:
             p.strategy.house = self.house
