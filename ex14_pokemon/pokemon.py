@@ -121,29 +121,28 @@ class Pokemon:
 
         :return: Pokemon's name
         """
-        return f"{self.data['name']}"
+        return f"{self.data['name']} {self.score}"
 
 
 class World:
     """World class."""
 
-    def __init__(self, name):
+    def __init__(self, name, offset, limit):
         """
         Class constructor.
         :param name:
         """
         if os.path.isfile(name + '.txt'):
-            f = open(name + '.txt', "r")
+            f = open(f"{name}_{offset}_{limit}.txt", "r")
             self.pokemons = [Pokemon(pokemon) for pokemon in f]
         else:
             self.pokemons = [Pokemon(pokemon['url']) for pokemon in
-                             requests.get("https://pokeapi.co/api/v2/pokemon?offset=0&limit=100000").json()['results']]
-            self.dump_pokemons_to_file_as_json(name)
+                             requests.get(f"https://pokeapi.co/api/v2/pokemon?offset={offset}&limit={limit}").json()[
+                                 'results']]
+            self.dump_pokemons_to_file_as_json(name, offset, limit)
 
-        self.fight()
-
-    def dump_pokemons_to_file_as_json(self, name):
-        f = open(name + '.txt', "w")
+    def dump_pokemons_to_file_as_json(self, name, offset, limit):
+        f = open(f"{name}_{offset}_{limit}.txt", "w")
         for pokemon in self.pokemons:
             f.write(pokemon.__str__() + '\n')
         f.close()
@@ -154,8 +153,7 @@ class World:
         :return: Pokemon which wins.
         """
         for pokemon1 in self.pokemons:
-            print(self.pokemons.index(pokemon1))
-            for pokemon2 in self.pokemons[self.pokemons.index(pokemon1)+1:]:
+            for pokemon2 in self.pokemons[self.pokemons.index(pokemon1) + 1:]:
                 try:
                     first, second = self.choose_which_pokemon_hits_first(pokemon1, pokemon2)
 
@@ -193,12 +191,15 @@ class World:
 
     @staticmethod
     def choose_which_pokemon_hits_first(pokemon1, pokemon2):
-        stack1 = [pokemon1.data['speed'], pokemon1.data['weight'], pokemon1.data['height'], len(pokemon1.data['types']), len(pokemon1.data['moves']), pokemon1.data['base_experience']]
-        stack2 = [pokemon2.data['speed'], pokemon2.data['weight'], pokemon2.data['height'], len(pokemon2.data['types']), len(pokemon2.data['moves']), pokemon2.data['base_experience']]
+        stack1 = [pokemon1.data['speed'], pokemon1.data['weight'], pokemon1.data['height'],
+                  len(pokemon1.data['abilities']), len(pokemon1.data['moves']), pokemon1.data['base_experience']]
+        stack2 = [pokemon2.data['speed'], pokemon2.data['weight'], pokemon2.data['height'],
+                  len(pokemon2.data['abilities']), len(pokemon2.data['moves']), pokemon2.data['base_experience']]
         if all(stack1[x] == stack2[x] for x in range(6)):
             raise SamePokemonFightException(
                 f"Same base Pokemon: {str(pokemon1.data['name']).split('-')[0]}")
-        if any([all([stack1[i] > stack2[i] if i in [1, 2] else stack1[i] < stack2[i], all(stack1[j] == stack2[j] for j in range(i))]) for i in range(6)]):
+        if any([all([stack1[i] > stack2[i] if i in [1, 2] else stack1[i] < stack2[i],
+                     all(stack1[j] == stack2[j] for j in range(i))]) for i in range(6)]):
             return pokemon1, pokemon2
         return pokemon2, pokemon1
 
@@ -217,10 +218,3 @@ class World:
         :return: sorted List of pokemons
         """
         return sorted(self.pokemons, key=lambda x: x.data[attribute])
-
-
-class Main:
-    if __name__ == '__main__':
-        world = World("PokeLand")
-        print(world.get_leader_board())
-        print(world.get_pokemons_sorted_by_attribute('name'))

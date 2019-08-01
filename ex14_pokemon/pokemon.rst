@@ -78,8 +78,6 @@ PS: Write a quick script to parse it into a matrix :)
             f"{name}.txt" file
             """
             self.pokemons = []
-            #  .... code ....
-            self.fight() #  <- function ends with this
 
         def dump_pokemons_to_file_as_json(self, name):
             """
@@ -116,8 +114,8 @@ PS: Write a quick script to parse it into a matrix :)
             :param pokemon2:
             pokemon who's speed is higher, goes first. if both pokemons have the same speed, then pokemon who's weight
             is lower goes first, if both pokemons have same weight, then pokemon who's height is lower goes first,
-            if both pokemons have the same height, then the pokemon with more types goes first, if they have the same
-            amount of types, then the pokemon with more moves goes first, if the pokemons have the same amount of
+            if both pokemons have the same height, then the pokemon with more abilities goes first, if they have the same
+            amount of abilities, then the pokemon with more moves goes first, if the pokemons have the same amount of
             moves, then the pokemon with higher base_experience goes first, if the pokemons have the same
             base_experience then SamePokemonFightException() is thrown
             :return pokemon1 who goes first and pokemon2 who goes second (return pokemon1, pokemon2)
@@ -208,7 +206,7 @@ Pokemon
             """
             Object representation.
 
-            :return: Pokemon's name in string format
+            :return: Pokemon's name in string format and his score, for example: "garchomp-mega 892"
             """
             pass
 
@@ -218,8 +216,8 @@ Exceptions
 .. code-block:: python
 
     class SamePokemonFightException(Exception):
-    """Custom exception thrown when same pokemons are fighting."""
-    pass
+        """Custom exception thrown when same pokemons are fighting."""
+        pass
 
 
     class PokemonFightResultsInATieException(Exception):
