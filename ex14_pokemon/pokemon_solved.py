@@ -105,7 +105,7 @@ class Pokemon:
         return self.data['special-attack'] if turn_counter % 3 == 0 else self.data['attack']
 
     def get_pokemon_defense(self, turn_counter):
-        return self.data['special-defense'] if turn_counter % 2 == 0 else self.data['defense']
+        return self.data['special-defense'] if turn_counter % 2 == 0 else self.data['defense'] / 2
 
     def __str__(self):
         """
@@ -172,7 +172,6 @@ class World:
                             second.get_pokemon_attack(
                                 turn_counter) * multiplier2 - first.get_pokemon_defense(turn_counter), 0)
 
-                        #  print(attack1, attack2)
                         hp2 -= attack1
                         if hp2 <= 0:
                             first.score += 1
@@ -194,17 +193,14 @@ class World:
 
     @staticmethod
     def choose_which_pokemon_hits_first(pokemon1, pokemon2):
-        stack1 = [pokemon1.data['speed'], pokemon1.data['weight'], pokemon1.data['height'],
-                  pokemon1.data['base_experience'], len(pokemon1.data['moves'])]
-        stack2 = [pokemon2.data['speed'], pokemon2.data['weight'], pokemon2.data['height'],
-                  pokemon2.data['base_experience'], len(pokemon2.data['moves'])]
-        if all(stack1[x] == stack2[x] for x in range(5)):
+        stack1 = [pokemon1.data['speed'], pokemon1.data['weight'], pokemon1.data['height'], len(pokemon1.data['types']), len(pokemon1.data['moves']), pokemon1.data['base_experience']]
+        stack2 = [pokemon2.data['speed'], pokemon2.data['weight'], pokemon2.data['height'], len(pokemon2.data['types']), len(pokemon2.data['moves']), pokemon2.data['base_experience']]
+        if all(stack1[x] == stack2[x] for x in range(6)):
             raise SamePokemonFightException(
                 f"Same base Pokemon: {str(pokemon1.data['name']).split('-')[0]}")
-        if not any([all([stack1[i] > stack2[i] if i % 2 == 0 else stack1[i] < stack2[i],
-                         all(stack1[j] == stack2[j] for j in range(i))]) for i in range(5)]):
-            return pokemon2, pokemon1
-        return pokemon1, pokemon2
+        if any([all([stack1[i] > stack2[i] if i in [1, 2] else stack1[i] < stack2[i], all(stack1[j] == stack2[j] for j in range(i))]) for i in range(6)]):
+            return pokemon1, pokemon2
+        return pokemon2, pokemon1
 
     def get_leader_board(self):
         """
