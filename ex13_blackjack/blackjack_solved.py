@@ -84,7 +84,7 @@ class Player:
         """Play move."""
         return self.strategy.play_move(hand)
 
-    def split_hand(self, hand: Hand):
+    def split_hand(self, hand: Hand) -> None:
         """Split hand."""
         if hand in self.hands:
             self.hands.append(hand.split())
