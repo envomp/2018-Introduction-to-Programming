@@ -32,6 +32,11 @@ class SamePokemonFightException(Exception):
     pass
 
 
+class PokemonFightResultsInATieException(Exception):
+    """Custom exception."""
+    pass
+
+
 class NotAPokemonException(Exception):
     """Custom exception."""
     pass
@@ -55,7 +60,7 @@ class Pokemon:
 
     def parse_json_to_pokemon_information(self, url):
         all_information = requests.get(url).json()
-        speed = attack = defence = special_attack = special_defence = hp = None
+        speed = attack = defense = special_attack = special_defense = hp = None
         for stat in all_information['stats']:
             name = stat['stat']['name']
             if name == 'speed':
@@ -63,20 +68,20 @@ class Pokemon:
             if name == 'attack':
                 attack = stat['base_stat']
             if name == 'defense':
-                defence = stat['base_stat']
+                defense = stat['base_stat']
             if name == 'special-attack':
                 special_attack = stat['base_stat']
             if name == 'special-defense':
-                special_defence = stat['base_stat']
+                special_defense = stat['base_stat']
             if name == 'hp':
                 hp = stat['base_stat']
 
         self.data = {"name": all_information['name'],
                      "speed": speed,
                      "attack": attack,
-                     "defence": defence,
+                     "defense": defense,
                      "special-attack": special_attack,
-                     "special-defence": special_defence,
+                     "special-defense": special_defense,
                      "hp": hp,
                      "types": [x['type']['name'] for x in all_information['types']],
                      "abilities": [x['ability']['name'] for x in all_information['abilities']],
@@ -99,11 +104,14 @@ class Pokemon:
     def get_pokemon_attack(self, turn_counter):
         return self.data['special-attack'] if turn_counter % 3 == 0 else self.data['attack']
 
+    def get_pokemon_defense(self, turn_counter):
+        return self.data['special-defense'] if turn_counter % 2 == 0 else self.data['defense']
+
     def __str__(self):
         """
         String representation of object.
 
-        :return: Pokemon's name, experience: Pokemon's experience, att: Pokemon's attack level, def: Pokemon's defence level, types: Pokemon's types.
+        :return: Pokemon's name, experience: Pokemon's experience, att: Pokemon's attack level, def: Pokemon's defense level, types: Pokemon's types.
         """
         return json.dumps(self.data)
 
@@ -133,7 +141,6 @@ class World:
             self.dump_pokemons_to_file_as_json(name)
 
         self.fight()
-        print(self.get_leader_board())
 
     def dump_pokemons_to_file_as_json(self, name):
         f = open(name + '.txt', "w")
@@ -147,29 +154,42 @@ class World:
         :return: Pokemon which wins.
         """
         for pokemon1 in self.pokemons:
-            for pokemon2 in self.pokemons:
+            print(self.pokemons.index(pokemon1))
+            for pokemon2 in self.pokemons[self.pokemons.index(pokemon1)+1:]:
                 try:
-                    pokemon1, pokemon2 = self.choose_which_pokemon_hits_first(pokemon1, pokemon2)
+                    first, second = self.choose_which_pokemon_hits_first(pokemon1, pokemon2)
 
-                    hp1 = pokemon1.data['hp'] * 10
-                    hp2 = pokemon2.data['hp'] * 10
-                    multiplier1 = pokemon1.get_attack_multiplier(list(pokemon2.data['types']))
-                    multiplier2 = pokemon2.get_attack_multiplier(list(pokemon1.data['types']))
+                    hp1 = first.data['hp']
+                    hp2 = second.data['hp']
+                    multiplier1 = first.get_attack_multiplier(list(second.data['types']))
+                    multiplier2 = second.get_attack_multiplier(list(first.data['types']))
                     turn_counter = 1
                     while True:
-                        attack1 = pokemon1.get_pokemon_attack(turn_counter) * multiplier1
-                        attack2 = pokemon2.get_pokemon_attack(turn_counter) * multiplier2
+                        attack1 = max(
+                            first.get_pokemon_attack(turn_counter) * multiplier1 - second.get_pokemon_defense(
+                                turn_counter), 0)
+                        attack2 = max(
+                            second.get_pokemon_attack(
+                                turn_counter) * multiplier2 - first.get_pokemon_defense(turn_counter), 0)
+
+                        #  print(attack1, attack2)
                         hp2 -= attack1
                         if hp2 <= 0:
-                            pokemon1.score += 1
+                            first.score += 1
                             break
                         hp1 -= attack2
                         if hp1 <= 0:
-                            pokemon2.score += 1
+                            second.score += 1
                             break
-                        turn_counter += 1
-                        break
+
+                        if turn_counter == 100:
+                            raise PokemonFightResultsInATieException()
+                        else:
+                            turn_counter += 1
                 except SamePokemonFightException:
+                    continue
+
+                except PokemonFightResultsInATieException:
                     continue
 
     @staticmethod
@@ -183,7 +203,7 @@ class World:
                 f"Same base Pokemon: {str(pokemon1.data['name']).split('-')[0]}")
         if not any([all([stack1[i] > stack2[i] if i % 2 == 0 else stack1[i] < stack2[i],
                          all(stack1[j] == stack2[j] for j in range(i))]) for i in range(5)]):
-            pokemon1, pokemon2 = pokemon2, pokemon1
+            return pokemon2, pokemon1
         return pokemon1, pokemon2
 
     def get_leader_board(self):
@@ -194,7 +214,17 @@ class World:
         """
         return list(reversed(sorted(self.pokemons, key=lambda x: x.score)))
 
+    def get_pokemons_sorted_by_attribute(self, attribute: str):
+        """
+
+        :param attribute:  pokemon data attribute to sort by
+        :return: sorted List of pokemons
+        """
+        return sorted(self.pokemons, key=lambda x: x.data[attribute])
+
 
 class Main:
     if __name__ == '__main__':
         world = World("PokeLand")
+        print(world.get_leader_board())
+        print(world.get_pokemons_sorted_by_attribute('name'))

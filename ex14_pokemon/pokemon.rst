@@ -32,7 +32,7 @@ näide ühest pokemonist
 
 .. code-block:: python
 
-    {"name": "bulbasaur", "speed": 45, "attack": 49, "defence": 49, "special-attack": 65, "special-defence": 65, "hp": 45, "types": ["poison", "grass"], "abilities": ["chlorophyll", "overgrow"], "forms": ["bulbasaur"], "moves": ["razor-wind", "swords-dance", "cut", "bind", "vine-whip", "headbutt", "tackle", "body-slam", "take-down", "double-edge", "growl", "strength", "mega-drain", "leech-seed", "growth", "razor-leaf", "solar-beam", "poison-powder", "sleep-powder", "petal-dance", "string-shot", "toxic", "rage", "mimic", "double-team", "defense-curl", "light-screen", "reflect", "bide", "sludge", "skull-bash", "amnesia", "flash", "rest", "substitute", "snore", "curse", "protect", "sludge-bomb", "mud-slap", "giga-drain", "endure", "charm", "swagger", "fury-cutter", "attract", "sleep-talk", "return", "frustration", "safeguard", "sweet-scent", "synthesis", "hidden-power", "sunny-day", "rock-smash", "facade", "nature-power", "ingrain", "knock-off", "secret-power", "grass-whistle", "bullet-seed", "magical-leaf", "natural-gift", "worry-seed", "seed-bomb", "energy-ball", "leaf-storm", "power-whip", "captivate", "grass-knot", "venoshock", "round", "echoed-voice", "grass-pledge", "work-up", "grassy-terrain", "confide"], "height": 7, "weight": 69, "base_experience": 64}
+    {"name": "bulbasaur", "speed": 45, "attack": 49, "defense": 49, "special-attack": 65, "special-defense": 65, "hp": 45, "types": ["poison", "grass"], "abilities": ["chlorophyll", "overgrow"], "forms": ["bulbasaur"], "moves": ["razor-wind", "swords-dance", "cut", "bind", "vine-whip", "headbutt", "tackle", "body-slam", "take-down", "double-edge", "growl", "strength", "mega-drain", "leech-seed", "growth", "razor-leaf", "solar-beam", "poison-powder", "sleep-powder", "petal-dance", "string-shot", "toxic", "rage", "mimic", "double-team", "defense-curl", "light-screen", "reflect", "bide", "sludge", "skull-bash", "amnesia", "flash", "rest", "substitute", "snore", "curse", "protect", "sludge-bomb", "mud-slap", "giga-drain", "endure", "charm", "swagger", "fury-cutter", "attract", "sleep-talk", "return", "frustration", "safeguard", "sweet-scent", "synthesis", "hidden-power", "sunny-day", "rock-smash", "facade", "nature-power", "ingrain", "knock-off", "secret-power", "grass-whistle", "bullet-seed", "magical-leaf", "natural-gift", "worry-seed", "seed-bomb", "energy-ball", "leaf-storm", "power-whip", "captivate", "grass-knot", "venoshock", "round", "echoed-voice", "grass-pledge", "work-up", "grassy-terrain", "confide"], "height": 7, "weight": 69, "base_experience": 64}
 
 kõik pokemonid kirjutada faili worldi konstruktorist sisse saadud <nimi + ".txt"> faili
 
@@ -79,6 +79,14 @@ kõik pokemonid kirjutada faili worldi konstruktorist sisse saadud <nimi + ".txt
             """
             pass
 
+        def get_pokemons_sorted_by_attribute(self, attribute: str):
+            """
+
+            :param attribute:  pokemon data attribute to sort by
+            :return: sorted List of pokemons
+            """
+            pass
+
 
 Pokemon
 ----
@@ -119,7 +127,7 @@ Pokemon
             """
             String representation of object.
 
-            :return: Pokemon's name, experience: Pokemon's experience, att: Pokemon's attack level, def: Pokemon's defence level, types: Pokemon's types.
+            :return: string version of json file with necessary information
             """
             pass
 
@@ -164,6 +172,11 @@ Exceptions
 .. code-block:: python
 
     class SamePokemonFightException(Exception):
+    """Custom exception."""
+    pass
+
+
+    class PokemonFightResultsInATieException(Exception):
         """Custom exception."""
         pass
 
