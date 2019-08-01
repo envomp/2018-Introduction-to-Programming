@@ -44,9 +44,9 @@ klassimuutujatesse. `self.hands` peab olema tühi list. **Lisaks peab strategil 
 
 `def join_table(self):` Peale funktsiooni välja kutsumist peab `self.hands` sisaldama ühte kätt.
 
-`def play_move(self) -> Move:` Tagastab strateegia poolt valitud käigu.
+`def play_move(self, hand: Hand) -> Move:` Tagastab strateegia poolt valitud käigu.
 
-`def split_hand(self):` Splitib käe
+`def split_hand(self, hand: Hand) -> None:` Splitib käe
 
 #### Klass GameController
 
@@ -132,11 +132,11 @@ class Player:
         """Join table."""
         pass
 
-    def play_move(self) -> Move:
+    def play_move(self, hand: Hand) -> Move:
         """Play move."""
         pass
 
-    def split_hand(self):
+    def split_hand(self, hand: Hand) -> None:
         """Split hand."""
         pass
 

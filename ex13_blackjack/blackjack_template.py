@@ -59,11 +59,11 @@ class Player:
         """Join table."""
         pass
 
-    def play_move(self) -> Move:
+    def play_move(self, hand: Hand) -> Move:
         """Play move."""
         pass
 
-    def split_hand(self):
+    def split_hand(self, hand: Hand) -> None:
         """Split hand."""
         pass
 
