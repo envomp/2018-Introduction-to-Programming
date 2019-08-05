@@ -8,9 +8,9 @@ Kirjuta programm, mis teeb api päringu pokeapi.co pihta ja korrastab andmed jso
 World
 ----
 
-url, kust kõik pokemonid kätte saab: https://pokeapi.co/api/v2/pokemon?offset=0&limit=100000
+Url, kust kõik pokemonid kätte saab: https://pokeapi.co/api/v2/pokemon?offset=0&limit=100000
 
-import json'it kasutades saab viia dictionary json kujule
+Import json'it kasutades saab viia dictionary json kujule
 
 .. code-block:: python
 
@@ -33,9 +33,6 @@ näide ühest pokemonist
 .. code-block:: python
 
     {"name": "bulbasaur", "speed": 45, "attack": 49, "defense": 49, "special-attack": 65, "special-defense": 65, "hp": 45, "types": ["poison", "grass"], "abilities": ["chlorophyll", "overgrow"], "forms": ["bulbasaur"], "moves": ["razor-wind", "swords-dance", "cut", "bind", "vine-whip", "headbutt", "tackle", "body-slam", "take-down", "double-edge", "growl", "strength", "mega-drain", "leech-seed", "growth", "razor-leaf", "solar-beam", "poison-powder", "sleep-powder", "petal-dance", "string-shot", "toxic", "rage", "mimic", "double-team", "defense-curl", "light-screen", "reflect", "bide", "sludge", "skull-bash", "amnesia", "flash", "rest", "substitute", "snore", "curse", "protect", "sludge-bomb", "mud-slap", "giga-drain", "endure", "charm", "swagger", "fury-cutter", "attract", "sleep-talk", "return", "frustration", "safeguard", "sweet-scent", "synthesis", "hidden-power", "sunny-day", "rock-smash", "facade", "nature-power", "ingrain", "knock-off", "secret-power", "grass-whistle", "bullet-seed", "magical-leaf", "natural-gift", "worry-seed", "seed-bomb", "energy-ball", "leaf-storm", "power-whip", "captivate", "grass-knot", "venoshock", "round", "echoed-voice", "grass-pledge", "work-up", "grassy-terrain", "confide"], "height": 7, "weight": 69, "base_experience": 64}
-
-kõik pokemonid kirjutada faili worldi konstruktorist sisse saadud <nimi + ".txt"> faili
-
 
 Fighting multipliers
 ----
@@ -73,17 +70,17 @@ PS: Write a quick script to parse it into a matrix :)
             """
             Class constructor.
             :param name: name of the pokemon world
-            check if f"{name}.txt" file exists, if it does, read pokemons in from that file, if not, then make a api
-            request to "https://pokeapi.co/api/v2/pokemon?offset=0&limit=100000" to get all pokemons and dump them to
-            f"{name}.txt" file
+            Check if f"{name}_{offset}_{limit}.txt" file exists, if it does, read pokemons in from that file, if not, then make a api
+            request to f"https://pokeapi.co/api/v2/pokemon?offset={offset}&limit={limit}" to get pokemons and dump them to
+            f"{name}_{offset}_{limit}.txt" file
             """
             self.pokemons = []
 
         def dump_pokemons_to_file_as_json(self, name):
             """
             :param name: name of the .txt file
-            write all self.pokemons separated by a newline to the given filename(if it doesnt exist, then create one)
-            PS: write the pokemon.__str__() version, not __repr__() as only name is useless :)
+            Write all self.pokemons separated by a newline to the given filename(if it doesnt exist, then create one)
+            PS: Write the pokemon.__str__() version, not __repr__() as only name is useless :)
             """
             pass
 
@@ -112,7 +109,7 @@ PS: Write a quick script to parse it into a matrix :)
             """
             :param pokemon1:
             :param pokemon2:
-            pokemon who's speed is higher, goes first. if both pokemons have the same speed, then pokemon who's weight
+            Pokemon who's speed is higher, goes first. if both pokemons have the same speed, then pokemon who's weight
             is lower goes first, if both pokemons have same weight, then pokemon who's height is lower goes first,
             if both pokemons have the same height, then the pokemon with more abilities goes first, if they have the same
             amount of abilities, then the pokemon with more moves goes first, if the pokemons have the same amount of
@@ -161,7 +158,7 @@ Pokemon
         def parse_json_to_pokemon_information(self, url):
             """
             :param url: url where the information is requested.
-            called from constructor and this method requests data from url to parse it into proper json object
+            Called from constructor and this method requests data from url to parse it into proper json object
             and then saved under self.data example done previously
             """
             pass
@@ -205,7 +202,6 @@ Pokemon
         def __repr__(self):
             """
             Object representation.
-
             :return: Pokemon's name in string format and his score, for example: "garchomp-mega 892"
             """
             pass

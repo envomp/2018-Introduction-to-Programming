@@ -1,8 +1,75 @@
 import pytest
 import random
-from ex14_pokemon.pokemon import World
+from ex14_pokemon.pokemon import Pokemon, World, SamePokemonFightException
 import os
 import glob
+
+
+@pytest.mark.timeout(2.0)
+@pytest.mark.incgroupdepend("correct")
+def test_pokemon_init_from_json():
+    pokemon = Pokemon(
+        """{"name": "pikachu-original-cap", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}""")
+    assert pokemon.data == """{"name": "pikachu-original-cap", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}"""
+
+
+@pytest.mark.timeout(1.0)
+@pytest.mark.incgroupdepend("correct")
+def test_choose_which_pokemon_hits_first_speed_only():
+    pokemon1 = Pokemon(
+        """{"name": "pikachu-1", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}""")
+    pokemon2 = Pokemon(
+        """{"name": "pikachu-2", "speed": 91, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}""")
+    assert World.choose_which_pokemon_hits_first(pokemon2, pokemon1) == pokemon1, pokemon2
+    assert World.choose_which_pokemon_hits_first(pokemon1, pokemon2) == pokemon1, pokemon2
+
+
+@pytest.mark.timeout(1.0)
+@pytest.mark.incgroupdepend("correct")
+def test_choose_which_pokemon_hits_first_speed_weight():
+    pokemon1 = Pokemon(
+        """{"name": "pikachu-1", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 59, "base_experience": 112}""")
+    pokemon2 = Pokemon(
+        """{"name": "pikachu-2", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}""")
+    assert World.choose_which_pokemon_hits_first(pokemon2, pokemon1) == pokemon1, pokemon2
+    assert World.choose_which_pokemon_hits_first(pokemon1, pokemon2) == pokemon1, pokemon2
+
+
+@pytest.mark.timeout(1.0)
+@pytest.mark.incgroupdepend("correct")
+def test_choose_which_pokemon_hits_first_speed_weight_height():
+    pokemon1 = Pokemon(
+        """{"name": "pikachu-1", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 3, "weight": 60, "base_experience": 112}""")
+    pokemon2 = Pokemon(
+        """{"name": "pikachu-2", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}""")
+    assert World.choose_which_pokemon_hits_first(pokemon2, pokemon1) == pokemon1, pokemon2
+    assert World.choose_which_pokemon_hits_first(pokemon1, pokemon2) == pokemon1, pokemon2
+
+
+@pytest.mark.timeout(1.0)
+@pytest.mark.incgroupdepend("correct")
+def test_choose_which_pokemon_hits_first_all_6():
+    pokemon1 = Pokemon(
+        """{"name": "pikachu-1", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 113}""")
+    pokemon2 = Pokemon(
+        """{"name": "pikachu-2", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}""")
+    assert World.choose_which_pokemon_hits_first(pokemon2, pokemon1) == pokemon1, pokemon2
+    assert World.choose_which_pokemon_hits_first(pokemon1, pokemon2) == pokemon1, pokemon2
+
+
+@pytest.mark.timeout(1.0)
+@pytest.mark.incgroupdepend("correct")
+def test_choose_which_pokemon_hits_exception_thrown():
+    pokemon1 = Pokemon(
+        """{"name": "pikachu-1", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}""")
+    pokemon2 = Pokemon(
+        """{"name": "pikachu-2", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}""")
+
+    try:
+        World.choose_which_pokemon_hits_first(pokemon2, pokemon1)
+    except SamePokemonFightException:
+        return
+    assert False
 
 
 @pytest.mark.timeout(2.0)
@@ -210,7 +277,5 @@ def test_world_fight_between_all_pokemons():
             "wimpod 50", "wynaut 47", "kadabra 46", "kricketot 44", "chansey 44", "meowth 44", "caterpie 44",
             "pichu 41", "metapod 40", "bunnelby 29", "azurill 29", "cosmog 27", "zigzagoon 23", "wishiwashi-solo 17",
             "smeargle 7", "abra 7", "feebas 3", "magikarp 2", "happiny 0"]
-    index = 0
-    for pokemon in world.get_leader_board():
+    for index, pokemon in enumerate(world.get_leader_board()):
         assert pokemon.__repr__() == real[index]
-        index += 1
