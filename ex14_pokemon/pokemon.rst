@@ -98,7 +98,7 @@ PS: Write a quick script to parse it into a matrix :)
             pokemon1.get_pokemon_attack(turn_counter) * multiplier1 - second.get_pokemon_defense(turn_counter)
             total attack is subtracted from other pokemons hp
             pokemons can not heal (when total attack is negative, no damage is dealt)
-            if the fight lasts more than 100 turns, then PokemonFightResultsInATieException() is thrown
+            if the fight between 2 pokemons lasts more than 100 turns, then PokemonFightResultsInATieException() is thrown
             if one pokemon dies, fight ends and the winner gets 1 point, (self.score += 1)
             every exception thrown by called sub methods must be catched and dealt with.
             """
@@ -218,9 +218,4 @@ Exceptions
 
     class PokemonFightResultsInATieException(Exception):
         """Custom exception thrown when the fight lasts longer than 100 rounds."""
-        pass
-
-
-    class NotAPokemonException(Exception):
-        """Custom exception thrown when object is not a pokemon."""
         pass

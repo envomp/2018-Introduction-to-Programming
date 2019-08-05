@@ -37,11 +37,6 @@ class PokemonFightResultsInATieException(Exception):
     pass
 
 
-class NotAPokemonException(Exception):
-    """Custom exception."""
-    pass
-
-
 class Pokemon:
     """Class for Pokemon."""
 
@@ -105,7 +100,7 @@ class Pokemon:
         return self.data['special-attack'] if turn_counter % 3 == 0 else self.data['attack']
 
     def get_pokemon_defense(self, turn_counter):
-        return self.data['special-defense'] if turn_counter % 2 == 0 else self.data['defense'] / 2
+        return self.data['special-defense'] / 2 if turn_counter % 2 == 0 else self.data['defense'] / 2
 
     def __str__(self):
         """
@@ -209,7 +204,7 @@ class World:
 
         :return: List of leader board.
         """
-        return list(reversed(sorted(self.pokemons, key=lambda x: x.score)))
+        return list(sorted(sorted(self.pokemons, key=lambda x: x.data["name"]), key=lambda x: x.score, reverse=True))
 
     def get_pokemons_sorted_by_attribute(self, attribute: str):
         """

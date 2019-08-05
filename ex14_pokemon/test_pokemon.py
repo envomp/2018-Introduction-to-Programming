@@ -1,16 +1,104 @@
 import pytest
 import random
-from ex14_pokemon.pokemon import Pokemon, World, SamePokemonFightException
+from pokemon import Pokemon, World, SamePokemonFightException
 import os
 import glob
+from functools import reduce
+
+all_types = ['normal', 'fighting', 'flying', 'poison', 'ground', 'rock', 'bug', 'ghost', 'steel', 'fire', 'water',
+             'grass', 'electric', 'psychic', 'ice', 'dragon', 'dark', 'fairy']
+
+pokemon_attack_multipliers = [
+    [1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+    [2.0, 1.0, 0.5, 0.5, 1.0, 2.0, 0.5, 0.0, 2.0, 1.0, 1.0, 1.0, 1.0, 0.5, 2.0, 1.0, 2.0, 0.5],
+    [1.0, 2.0, 1.0, 1.0, 1.0, 0.5, 2.0, 1.0, 0.5, 1.0, 1.0, 2.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0],
+    [1.0, 1.0, 1.0, 0.5, 0.5, 0.5, 1.0, 0.5, 0.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0],
+    [1.0, 1.0, 0.0, 2.0, 1.0, 2.0, 0.5, 1.0, 2.0, 2.0, 1.0, 0.5, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+    [1.0, 0.5, 2.0, 1.0, 0.5, 1.0, 2.0, 1.0, 0.5, 2.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0],
+    [1.0, 0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 0.5, 0.5, 0.5, 1.0, 2.0, 1.0, 2.0, 1.0, 1.0, 2.0, 0.5],
+    [0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 0.5, 1.0],
+    [1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 0.5, 0.5, 0.5, 1.0, 0.5, 1.0, 2.0, 1.0, 1.0, 2.0],
+    [1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 2.0, 1.0, 2.0, 0.5, 0.5, 2.0, 1.0, 1.0, 2.0, 0.5, 1.0, 1.0],
+    [1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 1.0, 1.0, 1.0, 2.0, 0.5, 0.5, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0],
+    [1.0, 1.0, 0.5, 0.5, 2.0, 2.0, 0.5, 1.0, 0.5, 0.5, 2.0, 0.5, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0],
+    [1.0, 1.0, 2.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 0.5, 0.5, 1.0, 1.0, 0.5, 1.0, 1.0],
+    [1.0, 2.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 0.0, 1.0],
+    [1.0, 1.0, 2.0, 1.0, 2.0, 1.0, 1.0, 1.0, 0.5, 0.5, 0.5, 2.0, 1.0, 1.0, 0.5, 2.0, 1.0, 1.0],
+    [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 0.0],
+    [1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 0.5, 0.5],
+    [1.0, 2.0, 1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 1.0]]
 
 
-@pytest.mark.timeout(2.0)
+@pytest.mark.timeout(1.0)
 @pytest.mark.incgroupdepend("correct")
 def test_pokemon_init_from_json():
     pokemon = Pokemon(
         """{"name": "pikachu-original-cap", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}""")
-    assert pokemon.data == """{"name": "pikachu-original-cap", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}"""
+    assert pokemon.__str__() == """{"name": "pikachu-original-cap", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}"""
+
+
+@pytest.mark.timeout(1.0)
+@pytest.mark.incgroupdepend("correct")
+def test_world_correct_pokemon_form_repr_and_str():
+    world = World("PokeLand", 0, 1)
+    assert world.pokemons[
+               0].__str__() == """{"name": "bulbasaur", "speed": 45, "attack": 49, "defense": 49, "special-attack": 65, "special-defense": 65, "hp": 45, "types": ["poison", "grass"], "abilities": ["chlorophyll", "overgrow"], "forms": ["bulbasaur"], "moves": ["razor-wind", "swords-dance", "cut", "bind", "vine-whip", "headbutt", "tackle", "body-slam", "take-down", "double-edge", "growl", "strength", "mega-drain", "leech-seed", "growth", "razor-leaf", "solar-beam", "poison-powder", "sleep-powder", "petal-dance", "string-shot", "toxic", "rage", "mimic", "double-team", "defense-curl", "light-screen", "reflect", "bide", "sludge", "skull-bash", "amnesia", "flash", "rest", "substitute", "snore", "curse", "protect", "sludge-bomb", "mud-slap", "giga-drain", "endure", "charm", "swagger", "fury-cutter", "attract", "sleep-talk", "return", "frustration", "safeguard", "sweet-scent", "synthesis", "hidden-power", "sunny-day", "rock-smash", "facade", "nature-power", "ingrain", "knock-off", "secret-power", "grass-whistle", "bullet-seed", "magical-leaf", "natural-gift", "worry-seed", "seed-bomb", "energy-ball", "leaf-storm", "power-whip", "captivate", "grass-knot", "venoshock", "round", "echoed-voice", "grass-pledge", "work-up", "grassy-terrain", "confide"], "height": 7, "weight": 69, "base_experience": 64}"""
+    assert world.pokemons[0].__repr__() == 'bulbasaur 0'
+
+
+@pytest.mark.timeout(1.0)
+@pytest.mark.incgroupdepend("correct")
+def test_get_correct_attack_multiplier_one_type():
+    pokemon1 = Pokemon(
+        """{"name": "pikachu-1", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}""")
+
+    for type1 in all_types:
+        pokemon1.data['types'] = [type1]
+        for enemy_type in all_types:
+            assert pokemon1.get_attack_multiplier([enemy_type]) == pokemon_attack_multipliers[all_types.index(type1)][
+                all_types.index(enemy_type)]
+
+
+@pytest.mark.timeout(2.0)
+@pytest.mark.incgroupdepend("correct")
+def test_get_correct_attack_multiplier_two_types():
+    pokemon1 = Pokemon(
+        """{"name": "pikachu-1", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}""")
+
+    for type1 in all_types:
+        for type2 in all_types:
+            if type1 != type2:
+                pokemon1.data['types'] = [type1, type2]
+                for enemy_type1 in all_types:
+                    for enemy_type2 in all_types:
+                        if enemy_type1 != enemy_type2:
+                            assert pokemon1.get_attack_multiplier([enemy_type1, enemy_type2]) == max(
+                                reduce(lambda x, y: x * y, [
+                                    pokemon_attack_multipliers[all_types.index(self_type)][all_types.index(enemy_type)]
+                                    for enemy_type in [enemy_type1, enemy_type2]]) for self_type in
+                                pokemon1.data['types'])
+
+
+@pytest.mark.timeout(1.0)
+@pytest.mark.incgroupdepend("correct")
+def test_get_pokemon_attack():
+    pokemon1 = Pokemon(
+        """{"name": "pikachu-1", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}""")
+    assert pokemon1.get_pokemon_attack(1) == 55
+    assert pokemon1.get_pokemon_attack(3) == 50
+    assert pokemon1.get_pokemon_attack(11) == 55
+    assert pokemon1.get_pokemon_attack(12) == 50
+
+
+@pytest.mark.timeout(1.0)
+@pytest.mark.incgroupdepend("correct")
+def test_get_pokemon_defense():
+    pokemon1 = Pokemon(
+        """{"name": "pikachu-1", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}""")
+    assert pokemon1.get_pokemon_defense(1) == 20
+    assert pokemon1.get_pokemon_defense(2) == 25
+    assert pokemon1.get_pokemon_defense(3) == 20
+    assert pokemon1.get_pokemon_defense(4) == 25
 
 
 @pytest.mark.timeout(1.0)
@@ -20,8 +108,8 @@ def test_choose_which_pokemon_hits_first_speed_only():
         """{"name": "pikachu-1", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}""")
     pokemon2 = Pokemon(
         """{"name": "pikachu-2", "speed": 91, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}""")
-    assert World.choose_which_pokemon_hits_first(pokemon2, pokemon1) == pokemon1, pokemon2
-    assert World.choose_which_pokemon_hits_first(pokemon1, pokemon2) == pokemon1, pokemon2
+    assert pokemon1, pokemon2 == World.choose_which_pokemon_hits_first(pokemon2, pokemon1)
+    assert pokemon1, pokemon2 == World.choose_which_pokemon_hits_first(pokemon1, pokemon2)
 
 
 @pytest.mark.timeout(1.0)
@@ -31,8 +119,8 @@ def test_choose_which_pokemon_hits_first_speed_weight():
         """{"name": "pikachu-1", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 59, "base_experience": 112}""")
     pokemon2 = Pokemon(
         """{"name": "pikachu-2", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}""")
-    assert World.choose_which_pokemon_hits_first(pokemon2, pokemon1) == pokemon1, pokemon2
-    assert World.choose_which_pokemon_hits_first(pokemon1, pokemon2) == pokemon1, pokemon2
+    assert pokemon1, pokemon2 == World.choose_which_pokemon_hits_first(pokemon2, pokemon1)
+    assert pokemon1, pokemon2 == World.choose_which_pokemon_hits_first(pokemon1, pokemon2)
 
 
 @pytest.mark.timeout(1.0)
@@ -42,8 +130,8 @@ def test_choose_which_pokemon_hits_first_speed_weight_height():
         """{"name": "pikachu-1", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 3, "weight": 60, "base_experience": 112}""")
     pokemon2 = Pokemon(
         """{"name": "pikachu-2", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}""")
-    assert World.choose_which_pokemon_hits_first(pokemon2, pokemon1) == pokemon1, pokemon2
-    assert World.choose_which_pokemon_hits_first(pokemon1, pokemon2) == pokemon1, pokemon2
+    assert pokemon1, pokemon2 == World.choose_which_pokemon_hits_first(pokemon2, pokemon1)
+    assert pokemon1, pokemon2 == World.choose_which_pokemon_hits_first(pokemon1, pokemon2)
 
 
 @pytest.mark.timeout(1.0)
@@ -53,8 +141,8 @@ def test_choose_which_pokemon_hits_first_all_6():
         """{"name": "pikachu-1", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 113}""")
     pokemon2 = Pokemon(
         """{"name": "pikachu-2", "speed": 90, "attack": 55, "defense": 40, "special-attack": 50, "special-defense": 50, "hp": 35, "types": ["electric"], "abilities": ["lightning-rod", "static"], "forms": ["pikachu-original-cap"], "moves": ["slam", "tail-whip", "growl", "thunder-shock", "thunderbolt", "thunder-wave", "thunder", "toxic", "agility", "quick-attack", "double-team", "light-screen", "rest", "substitute", "protect", "swagger", "spark", "attract", "sleep-talk", "return", "frustration", "hidden-power", "rain-dance", "facade", "brick-break", "feint", "fling", "discharge", "grass-knot", "charge-beam", "electro-ball", "round", "echoed-voice", "volt-switch", "wild-charge", "play-nice", "confide", "nuzzle"], "height": 4, "weight": 60, "base_experience": 112}""")
-    assert World.choose_which_pokemon_hits_first(pokemon2, pokemon1) == pokemon1, pokemon2
-    assert World.choose_which_pokemon_hits_first(pokemon1, pokemon2) == pokemon1, pokemon2
+    assert pokemon1, pokemon2 == World.choose_which_pokemon_hits_first(pokemon2, pokemon1)
+    assert pokemon1, pokemon2 == World.choose_which_pokemon_hits_first(pokemon1, pokemon2)
 
 
 @pytest.mark.timeout(1.0)
@@ -72,7 +160,7 @@ def test_choose_which_pokemon_hits_exception_thrown():
     assert False
 
 
-@pytest.mark.timeout(2.0)
+@pytest.mark.timeout(5.0)
 @pytest.mark.incgroupdepend("correct")
 def test_world_right_amount_of_pokemons_requested():
     for filename in glob.glob("./PokeLand*"):
@@ -97,15 +185,6 @@ def test_world_reading_from_file():
 
 @pytest.mark.timeout(2.0)
 @pytest.mark.incgroupdepend("correct")
-def test_correct_pokemon_form_repr_and_str():
-    world = World("PokeLand", 0, 1)
-    assert world.pokemons[
-               0].__str__() == """{"name": "bulbasaur", "speed": 45, "attack": 49, "defense": 49, "special-attack": 65, "special-defense": 65, "hp": 45, "types": ["poison", "grass"], "abilities": ["chlorophyll", "overgrow"], "forms": ["bulbasaur"], "moves": ["razor-wind", "swords-dance", "cut", "bind", "vine-whip", "headbutt", "tackle", "body-slam", "take-down", "double-edge", "growl", "strength", "mega-drain", "leech-seed", "growth", "razor-leaf", "solar-beam", "poison-powder", "sleep-powder", "petal-dance", "string-shot", "toxic", "rage", "mimic", "double-team", "defense-curl", "light-screen", "reflect", "bide", "sludge", "skull-bash", "amnesia", "flash", "rest", "substitute", "snore", "curse", "protect", "sludge-bomb", "mud-slap", "giga-drain", "endure", "charm", "swagger", "fury-cutter", "attract", "sleep-talk", "return", "frustration", "safeguard", "sweet-scent", "synthesis", "hidden-power", "sunny-day", "rock-smash", "facade", "nature-power", "ingrain", "knock-off", "secret-power", "grass-whistle", "bullet-seed", "magical-leaf", "natural-gift", "worry-seed", "seed-bomb", "energy-ball", "leaf-storm", "power-whip", "captivate", "grass-knot", "venoshock", "round", "echoed-voice", "grass-pledge", "work-up", "grassy-terrain", "confide"], "height": 7, "weight": 69, "base_experience": 64}"""
-    assert world.pokemons[0].__repr__() == 'bulbasaur 0'
-
-
-@pytest.mark.timeout(2.0)
-@pytest.mark.incgroupdepend("correct")
 def test_random_pokemon_correct_form_repr_and_writing_to_file():
     rando = random.randint(0, 900)
     world = World("PokeLand", rando, 1)
@@ -113,169 +192,228 @@ def test_random_pokemon_correct_form_repr_and_writing_to_file():
     assert f.readlines()[rando] == world.pokemons[0].__str__() + '\n'
 
 
-@pytest.mark.timeout(60.0)
+@pytest.mark.timeout(5.0)
 @pytest.mark.incgroupdepend("correct")
-def test_world_fight_between_all_pokemons():
-    world = World("all_pokemons", 0, 100000)
+def test_world_100_pokemons_attribute():
+    world = World("all_pokemons", 69, 100)
+    real = ["chansey 0", "magikarp 0", "ledyba 0", "voltorb 0", "hoothoot 0", "magnemite 0", "gastly 0", "ledian 0",
+            "tentacool 0", "exeggcute 0", "horsea 0", "omanyte 0", "seel 0", "onix 0", "staryu 0", "mr-mime 0",
+            "sentret 0", "drowzee 0", "ditto 0", "chikorita 0", "haunter 0", "electrode 0", "cubone 0", "jynx 0",
+            "noctowl 0", "cyndaquil 0", "lickitung 0", "tangela 0", "eevee 0", "magneton 0", "porygon 0", "omastar 0",
+            "spinarak 0", "bayleef 0", "dratini 0", "quilava 0", "slowpoke 0", "shellder 0", "gengar 0", "koffing 0",
+            "seadra 0", "vaporeon 0", "jolteon 0", "totodile 0", "goldeen 0", "tentacruel 0", "dewgong 0", "hypno 0",
+            "slowbro 0", "starmie 0", "furret 0", "geodude 0", "grimer 0", "marowak 0", "kabuto 0", "croconaw 0",
+            "meganium 0", "electabuzz 0", "dragonair 0", "typhlosion 0", "ponyta 0", "doduo 0", "rhyhorn 0", "lapras 0",
+            "articuno 0", "weepinbell 0", "farfetchd 0", "weezing 0", "zapdos 0", "ariados 0", "crobat 0", "seaking 0",
+            "graveler 0", "cloyster 0", "exeggutor 0", "kangaskhan 0", "magmar 0", "rapidash 0", "tauros 0",
+            "moltres 0", "mew 0", "victreebel 0", "muk 0", "krabby 0", "hitmonchan 0", "aerodactyl 0", "feraligatr 0",
+            "dodrio 0", "scyther 0", "snorlax 0", "mewtwo 0", "kabutops 0", "golem 0", "hitmonlee 0", "pinsir 0",
+            "gyarados 0", "kingler 0", "rhydon 0", "flareon 0", "dragonite 0"]
+    for index, pokemon in enumerate(world.get_pokemons_sorted_by_attribute('attack')):
+        assert pokemon.__repr__() == real[index]
+
+
+@pytest.mark.timeout(2.0)
+@pytest.mark.incgroupdepend("correct")
+def test_world_fight_between_some_pokemons_leaderboard():
+    world = World("all_pokemons", 420, 20)
     world.fight()
-    real = ["zygarde-complete 904", "steelix-mega 894", "garchomp-mega 892", "stakataka 882", "golisopod 882",
-            "giratina-origin 880", "rhyperior 876", "zekrom 864", "yveltal 863", "giratina-altered 863",
-            "necrozma-dusk 858", "swampert-mega 857", "camerupt-mega 856", "crabominable 856", "dialga 856",
-            "scizor-mega 855", "palkia 855", "dhelmise 854", "solgaleo 850", "necrozma-dawn 845", "escavalier 845",
-            "celesteela 844", "gyarados 844", "doublade 840", "aegislash-blade 838", "rhydon 837", "guzzlord 836",
-            "reshiram 836", "ampharos-mega 832", "gyarados-mega 832", "kyurem-black 832", "metagross 832",
-            "xerneas 831", "pangoro 831", "groudon-primal 828", "lunala 828", "tyranitar-mega 827", "mewtwo-mega-x 827",
-            "zygarde-50 826", "kyogre-primal 826", "zygarde 825", "garchomp 825", "abomasnow-mega 824", "muk-alola 823",
-            "landorus-therian 822", "dragonite 817", "aggron-mega 815", "ho-oh 812", "rayquaza 810", "carracosta 808",
-            "bisharp 806", "magearna-original 805", "magearna 805", "regigigas 805", "slaking 805",
-            "metagross-mega 804", "kyurem-white 804", "heracross-mega 803", "kyurem 803", "hoopa-unbound 799",
-            "rayquaza-mega 798", "armaldo 798", "swampert 797", "scizor 797", "wishiwashi-school 795", "honchkrow 795",
-            "charizard-mega-x 794", "bewear 792", "slowbro-mega 788", "salamence-mega 784", "altaria-mega 784",
-            "golem-alola 783", "mamoswine 782", "gigalith 781", "landorus-incarnate 779", "tyranitar 778",
-            "steelix 778", "volcanion 777", "druddigon 777", "aggron 776", "mawile-mega 775", "ferrothorn 775",
-            "kartana 774", "salamence 774", "golem 774", "tyrantrum 772", "golurk 772", "emboar 772", "excadrill 770",
-            "arceus 765", "mewtwo-mega-y 764", "cradily 764", "genesect 763", "empoleon 763", "buzzwole 762",
-            "magnezone 762", "trevenant 760", "gourgeist-super 757", "bronzong 757", "crustle 756",
-            "exeggutor-alola 755", "incineroar 755", "piloswine 755", "granbull 755", "kingdra 754", "sableye-mega 753",
-            "rampardos 753", "lapras 753", "braviary 752", "crawdaunt 749", "hoopa 747", "kommo-o-totem 746",
-            "necrozma-ultra 745", "zapdos 745", "kommo-o 744", "turtonator 743", "haxorus 743", "blastoise-mega 742",
-            "spiritomb 741", "jirachi 739", "kyogre 739", "toucannon 736", "tapu-bulu 735", "snorlax 733",
-            "kangaskhan-mega 732", "diancie 729", "forretress 728", "gastrodon 727", "walrein 727", "ursaring 726",
-            "seismitoad 725", "skarmory 725", "beartic 724", "avalugg 722", "cobalion 722", "eelektross 721",
-            "torterra 721", "slowking 721", "venusaur-mega 720", "vikavolt-totem 719", "audino-mega 719",
-            "necrozma 717", "vikavolt 717", "groudon 717", "thundurus-incarnate 716", "marshadow 715",
-            "gallade-mega 714", "tapu-fini 714", "lugia 712", "slowbro 712", "lucario-mega 711", "gliscor 711",
-            "primarina 710", "relicanth 708", "camerupt 707", "decidueye 706", "latios-mega 705", "articuno 705",
-            "thundurus-therian 704", "conkeldurr 704", "gallade 704", "mewtwo 704", "gourgeist-large 702",
-            "cloyster 702", "moltres 701", "banette-mega 700", "goodra 700", "barbaracle 698", "hydreigon 698",
-            "luxray 698", "mudsdale 697", "scrafty 696", "sandslash-alola 694", "latias-mega 694", "skuntank 694",
-            "meloetta-pirouette 693", "meloetta-aria 692", "tapu-koko 691", "manaphy 690", "regirock 690",
-            "pinsir-mega 689", "kingler 687", "poliwrath 687", "palossand 686", "toxapex 685", "heatran 683",
-            "aurorus 682", "mesprit 682", "klefki 681", "drapion 681", "fraxure 680", "lairon 680", "graveler 680",
-            "feraligatr 679", "mew 679", "durant 678", "krookodile 678", "victini 677", "quagsire 676", "magneton 675",
-            "blaziken 673", "cacturne 672", "togedemaru-totem 671", "honedge 671", "abomasnow 671", "exeggutor 671",
-            "togedemaru 670", "dragalge 670", "samurott 669", "kabutops 669", "stunfisk 667", "hippowdon 667",
-            "mawile 667", "donphan 667", "bouffalant 666", "whiscash 666", "blaziken-mega 665", "jellicent 665",
-            "drifblim 665", "lucario 664", "graveler-alola 663", "charjabug 662", "dusknoir 662", "nidoqueen 661",
-            "charizard-mega-y 660", "staraptor 660", "suicune 660", "muk 660", "registeel 658", "qwilfish 658",
-            "unfezant 657", "heracross 657", "drampa 656", "chesnaught 656", "flygon 656", "type-null 655",
-            "gourgeist-average 654", "electivire 654", "octillery 654", "ampharos 654", "rhyhorn 654", "amoonguss 653",
-            "machamp 653", "zeraora 652", "marowak-totem 651", "aerodactyl-mega 651", "aromatisse 650",
-            "marowak-alola 649", "wormadam-trash 648", "aegislash-shield 648", "absol 648", "hariyama 648",
-            "malamar 647", "reuniclus 647", "huntail 644", "araquanid-totem 643", "wailord 643", "araquanid 642",
-            "rotom-fan 641", "lickilicky 641", "vespiquen 641", "terrakion 639", "darmanitan-zen 638", "boldore 638",
-            "entei 637", "nidoking 637", "tornadus-incarnate 636", "probopass 636", "mandibuzz 635", "toxicroak 634",
-            "darmanitan-standard 633", "sharpedo-mega 630", "pignite 629", "stoutland 628", "metang 628",
-            "cresselia 627", "victreebel 627", "sylveon 625", "solrock 625", "vaporeon 623", "archeops 621",
-            "wormadam-sandy 620", "klinklang 620", "celebi 620", "xurkitree 618", "geodude 618", "silvally 617",
-            "sudowoodo 616", "wigglytuff 615", "gumshoos-totem 614", "zweilous 613", "bastiodon 612", "passimian 610",
-            "gumshoos 610", "latios 610", "musharna 609", "shelgon 609", "vileplume 608", "blastoise 608",
-            "lycanroc-midnight 607", "tirtouga 607", "breloom 607", "glalie-mega 606", "flareon 606", "clefable 606",
-            "charizard 606", "beheeyem 605", "greninja-ash 604", "lopunny-mega 603", "cranidos 603", "omastar 603",
-            "diancie-mega 601", "latias 600", "banette 600", "swanna 599", "torkoal 598", "tentacruel 598",
-            "shaymin-sky 597", "komala 597", "raikou 597", "marshtomp 596", "dewgong 594", "houndoom-mega 592",
-            "tyrunt 592", "cofagrigus 592", "throh 592", "uxie 592", "rotom-wash 590", "porygon2 590",
-            "gourgeist-small 589", "rotom-heat 589", "slurpuff 589", "arcanine 587", "tapu-lele 586", "bruxish 586",
-            "mimikyu-totem-disguised 585", "keldeo-resolute 585", "keldeo-ordinary 585", "azelf 585", "togekiss 585",
-            "gorebyss 585", "tropius 585", "gligar 585", "mimikyu-totem-busted 584", "clawitzer 584",
-            "mimikyu-busted 583", "oricorio-pom-pom 583", "absol-mega 583", "archen 583", "mimikyu-disguised 582",
-            "pawniard 582", "altaria 581", "oranguru 580", "rotom-frost 579", "deoxys-defense 578", "pupitar 578",
-            "tornadus-therian 577", "tsareena 576", "lanturn 576", "geodude-alola 575", "venusaur 575", "klang 574",
-            "aerodactyl 574", "politoed 570", "heatmor 569", "vanilluxe 568", "tangrowth 568", "milotic 568",
-            "shiftry 568", "pinsir 568", "sharpedo 567", "weezing 567", "medicham-mega 566", "glaceon 566", "aron 566",
-            "umbreon 566", "infernape 564", "crobat 564", "sealeo 563", "sandshrew-alola 562", "dartrix 562",
-            "darkrai 562", "gurdurr 561", "exploud 561", "parasect 560", "gabite 559", "hawlucha 558", "chandelure 558",
-            "garbodor 558", "grimer-alola 557", "pidgeot-mega 557", "minior-violet-meteor 556",
-            "minior-indigo-meteor 556", "minior-blue-meteor 556", "minior-green-meteor 556", "minior-yellow-meteor 556",
-            "minior-orange-meteor 556", "minior-red-meteor 556", "florges 556", "pelipper 556", "sawk 555",
-            "gardevoir 555", "blacephalon 553", "zangoose 552", "ariados 552", "magcargo 550", "houndoom 549",
-            "scyther 549", "weavile 548", "combusken 548", "hakamo-o 547", "magmortar 547", "ludicolo 545",
-            "seaking 545", "shaymin-land 544", "gardevoir-mega 543", "noivern 542", "virizion 542", "regice 542",
-            "eelektrik 541", "froslass 541", "golduck 541", "naganadel 540", "kangaskhan 539", "gogoat 538",
-            "greninja-battle-bond 537", "rotom-mow 537", "nihilego 537", "golett 537", "carbink 536", "greninja 536",
-            "seviper 536", "lurantis-totem 533", "talonflame 533", "lurantis 532", "floatzel 532", "bibarel 532",
-            "delphox 529", "yanmega 529", "dusclops 527", "alomomola 526", "leafeon 526", "pumpkaboo-super 524",
-            "zebstrika 524", "sableye 523", "lycanroc-dusk 522", "oricorio-sensu 522", "phione 522", "zygarde-10 521",
-            "sandslash 521", "mothim 520", "volcarona 519", "claydol 519", "manectric-mega 518", "typhlosion 518",
-            "machoke 518", "lycanroc-midday 517", "dodrio 517", "weepinbell 517", "swalot 516", "floette-eternal 515",
-            "sawsbuck 515", "corsola 515", "galvantula 513", "glalie 513", "pidgeot 513", "golbat 512",
-            "oricorio-baile 511", "ninetales-alola 510", "simipour 510", "scraggy 509", "pumpkaboo-large 507",
-            "azumarill 507", "tauros 507", "slowpoke 507", "munchlax 506", "sceptile-mega 505", "ferroseed 504",
-            "rotom 504", "mudbray 503", "sliggoo 503", "mantine 503", "leavanny 502", "phantump 499", "gothitelle 498",
-            "bonsly 498", "simisear 496", "dragonair 496", "hypno 495", "carnivine 494", "mightyena 494", "arbok 494",
-            "starmie 491", "pumpkaboo-average 490", "larvesta 489", "kabuto 489", "pyroar 488", "trapinch 486",
-            "noctowl 486", "amaura 483", "lileep 483", "bellossom 482", "rapidash 482", "ninetales 481",
-            "shiinotic 480", "scolipede 480", "anorith 480", "gloom 480", "dwebble 479", "snover 478", "skrelp 477",
-            "lunatone 476", "magmar 476", "farfetchd 476", "marowak 475", "gengar-mega 474", "porygon-z 474",
-            "croconaw 474", "pyukumuku 473", "krabby 473", "sigilyph 472", "girafarig 471", "pumpkaboo-small 470",
-            "zoroark 470", "wormadam-plant 470", "emolga 469", "brionne 465", "whimsicott 465", "shedinja 465",
-            "rufflet 462", "palpitoad 462", "fearow 462", "numel 460", "meganium 460", "oricorio-pau 459", "dewott 459",
-            "kecleon 459", "stantler 459", "larvitar 458", "dugtrio-alola 456", "darumaka 456", "miltank 456",
-            "hitmontop 455", "lampent 454", "shieldon 454", "grotle 454", "minior-violet 453", "minior-indigo 453",
-            "minior-blue 453", "minior-green 453", "minior-yellow 453", "minior-orange 453", "minior-red 453",
-            "beldum 452", "castform-snowy 450", "sandygast 450", "ambipom 449", "wailmer 449", "mienshao 448",
-            "basculin-blue-striped 447", "basculin-red-striped 447", "roggenrola 447", "roserade 447", "electabuzz 446",
-            "fletchinder 445", "masquerain 444", "hitmonchan 444", "raichu-alola 443", "castform-sunny 442",
-            "vullaby 442", "monferno 442", "xatu 440", "deoxys-speed 439", "dedenne 439", "sunflora 439", "murkrow 438",
-            "prinplup 437", "luxio 436", "chimecho 436", "gible 435", "beedrill-mega 434", "castform-rainy 434",
-            "swadloon 433", "tranquill 433", "gengar 432", "raichu 432", "beautifly 431", "beedrill 431",
-            "pheromosa 429", "ivysaur 429", "lumineon 427", "magnemite 426", "maractus 424", "medicham 421",
-            "salazzle-totem 419", "dunsparce 419", "stufful 418", "salazzle 418", "manectric 418", "audino 416",
-            "primeape 416", "raticate-totem-alola 415", "raticate-alola 414", "simisage 414", "vanillish 411",
-            "nuzleaf 411", "bergmite 410", "cinccino 410", "serperior 410", "bellsprout 408", "krokorok 407",
-            "togetic 407", "trumbeak 406", "pancham 406", "paras 406", "sneasel 405", "seadra 405", "grimer 404",
-            "snubbull 402", "wartortle 402", "rowlet 400", "axew 400", "hitmonlee 400", "torracat 399", "poipole 394",
-            "cubchoo 394", "corphish 392", "drifloon 391", "quilladin 389", "deino 389", "timburr 388", "frillish 387",
-            "venomoth 387", "litwick 385", "diggersby 383", "kricketune 383", "carvanha 383", "porygon 383",
-            "foongus 382", "watchog 382", "jolteon 382", "machop 382", "nosepass 381", "flaaffy 381", "hippopotas 380",
-            "swellow 380", "ponyta 380", "jumpluff 378", "deoxys-normal 376", "vigoroth 375", "omanyte 373",
-            "braixen 372", "clamperl 372", "liepard 371", "sceptile 371", "comfey 370", "lopunny 370", "chatot 369",
-            "stunky 367", "grumpig 366", "charmeleon 366", "heliolisk 365", "quilava 365", "onix 365", "sandshrew 365",
-            "furfrou 364", "lilligant 363", "vibrava 363", "growlithe 362", "klink 360", "mareanie 358",
-            "cryogonal 357", "tangela 357", "whirlipede 355", "espeon 355", "castform 354", "roselia 353", "litleo 352",
-            "volbeat 352", "houndour 352", "lickitung 352", "croagunk 351", "staravia 351", "duosion 347",
-            "ninjask 347", "koffing 346", "oddish 346", "spritzee 345", "tepig 345", "misdreavus 345", "pidgeotto 345",
-            "nidorino 344", "cherrim 342", "nidorina 342", "mudkip 340", "meowstic-female 336", "meowstic-male 336",
-            "vivillon 334", "yanma 333", "sandile 332", "doduo 332", "herdier 331", "loudred 331", "cacnea 330",
-            "purugly 329", "furret 329", "ribombee-totem 326", "swoobat 326", "ribombee 325", "blissey 325",
-            "bayleef 325", "sewaddle 324", "drilbur 322", "binacle 321", "mismagius 321", "crabrawler 320",
-            "phanpy 320", "ducklett 319", "totodile 319", "morelull 317", "butterfree 316", "rockruff-own-tempo 314",
-            "exeggcute 314", "rockruff 313", "poliwhirl 313", "teddiursa 312", "persian-alola 310", "bagon 310",
-            "electrode 310", "dustox 308", "lombre 307", "turtwig 305", "torchic 304", "haunter 303", "bulbasaur 302",
-            "servine 301", "venonat 301", "elgyem 297", "gothorita 297", "mienfoo 296", "accelgor 296", "shellder 296",
-            "linoone 295", "shuppet 294", "magby 294", "raticate 294", "illumise 293", "pineco 292", "goldeen 292",
-            "skiddo 291", "spinarak 290", "karrablast 289", "chinchou 288", "delibird 287", "shinx 286", "unown 286",
-            "joltik 282", "deerling 280", "alakazam-mega 277", "skiploom 277", "jynx 277", "swirlix 274", "chespin 274",
-            "pikipek 273", "pidove 273", "skorupi 273", "swinub 273", "pansear 272", "persian 272", "frogadier 271",
-            "popplio 270", "litten 270", "chimchar 270", "clefairy 270", "spheal 267", "mr-mime 266", "floette 265",
-            "delcatty 265", "clauncher 264", "shellos 264", "makuhita 259", "pachirisu 257", "cubone 256",
-            "oshawott 255", "inkay 254", "nincada 250", "spinda 249", "snorunt 248", "salandit 247", "jangmo-o 245",
-            "barboach 245", "woobat 242", "piplup 242", "grubbin 241", "vanillite 241", "grovyle 240", "plusle 238",
-            "gulpin 235", "wooper 235", "dratini 235", "trubbish 233", "charmander 231", "cyndaquil 230", "seel 229",
-            "mankey 229", "aipom 228", "mantyke 227", "jigglypuff 227", "deoxys-attack 225", "chikorita 223",
-            "ekans 223", "shelmet 222", "wobbuffet 222", "squirtle 222", "riolu 221", "espurr 220", "buizel 220",
-            "natu 220", "psyduck 220", "spearow 219", "cosmoem 217", "elekid 217", "nidoran-m 217", "yamask 216",
-            "swablu 216", "dewpider 215", "ledian 212", "fletchling 211", "minun 209", "pansage 208", "starly 207",
-            "nidoran-f 206", "gastly 205", "drowzee 204", "shroomish 203", "blitzle 202", "zorua 201", "panpour 201",
-            "dugtrio 201", "baltoy 200", "zubat 200", "fomantis 199", "fennekin 199", "buneary 199", "petilil 196",
-            "cottonee 196", "bronzor 196", "slakoth 196", "goomy 195", "mareep 189", "finneon 187", "remoraid 187",
-            "munna 186", "slugma 185", "cherubi 184", "solosis 183", "snivy 183", "budew 180", "froakie 179",
-            "alakazam 178", "kirlia 177", "eevee 177", "hoppip 176", "cutiefly 174", "flabebe 173", "venipede 172",
-            "tynamo 171", "tentacool 169", "yungoos 168", "duskull 167", "vulpix 167", "taillow 166",
-            "diglett-alola 163", "steenee 163", "pidgey 161", "poochyena 155", "treecko 150", "tympole 146",
-            "noibat 145", "electrike 144", "meditite 143", "vulpix-alola 142", "pikachu-partner-cap 139",
-            "pikachu-alola-cap 139", "pikachu-kalos-cap 139", "pikachu-unova-cap 139", "pikachu-sinnoh-cap 139",
-            "pikachu-hoenn-cap 139", "pikachu-original-cap 139", "pikachu-cosplay 138", "lillipup 136", "spoink 136",
-            "staryu 136", "pikachu-libre 133", "pikachu-phd 133", "pikachu-pop-star 133", "pikachu-belle 133",
-            "pikachu-rock-star 133", "pikachu 132", "seedot 131", "rattata-alola 129", "ditto 128", "helioptile 127",
-            "hoothoot 125", "gothita 123", "patrat 121", "combee 120", "lotad 120", "purrloin 117", "chingling 113",
-            "whismur 110", "bidoof 106", "wurmple 104", "ledyba 104", "horsea 102", "poliwag 102", "wingull 101",
-            "glameow 100", "bounsweet 98", "minccino 98", "weedle 93", "surskit 91", "togepi 90", "voltorb 90",
-            "luvdisc 88", "igglybuff 87", "cascoon 86", "mime-jr 85", "silcoon 85", "kakuna 85", "cleffa 83",
-            "skitty 78", "marill 76", "smoochum 75", "meowth-alola 74", "diglett 67", "rattata 65", "burmy 63",
-            "sunkern 62", "scatterbug 60", "ralts 57", "tyrogue 57", "sentret 57", "shuckle 54", "spewpa 51",
-            "wimpod 50", "wynaut 47", "kadabra 46", "kricketot 44", "chansey 44", "meowth 44", "caterpie 44",
-            "pichu 41", "metapod 40", "bunnelby 29", "azurill 29", "cosmog 27", "zigzagoon 23", "wishiwashi-solo 17",
-            "smeargle 7", "abra 7", "feebas 3", "magikarp 2", "happiny 0"]
+    real = ["gastrodon 18", "honchkrow 17", "skuntank 17", "bronzong 15", "bonsly 14", "drifblim 14", "drifloon 11",
+            "lopunny 10", "stunky 10", "ambipom 9", "cherrim 9", "purugly 9", "shellos 7", "bronzor 5", "buneary 5",
+            "mismagius 4", "glameow 3", "mime-jr 2", "chingling 1", "happiny 0"]
     for index, pokemon in enumerate(world.get_leader_board()):
         assert pokemon.__repr__() == real[index]
+
+
+@pytest.mark.timeout(5.0)
+@pytest.mark.incgroupdepend("correct")
+def test_world_fight_between_100_pokemons_leaderboard():
+    world = World("all_pokemons", 69, 100)
+    world.fight()
+    real = ["rhydon 92", "snorlax 91", "dragonite 86", "slowbro 86", "golem 84", "gyarados 84", "exeggutor 83",
+            "mewtwo 83", "lapras 82", "feraligatr 81", "mew 80", "kabutops 79", "graveler 78", "kingler 76", "muk 76",
+            "rhyhorn 75", "zapdos 75", "articuno 73", "geodude 72", "magneton 72", "cloyster 70", "kangaskhan 69",
+            "slowpoke 69", "moltres 67", "omastar 67", "tentacruel 67", "victreebel 67", "starmie 66", "ariados 65",
+            "vaporeon 65", "aerodactyl 64", "weezing 64", "dewgong 63", "seaking 63", "hypno 62", "flareon 61",
+            "scyther 61", "weepinbell 61", "pinsir 59", "kabuto 58", "dragonair 57", "tauros 57", "crobat 56",
+            "croconaw 54", "grimer 54", "meganium 54", "electabuzz 52", "hitmonchan 52", "marowak 52", "krabby 51",
+            "dodrio 50", "typhlosion 49", "farfetchd 48", "jolteon 46", "exeggcute 45", "hitmonlee 45", "noctowl 45",
+            "rapidash 45", "furret 44", "magmar 44", "gengar 43", "seadra 42", "onix 41", "porygon 41", "tangela 41",
+            "omanyte 40", "totodile 39", "bayleef 38", "lickitung 37", "magnemite 37", "cubone 35", "dratini 34",
+            "koffing 34", "goldeen 32", "haunter 31", "shellder 31", "doduo 30", "electrode 30", "mr-mime 30",
+            "ponyta 29", "quilava 29", "chikorita 28", "jynx 28", "seel 27", "drowzee 24", "spinarak 24",
+            "tentacool 23", "ledian 22", "gastly 21", "cyndaquil 18", "eevee 16", "staryu 15", "horsea 13", "ditto 11",
+            "ledyba 10", "hoothoot 9", "voltorb 7", "sentret 6", "chansey 5", "magikarp 0"]
+    for index, pokemon in enumerate(world.get_leader_board()):
+        assert pokemon.__repr__() == real[index]
+
+
+@pytest.mark.timeout(60.0)
+@pytest.mark.incgroupdepend("correct")
+def test_world_fight_between_all_pokemons_leaderboard():
+    world = World("all_pokemons", 0, 100000)
+    world.fight()
+    real = ["zygarde-complete 920", "steelix-mega 902", "garchomp-mega 892", "golisopod 890", "stakataka 883",
+            "rhyperior 878", "giratina-origin 870", "doublade 862", "guzzlord 862", "crabominable 860",
+            "giratina-altered 860", "necrozma-dusk 860", "zekrom 860", "yveltal 857", "dialga 856", "camerupt-mega 854",
+            "scizor-mega 853", "swampert-mega 853", "dhelmise 851", "escavalier 851", "solgaleo 851", "gyarados 847",
+            "muk-alola 844", "rhydon 843", "celesteela 841", "aegislash-blade 836", "pangoro 834", "gyarados-mega 831",
+            "carracosta 830", "groudon-primal 830", "kyurem-black 830", "metagross 830", "mewtwo-mega-x 828",
+            "tyranitar-mega 827", "palkia 826", "necrozma-dawn 825", "abomasnow-mega 823", "landorus-therian 823",
+            "xerneas 822", "kyogre-primal 821", "ampharos-mega 819", "dragonite 816", "aggron-mega 815", "reshiram 813",
+            "rayquaza 809", "slaking 809", "lunala 808", "steelix 808", "armaldo 805", "bewear 805", "garchomp 805",
+            "bisharp 803", "zygarde-50 803", "heracross-mega 802", "zygarde 802", "ho-oh 800", "regigigas 800",
+            "swampert 800", "golem-alola 799", "kyurem 797", "metagross-mega 797", "honchkrow 796", "scizor 795",
+            "hoopa-unbound 794", "rayquaza-mega 794", "wishiwashi-school 793", "gigalith 792", "kyurem-white 792",
+            "aggron 791", "magearna 791", "magearna-original 791", "slowbro-mega 791", "ferrothorn 789",
+            "gourgeist-super 787", "mawile-mega 784", "golem 782", "mamoswine 782", "charizard-mega-x 781",
+            "emboar 781", "forretress 781", "granbull 781", "salamence-mega 781", "buzzwole 779", "druddigon 777",
+            "exeggutor-alola 777", "piloswine 776", "tyranitar 776", "crustle 775", "golurk 774", "kartana 772",
+            "snorlax 772", "trevenant 771", "excadrill 769", "altaria-mega 768", "lapras 768", "landorus-incarnate 767",
+            "bronzong 766", "cradily 765", "salamence 765", "tyrantrum 765", "empoleon 764", "avalugg 763",
+            "braviary 761", "incineroar 761", "volcanion 759", "mewtwo-mega-y 758", "rampardos 756", "crawdaunt 751",
+            "arceus 750", "sableye-mega 749", "gastrodon 747", "magnezone 746", "toucannon 746", "genesect 743",
+            "necrozma-ultra 741", "seismitoad 741", "beartic 740", "haxorus 740", "hoopa 740", "kingdra 737",
+            "skarmory 733", "turtonator 733", "tapu-bulu 731", "spiritomb 730", "torterra 730", "quagsire 729",
+            "ursaring 729", "slowbro 728", "walrein 728", "jirachi 727", "relicanth 727", "kommo-o-totem 726",
+            "skuntank 726", "kommo-o 724", "scrafty 724", "kyogre 723", "zapdos 723", "diancie 722", "eelektross 722",
+            "mudsdale 722", "conkeldurr 721", "camerupt 720", "gourgeist-large 720", "blastoise-mega 719",
+            "gliscor 718", "lairon 716", "slowking 716", "lugia 715", "gallade-mega 714", "kangaskhan-mega 714",
+            "cobalion 712", "groudon 711", "venusaur-mega 711", "barbaracle 710", "honedge 710", "regirock 710",
+            "bouffalant 705", "goodra 705", "lucario-mega 705", "decidueye 704", "graveler 704", "necrozma 701",
+            "articuno 700", "gallade 699", "luxray 699", "thundurus-incarnate 699", "hippowdon 698",
+            "sandslash-alola 698", "thundurus-therian 698", "banette-mega 697", "graveler-alola 697", "marshadow 697",
+            "moltres 696", "palossand 695", "wailord 695", "audino-mega 694", "drapion 694", "poliwrath 694",
+            "charjabug 693", "amoonguss 692", "donphan 691", "muk 691", "fraxure 689", "tapu-fini 689", "whiscash 688",
+            "exeggutor 687", "feraligatr 687", "latios-mega 686", "rhyhorn 686", "cloyster 684", "hariyama 684",
+            "hydreigon 683", "pinsir-mega 683", "toxapex 682", "drifblim 681", "samurott 681", "stunfisk 681",
+            "aurorus 680", "mawile 680", "vikavolt-totem 680", "boldore 678", "dusknoir 678", "primarina 678",
+            "togedemaru-totem 678", "vikavolt 678", "klefki 677", "togedemaru 677", "krookodile 676", "latias-mega 676",
+            "cacturne 675", "blaziken 674", "kabutops 674", "manaphy 674", "octillery 674", "abomasnow 673",
+            "heatran 673", "kingler 673", "aegislash-shield 671", "meloetta-pirouette 671", "tapu-koko 670",
+            "gumshoos-totem 668", "lucario 667", "grimer-alola 666", "blaziken-mega 665", "mesprit 665",
+            "jellicent 664", "araquanid-totem 663", "durant 663", "gumshoos 663", "nidoqueen 663", "registeel 663",
+            "araquanid 662", "unfezant 662", "machamp 661", "staraptor 660", "victini 660", "type-null 659",
+            "marowak-totem 658", "mewtwo 658", "qwilfish 658", "dragalge 657", "marowak-alola 656",
+            "charizard-mega-y 655", "malamar 655", "chesnaught 654", "gourgeist-average 654", "meloetta-aria 654",
+            "sudowoodo 654", "lickilicky 653", "wigglytuff 653", "electivire 652", "shelgon 652", "heracross 651",
+            "suicune 650", "pignite 649", "magneton 646", "wormadam-trash 646", "huntail 645", "stoutland 645",
+            "tirtouga 645", "aerodactyl-mega 643", "aromatisse 643", "flygon 642", "throh 642",
+            "darmanitan-standard 640", "geodude 639", "mew 639", "solrock 639", "vespiquen 639", "absol 638",
+            "metang 638", "terrakion 636", "wormadam-sandy 636", "nidoking 635", "probopass 634", "marshtomp 633",
+            "zeraora 633", "entei 632", "tyrunt 630", "victreebel 630", "toxicroak 628", "cresselia 627",
+            "ampharos 625", "mandibuzz 625", "sharpedo-mega 625", "zweilous 624", "torkoal 620", "archeops 619",
+            "passimian 619", "tornadus-incarnate 617", "geodude-alola 614", "bastiodon 613", "cranidos 613",
+            "flareon 613", "gurdurr 613", "celebi 610", "mimikyu-totem-disguised 610", "lycanroc-midnight 609",
+            "mimikyu-totem-busted 609", "mimikyu-busted 608", "blastoise 607", "mimikyu-disguised 607", "breloom 603",
+            "dewgong 601", "klinklang 601", "munchlax 601", "greninja-ash 600", "pawniard 600", "alomomola 599",
+            "swanna 599", "diancie-mega 598", "banette 597", "tentacruel 597", "vaporeon 597", "silvally 596",
+            "exploud 595", "shaymin-sky 595", "tangrowth 595", "ariados 594", "vileplume 593", "glalie-mega 592",
+            "kangaskhan 592", "komala 592", "sandshrew-alola 592", "altaria 591", "tropius 591", "slurpuff 590",
+            "xurkitree 590", "gligar 589", "latios 588", "tapu-lele 588", "garbodor 587", "pupitar 587", "aron 586",
+            "latias 586", "arcanine 585", "bruxish 585", "clefable 585", "lopunny-mega 585", "reuniclus 585",
+            "sylveon 584", "weezing 584", "aerodactyl 583", "gabite 583", "houndoom-mega 583", "archen 582",
+            "raikou 580", "uxie 580", "musharna 579", "rotom-fan 579", "shiftry 579", "parasect 578", "charizard 577",
+            "heatmor 577", "umbreon 577", "dartrix 576", "gourgeist-small 576", "klang 576", "tsareena 576",
+            "drampa 575", "lanturn 575", "absol-mega 574", "deoxys-defense 572", "azelf 571", "keldeo-ordinary 569",
+            "keldeo-resolute 569", "politoed 569", "vanilluxe 569", "gardevoir-mega 567", "bibarel 566",
+            "tornadus-therian 566", "infernape 565", "regice 565", "venusaur 565", "porygon2 564",
+            "oricorio-pom-pom 563", "sharpedo 563", "machoke 562", "omastar 562", "seaking 560", "eelektrik 559",
+            "darmanitan-zen 556", "gogoat 556", "gorebyss 554", "sandslash 554", "sawk 554", "beheeyem 553",
+            "hawlucha 553", "medicham-mega 553", "oranguru 553", "pinsir 552", "zangoose 552", "golett 551",
+            "seviper 551", "slowpoke 551", "blacephalon 547", "lurantis-totem 547", "combusken 546", "lurantis 545",
+            "minior-blue-meteor 545", "minior-green-meteor 545", "minior-indigo-meteor 545", "minior-orange-meteor 545",
+            "minior-red-meteor 545", "minior-violet-meteor 545", "minior-yellow-meteor 545", "crobat 544", "sealeo 544",
+            "hakamo-o 543", "magmortar 543", "scyther 543", "rotom-heat 542", "florges 541", "togekiss 541",
+            "magcargo 540", "milotic 540", "virizion 540", "azumarill 539", "dusclops 539", "bonsly 538",
+            "houndoom 538", "froslass 537", "swalot 537", "mudbray 534", "pumpkaboo-super 533", "mothim 532",
+            "shaymin-land 532", "weavile 532", "chandelure 531", "clawitzer 531", "rotom-wash 530", "sawsbuck 528",
+            "scraggy 528", "weepinbell 528", "golduck 527", "mightyena 526", "ferroseed 525", "golbat 525",
+            "ludicolo 525", "greninja-battle-bond 524", "noivern 524", "rotom-frost 524", "talonflame 524",
+            "floatzel 523", "greninja 523", "lycanroc-dusk 523", "pidgeot-mega 523", "carbink 521", "rufflet 520",
+            "yanmega 520", "lycanroc-midday 519", "dodrio 518", "hypno 518", "kecleon 517", "sableye 517", "phione 516",
+            "phantump 515", "pidgeot 515", "oricorio-sensu 514", "darkrai 513", "mantine 513", "pumpkaboo-large 513",
+            "cofagrigus 512", "zebstrika 511", "carnivine 510", "naganadel 510", "delphox 508", "leafeon 508",
+            "pelipper 507", "claydol 505", "roggenrola 504", "tauros 504", "glalie 503", "leavanny 503", "wailmer 503",
+            "gardevoir 501", "glaceon 501", "nihilego 501", "sliggoo 501", "trapinch 501", "corsola 498",
+            "dragonair 498", "dwebble 498", "kabuto 498", "darumaka 497", "grimer 497", "larvesta 497",
+            "pumpkaboo-average 497", "typhlosion 496", "simipour 495", "pyukumuku 494", "galvantula 493", "krabby 492",
+            "bellossom 491", "farfetchd 491", "croconaw 490", "arbok 489", "oricorio-baile 489", "miltank 488",
+            "rotom-mow 488", "amaura 487", "snubbull 487", "sceptile-mega 486", "zygarde-10 485", "ninetales-alola 482",
+            "simisear 482", "anorith 481", "girafarig 480", "grotle 480", "marowak 480", "skrelp 479", "snover 479",
+            "tranquill 479", "floette-eternal 478", "magmar 477", "sandygast 476", "hitmontop 474", "ninetales 474",
+            "gible 473", "lileep 472", "volcarona 471", "dewott 470", "pumpkaboo-small 470", "rapidash 470",
+            "gloom 469", "stantler 469", "starmie 467", "lunatone 465", "meganium 465", "numel 465", "dunsparce 463",
+            "pyroar 463", "shedinja 462", "luxio 461", "palpitoad 461", "larvitar 460", "manectric-mega 460",
+            "rotom 460", "porygon-z 459", "hitmonchan 458", "fearow 455", "zoroark 455", "gengar-mega 454",
+            "minior-blue 454", "minior-green 454", "minior-indigo 454", "minior-orange 454", "minior-red 454",
+            "minior-violet 454", "minior-yellow 454", "axew 453", "bergmite 453", "noctowl 452", "wormadam-plant 452",
+            "mienshao 451", "scolipede 451", "vullaby 451", "fletchinder 450", "timburr 449", "beldum 447",
+            "brionne 447", "castform-snowy 447", "raticate-totem-alola 447", "shiinotic 447", "ambipom 446",
+            "dugtrio-alola 446", "emolga 446", "gothitelle 445", "murkrow 445", "oricorio-pau 445",
+            "raticate-alola 445", "whimsicott 445", "raichu-alola 444", "stufful 444", "basculin-blue-striped 443",
+            "basculin-red-striped 443", "monferno 440", "beedrill-mega 437", "roserade 436", "pancham 435",
+            "shieldon 435", "beedrill 433", "lampent 433", "vigoroth 431", "castform-sunny 429", "maractus 429",
+            "trumbeak 429", "electabuzz 428", "machop 427", "sunflora 426", "hippopotas 425", "pheromosa 425",
+            "bellsprout 424", "xatu 424", "beautifly 423", "castform-rainy 422", "prinplup 422", "swadloon 421",
+            "corphish 420", "krokorok 420", "nuzleaf 420", "primeape 420", "raichu 419", "gengar 417", "rowlet 415",
+            "audino 413", "cubchoo 413", "hitmonlee 413", "paras 412", "sigilyph 412", "kricketune 411",
+            "masquerain 410", "simisage 410", "drifloon 409", "ivysaur 409", "lumineon 409", "poipole 406",
+            "torracat 404", "dedenne 403", "deoxys-speed 403", "herdier 403", "sandshrew 403", "deino 402",
+            "vanillish 402", "cinccino 401", "salazzle-totem 399", "serperior 399", "watchog 399", "manectric 398",
+            "medicham 398", "salazzle 398", "carvanha 397", "foongus 391", "furfrou 390", "sneasel 390", "lopunny 387",
+            "quilladin 387", "wartortle 387", "stunky 385", "loudred 383", "teddiursa 383", "furret 382", "togetic 382",
+            "frillish 377", "blissey 375", "venomoth 375", "magnemite 374", "ponyta 374", "seadra 373",
+            "deoxys-normal 372", "flaaffy 372", "swellow 372", "growlithe 371", "jumpluff 371", "diggersby 370",
+            "jolteon 369", "volbeat 369", "clamperl 366", "nosepass 366", "chimecho 365", "sceptile 365", "liepard 364",
+            "staravia 363", "bagon 362", "koffing 362", "phanpy 361", "vibrava 360", "klink 359", "pidgeotto 359",
+            "castform 358", "chatot 358", "cryogonal 358", "mareanie 357", "tepig 357", "charmeleon 356", "comfey 356",
+            "croagunk 356", "mudkip 356", "nidorina 356", "quilava 355", "heliolisk 353", "spritzee 352",
+            "nidorino 351", "braixen 348", "porygon 348", "purugly 347", "totodile 346", "houndour 343", "cacnea 342",
+            "ninjask 341", "whirlipede 341", "lickitung 339", "onix 339", "pineco 339", "omanyte 338", "roselia 337",
+            "drilbur 336", "sandile 334", "litleo 333", "litwick 331", "doduo 330", "grumpig 330", "tangela 330",
+            "turtwig 330", "lilligant 329", "sewaddle 329", "yanma 328", "espeon 327", "oddish 327", "poliwhirl 327",
+            "ducklett 326", "misdreavus 325", "rockruff-own-tempo 325", "binacle 324", "crabrawler 324", "rockruff 324",
+            "mismagius 318", "venonat 318", "cherrim 316", "shellder 313", "bayleef 311", "makuhita 311", "pidove 311",
+            "vivillon 311", "linoone 310", "shuppet 310", "swoobat 310", "dustox 305", "mienfoo 303",
+            "ribombee-totem 303", "shinx 303", "ribombee 302", "spinarak 302", "goldeen 301", "lombre 300", "unown 300",
+            "skiddo 298", "magby 297", "wooper 297", "meowstic-female 296", "torchic 296", "meowstic-male 295",
+            "karrablast 294", "servine 294", "haunter 293", "exeggcute 292", "morelull 292", "raticate 292",
+            "swinub 292", "chespin 287", "inkay 286", "bulbasaur 285", "jigglypuff 285", "jynx 284", "chinchou 283",
+            "cubone 282", "elgyem 282", "butterfree 280", "spheal 280", "accelgor 279", "illumise 279", "delibird 278",
+            "persian-alola 278", "skiploom 276", "electrode 275", "pikipek 275", "shellos 275", "joltik 274",
+            "mr-mime 274", "deerling 273", "nincada 269", "clauncher 268", "clefairy 268", "slakoth 268", "litten 267",
+            "skorupi 267", "delcatty 266", "swirlix 266", "popplio 264", "chimchar 263", "alakazam-mega 262",
+            "pansear 261", "gothorita 259", "pachirisu 259", "persian 258", "oshawott 256", "frogadier 255",
+            "barboach 253", "floette 253", "salandit 250", "jangmo-o 249", "grubbin 247", "woobat 247", "snorunt 245",
+            "dratini 244", "duosion 244", "piplup 243", "grovyle 242", "gulpin 242", "spinda 242", "trubbish 240",
+            "aipom 236", "ledian 233", "seel 233", "wobbuffet 233", "deoxys-attack 231", "mantyke 231", "vanillite 231",
+            "starly 230", "spearow 229", "mankey 228", "buizel 227", "ekans 225", "fletchling 225", "nidoran-f 225",
+            "riolu 225", "cosmoem 224", "swablu 224", "nidoran-m 223", "chikorita 222", "plusle 222", "squirtle 221",
+            "drowzee 220", "zubat 220", "natu 217", "charmander 216", "cyndaquil 215", "elekid 214", "dewpider 213",
+            "bronzor 212", "psyduck 212", "shelmet 212", "goomy 210", "buneary 208", "blitzle 206", "fomantis 206",
+            "minun 205", "alakazam 204", "pansage 203", "eevee 202", "yungoos 202", "tentacool 200", "dugtrio 199",
+            "shroomish 198", "zorua 196", "baltoy 195", "slugma 195", "remoraid 193", "fennekin 192", "gastly 191",
+            "espurr 190", "panpour 190", "cutiefly 187", "finneon 186", "duskull 184", "pidgey 184", "hoppip 181",
+            "poochyena 181", "venipede 180", "taillow 179", "mareep 178", "yamask 178", "budew 177", "petilil 177",
+            "snivy 177", "froakie 174", "cottonee 170", "diglett-alola 170", "whismur 169", "vulpix 168", "cherubi 165",
+            "lillipup 165", "tynamo 165", "steenee 159", "patrat 154", "wurmple 153", "flabebe 151", "munna 147",
+            "treecko 146", "seedot 145", "tympole 144", "noibat 141", "pikachu-alola-cap 136", "pikachu-hoenn-cap 136",
+            "pikachu-kalos-cap 136", "pikachu-original-cap 136", "pikachu-partner-cap 136", "pikachu-sinnoh-cap 136",
+            "pikachu-unova-cap 136", "vulpix-alola 136", "bidoof 135", "pikachu-cosplay 135", "ditto 134",
+            "hoothoot 133", "purrloin 133", "meditite 130", "pikachu-belle 130", "pikachu-libre 130", "pikachu-phd 130",
+            "pikachu-pop-star 130", "pikachu-rock-star 130", "pikachu 129", "combee 128", "rattata-alola 127",
+            "electrike 126", "kirlia 125", "lotad 122", "staryu 119", "helioptile 117", "ledyba 117", "skitty 111",
+            "spoink 109", "minccino 105", "igglybuff 103", "poliwag 101", "weedle 100", "glameow 99", "horsea 99",
+            "bounsweet 97", "solosis 95", "cascoon 94", "silcoon 93", "kakuna 90", "mime-jr 90", "surskit 90",
+            "marill 89", "wingull 89", "chansey 88", "luvdisc 85", "togepi 82", "gothita 81", "voltorb 79",
+            "sentret 77", "cleffa 76", "scatterbug 75", "smoochum 74", "chingling 72", "meowth-alola 72", "shuckle 71",
+            "diglett 69", "rattata 69", "tyrogue 65", "sunkern 62", "burmy 60", "caterpie 52", "ralts 48",
+            "kricketot 47", "wynaut 47", "spewpa 46", "kadabra 45", "meowth 45", "wimpod 44", "metapod 42", "pichu 41",
+            "azurill 38", "bunnelby 34", "cosmog 30", "zigzagoon 24", "wishiwashi-solo 17", "abra 6", "smeargle 6",
+            "feebas 3", "magikarp 1", "happiny 0"]
+    for index, pokemon in enumerate(world.get_leader_board()):
+        assert pokemon.__repr__() == real[index]
+
+    for filename in glob.glob("./PokeLand*"):
+        os.remove(filename)  # blow up all previous files
