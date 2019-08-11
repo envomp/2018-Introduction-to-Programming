@@ -1,9 +1,10 @@
-Vestlus
+Conversation
 =======
 
 Fail Gitis: ``xp_conversation/conversation.py`` .
 
 .. code-block:: python
+
     student = Student(100)
     server = Server(100)
     server_functions = [server.get_quadratic_equation, server.get_amount_of_zeroes_in_binary,
@@ -24,6 +25,7 @@ Fail Gitis: ``xp_conversation/conversation.py`` .
                 break
 
 .. code-block:: none
+
     server > student: Number contains hex value: "c".
     student > server: Possible answers are [12, 28, 44, 60, 76, 92].
     server > student: The aforementioned number doesn't happen to be in catalan sequence.
@@ -206,6 +208,7 @@ Mall
 ----
 
 .. code-block:: python
+
     class Student:
         def __init__(self, biggest_number: int):
             """
