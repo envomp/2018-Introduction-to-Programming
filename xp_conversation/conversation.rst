@@ -3,28 +3,15 @@ Conversation
 
 Fail Gitis: ``xp_conversation/conversation.py`` .
 
-.. code-block:: python
-
-    student = Student(100)
-    server = Server(100)
-    server_functions = [server.get_quadratic_equation, server.get_amount_of_zeroes_in_binary,
-                        server.get_amount_of_ones_in_binary, server.get_random_dec_number, server.get_random_hex_number,
-                        server.is_composite, server.is_prime, server.is_in_fibonacci_sequence,
-                        server.is_in_catalan_sequence, server.get_order]
-    while True:
-        server_call = random.choice(server_functions)()
-        print('server > student:', server_call)
-        student_result = student.decision_branch(server_call)
-        print('student > server:', student_result)
-        if server.number not in student.possible_answers:
-            print('server > student: You made a mistake... It is a humane thing to do.')
-            break
-        if re.compile(r'(\d+)\.').search(student_result):
-            if int(re.compile(r'(\d+)\.').search(student_result).group()[:-1]) == server.number:
-                print('server > student: You are correct.')
-                break
-
 .. code-block:: none
+
+    server > student: Greetings from the server side!
+    student > server: Oh, hello there!
+    server > student: I want to play a game, where you need to guess my number. We will play some rounds and best of luck to you with guessing my number! :D
+    student > server: What are the rules?
+    server > student: Rules are simple.. you remove wrong elements -> you lose.. you dont remove all the elements -> you lose.. There are no mistakes to be made here.. are you up for the challenge?
+    student > server: I have what it takes!
+    server > student: Let the games begin!
 
     server > student: Number contains hex value: "c".
     student > server: Possible answers are [12, 28, 44, 60, 76, 92].
@@ -204,6 +191,33 @@ Fail Gitis: ``xp_conversation/conversation.py`` .
     student > server: The number I needed to guess was 72.
     server > student: You are correct.
 
+    server > student: GG!
+    student > server: GG!
+    server > student: You got 10/10 correct! Thank you for playing with me!
+    student > server: The pleasure is mine!
+
+
+.. code-block:: python
+
+    student = Student(100)
+    server = Server(100)
+    server_functions = [server.get_quadratic_equation, server.get_amount_of_zeroes_in_binary,
+                        server.get_amount_of_ones_in_binary, server.get_random_dec_number, server.get_random_hex_number,
+                        server.is_composite, server.is_prime, server.is_in_fibonacci_sequence,
+                        server.is_in_catalan_sequence, server.get_order]
+    while True:
+        server_call = random.choice(server_functions)()
+        print('server > student:', server_call)
+        student_result = student.decision_branch(server_call)
+        print('student > server:', student_result)
+        if server.number not in student.possible_answers:
+            print('server > student: You made a mistake... It is a humane thing to do.')
+            break
+        if re.compile(r'(\d+)\.').search(student_result):
+            if int(re.compile(r'(\d+)\.').search(student_result).group()[:-1]) == server.number:
+                print('server > student: You are correct.')
+                break
+
 Mall
 ----
 
@@ -217,7 +231,7 @@ Mall
             :param biggest_number: biggest possible number(inclusive) to guess
             NB: calculating using sets are much faster compared to lists
             """
-            self.possible_answers = set([all_possible_answers for all_possible_answers in range(biggest_number)])
+            self.possible_answers = set([all_possible_answers for all_possible_answers in range(biggest_number + 1)])
 
         def decision_branch(self, sentence: str):
             """
@@ -307,6 +321,7 @@ Mall
             """
             :param update: new list to be put into conjunction with self.possible_answers
             conjunction between self.possible_answers and update
+            https://en.wikipedia.org/wiki/Logical_conjunction
             """
             pass
 
@@ -322,6 +337,7 @@ Mall
         """
         :param a, b, c: variables for quadratic equation
         solve the quadratic equation
+        https://en.wikipedia.org/wiki/Quadratic_formula
         :return: x1, x2, where the discriminant is subtracted from the first one and added to the second one
         """
         pass
@@ -329,8 +345,9 @@ Mall
 
     def find_primes_in_range(biggest_number: int):
         """
-        :return: list of primes
         :param biggest_number: all primes in range of biggest_number(included)
+        https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
+        :return: list of primes
         """
         pass
 
@@ -345,15 +362,17 @@ Mall
 
     def find_fibonacci_numbers(biggest_number: int):
         """
-        :return: list of fibonacci numbers
         :param biggest_number: all fibonacci numbers in range of biggest_number(included)
+        https://en.wikipedia.org/wiki/Fibonacci_number
+        :return: list of fibonacci numbers
         """
         pass
 
 
     def find_catalan_numbers(biggest_number: int):
          """
-        :return: list of catalan numbers
         :param biggest_number: all catalan numbers in range of biggest_number(included)
+        https://en.wikipedia.org/wiki/Catalan_number
+        :return: list of catalan numbers
         """
         pass
