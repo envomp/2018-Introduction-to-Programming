@@ -25,31 +25,49 @@ kui eraldate teksti suvalistest numbritest ja sümbolitest. Kuna tekstis on olem
 vajalikud sümbolid, on allpool antud mõnede sümbolite asendused (vasakpoolne on
 esialgne sümbol, paremalpoolne on selle asendus):
 
-- ``.`` -> ``.``
-- ``*`` -> ``"``
-- ``!`` -> ``?``
-- ``?`` -> ``!``
-- ``/`` -> ``,``
-
-Kõik ülejäänud sümbolid ei tähenda mitte midagi ja on mõeldud selleks, et teha 
-teksti segaseks, aga kõik **tähed** ja **tühikud** on **teksti koostisosad!**
-
-**NB! Esialgses tekstis kõik lause alguse suurtähed on jäänud määramata, seega peate ise
-tuvastama, kuskohas peaks suurtäht olema! (Aga nimedel ja nimetustel on suurtäht säilinud)**.
-Ehk siis teisisõnu, tekstis olev suur-väike täht jääb samaks,
-välja arvatud iga lause alguses - seal peab tulemuses olema suurtäht.
-
-
-Ebaolulised sümbolid, mis tuleb tekstist eemaldada -> ``1234567890&@#$%^()_+|><~``
-
-Your task is to find the unique e-mail addresses present in the text. You could use Regular Expressions to simplify your task. And remember that the "@" sign can be used for a variety of purposes!
-
 - ``read_text_from_file(file)`` - funktsioon, mida kasutad teksti failist lugemiseks. Funktsioon saab sisendiks tekstifaili ja peab tagastama loetud teksti stringina.
 
 - ``get_email_addresses(file)`` - funktsioon, mis saab sisendiks teksti. Sinu ülesandeks on sellest tekstist regexi abil leida unikaalseid emaili aadresse.
 Arvesta sellega, et "@" võib olla kasutatud erinevatel põhjustel. Tagastama pead tähestiku järgi järjestatud listi unikaalsete emailidega (nendega, mida tekstis on vaid 1 ekseplaar).
+
+Mida saab peeta valiidseks emailiks?
+
+* The recipient name may be a maximum of 64 characters long and consist of:
+    * Uppercase and lowercase letters in English (A-Z, a-z)
+    * Digits from 0 to 9
+    * Special characters such as ! # $ % & ' * + - / = ? ^ _ ` { |
+    
+A special character cannot appear as the first or last character in an email address or appear consecutively two or more times. The most commonly used special characters are the period (.), underscore(_), hyphen (-) and plus sign (+).
   
-  
+* Domain names may be a maximum of 253 characters and consist of:
+
+    * Uppercase and lowercase letters in English (A-Z, a-z)
+    * Digits from 0 to 9 
+    * A hyphen (-)
+    * A period (.)  (used to identify a sub-domain; for example,  email.domainsample)
+    
+    
+Valid emails:
+Examples of valid email addresses include:
+
+johndoe@domainsample.com
+john.doe@domainsample.net
+john.doe43@domainsample.co.uk
+Examples of invalid email addresses include:
+ 
+
+Email address
+What makes it invalid
+@domainsample.com
+The recipient name is missing.
+johndoedomainsample.com
+The @ symbol is missing between johndoe and domainsample.com.
+john.doe@.net
+The domain name (domainsample) is missing after the @ symbol and before the top level domain (.net).
+john.doe43@domainsample
+The top level domain (.co.uk) is missing.
+
+
 Mall
 ~~~~
 
