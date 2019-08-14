@@ -79,11 +79,15 @@ class GameController:
         pass
 
     def start_game(self) -> None:
-        """Start game"""
+        """Start game."""
         pass
 
     def play_round(self) -> bool:
+        """Play round."""
         pass
+
+    def _draw_card(self) -> Card:
+        """Draw card."""
 
     @staticmethod
     def load_strategies() -> list:
