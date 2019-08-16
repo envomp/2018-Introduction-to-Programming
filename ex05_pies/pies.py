@@ -16,7 +16,7 @@ def get_results_dict(filename):
     """
     Get the results and store them in the dictionary.
 
-    Results are following the format 'Firstname Surename - result'.
+    Results are following the format 'Firstname Lastname - result'.
     You have to return a dict, where the names of the competitors
     are keys and the results are values.
 
