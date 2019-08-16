@@ -220,7 +220,7 @@ with open('example.txt', 'r') as file:
 
 *Comma-Separated-Values* ehk **CSV** on failitüüp, kus andmete eraldamiseks teineteisest kasutatakse koma (vajadusel saab kasutada ka muud sobivat sümbolit). CSV faili võib vaadela tabelina, kus on olemas read ja veergud. Veergude päised on üldjuhul defineeritud faili esimeses reas ning edasi tulevad andmed.
 
-![Näide csv failist](https://srv-file2.gofile.io/download/cgVj87/csv_example.JPG)
+![Näide csv failist](https://srv-file6.gofile.io/download/iS2iJQ/csv_example.JPG)
 
 Pyhton pakub CSV failide töötlemiseks sisseehitatud mooduli originaalse nimega `csv`. Peamised kaks meetodit, mida kasutame:
 
@@ -258,13 +258,17 @@ Pyhton pakub CSV failide töötlemiseks sisseehitatud mooduli originaalse nimega
 
     Näite põhjal koostatud fail näeb niimoodi välja:
 
-    ![Uus csv fail](https://srv-file2.gofile.io/download/cgVj87/new_csv_example.JPG)
+    ![Uus csv fail](https://srv-file6.gofile.io/download/iS2iJQ/new_csv_example.JPG)
 
 Mõned tähelepanekud:
 
-1. Antud näidetes andsime `open()` meetodile kaasa veel ühe argumendi `newline`. Sellest saate lugeda näiteks [siit](https://pythonconquerstheuniverse.wordpress.com/2011/05/08/newline-conversion-in-python-3/). Lühidalt kokku võttes on seda vaja selleks, et python õigesti interpreteeriks reavahetused.
+1. Antud näidetes andsime `open()` meetodile kaasa veel ühe argumendi `newline`. Sellest saate lugeda näiteks [siit](https://pythonconquerstheuniverse.wordpress.com/2011/05/08/newline-conversion-in-python-3/). Lühidalt kokku võttes on seda vaja selleks, et python õigesti interpreteeriks failis olevad reavahetused.
 
 2. `delimiter` määrab ära, mis sümbolit kasutatakse andemte eraldamiseks. Mõlemad meetodid aktsepteerivad seda. Vaikimisi on selle väärtuseks koma.
+
+### Sõnastik (`dict`)
+
+Selles ülesandes peate tegelema ka sellise pythoni andmestruktuuriga nagu sõnastik ehk `dict`. Infot sellest, kuidas töötada sõnastikega, leiate [pydocist](https://ained.ttu.ee/pydoc/dict.html).
 
 ## Ülesanne
 
@@ -278,9 +282,9 @@ Kujutage ette, et Teid paluti korrastada ühe võistluse tulemusi. Võistluses o
 
 Teile on antud kaks faili:
 
-1. [*Competitors_list*](https://srv-file2.gofile.io/download/KjvZUd/competitors_list.txt) - siin on nimekiri registreeritud osalejatest. Formaat: `Eesnini Perenimi`.
+1. [*Competitors_list*](https://srv-file6.gofile.io/download/iS2iJQ/results.txt) - siin on nimekiri registreeritud osalejatest. Formaat: `Eesnini Perenimi`.
 
-2. [*Results*](https://srv-file2.gofile.io/download/KjvZUd/results.txt) - siin on võistluse tulemused. Formaat: `Eesnimi Perenimi - tulemus`.
+2. [*Results*](https://srv-file6.gofile.io/download/iS2iJQ/competitors_list.txt) - siin on võistluse tulemused. Formaat: `Eesnimi Perenimi - tulemus`.
 
 Teie peate realiseerima järgmised meetodid:
 
