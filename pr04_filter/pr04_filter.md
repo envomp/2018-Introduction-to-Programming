@@ -7,10 +7,10 @@ Fail Gitis: pr04_filter/filter.py
 Abimaterjalid ülesande lahendamiseks
 ------------------------------------
 
-- `sõne <https://ained.ttu.ee/pydoc/string.html>`
-- `järjend <https://ained.ttu.ee/pydoc/list.html>`
-- `tsükkel (loop) <https://ained.ttu.ee/pydoc/loop.html>`
-- `tingimuslause <https://ained.ttu.ee/pydoc/if_statements.html>`
+- [sõne](https://ained.ttu.ee/pydoc/string.html)
+- [järjend](https://ained.ttu.ee/pydoc/list.html>)
+- [tsükkel (loop)](https://ained.ttu.ee/pydoc/loop.html)
+- [tingimuslause](https://ained.ttu.ee/pydoc/if_statements.html)
 
 Funktsioonid
 ---
