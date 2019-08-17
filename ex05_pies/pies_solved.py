@@ -9,7 +9,8 @@ def get_competitors_list(filename) -> list:
     :param filename: is the path to the file with the names of competitors.
     :return: a list containing the names of competitors.
     """
-    pass
+    with open(filename) as file:
+        return [line.strip() for line in file.readlines()]
 
 
 def get_results_dict(filename) -> dict:
@@ -23,7 +24,9 @@ def get_results_dict(filename) -> dict:
     :param filename: is the path to the file with the results.
     :return: a dict containing names as keys and results as values.
     """
-    pass
+    with open(filename) as file:
+        lines = file.readlines()
+        return {k: int(v) for k, v in (line.split(' - ') for line in lines)}
 
 
 def competitors_filter(competitors_list: str, results: str) -> dict:
@@ -38,7 +41,12 @@ def competitors_filter(competitors_list: str, results: str) -> dict:
     :param results: is the path to the file with the results.
     :return: a dict with correct results.
     """
-    pass
+    comp_list = get_competitors_list(competitors_list)
+    results_dict = get_results_dict(results)
+    for name in list(results_dict.keys()):
+        if name not in comp_list:
+            del results_dict[name]
+    return results_dict
 
 
 def sort_results(competitors_list: list, results: dict) -> dict:
@@ -54,7 +62,7 @@ def sort_results(competitors_list: list, results: dict) -> dict:
     :param results: is the filtered results dictionary.
     :return: a sorted results dictionary.
     """
-    pass
+    return dict(sorted(results.items(), key=lambda x: (x[1], competitors_list.index(x[0])), reverse=True))
 
 
 def announce_winner(results: dict) -> str:
@@ -64,10 +72,11 @@ def announce_winner(results: dict) -> str:
     You have to return a string following this format (without curly brackets):
     'The winner of the "Pie Eating Competition" is {name} with {result} pies eaten.'
 
-    :param results: is the filtered results dictionary.
+    :param results: is the filtered and sorted results dictionary.
     :return: a correct string.
     """
-    pass
+    name, result = list(results.items())[0]
+    return f"The winner of the \"Pie Eating Competition\" is {name} with {result} pies eaten."
 
 
 def write_results_csv(competitors_list: str, results: str, file_to_write) -> None:
@@ -84,8 +93,18 @@ def write_results_csv(competitors_list: str, results: str, file_to_write) -> Non
     :param file_to_write: is the name of the csv file.
     :return: None
     """
-    pass
+    with open(file_to_write, mode='w', newline='') as file:
+        writer = csv.writer(file, delimiter=',')
+        place, name, result = 'Place', 'Name', 'Result'
+        writer.writerow([place, name, result])
 
-# Some examples:
+        filtered_dict = competitors_filter(competitors_list, results)
+        competitors = get_competitors_list(competitors_list)
+        sorted_dict = sort_results(competitors, filtered_dict)
+
+        for index, name, result in enumerate(sorted_dict.items(), start=1):
+            writer.writerow([index, name, result])
+
+
 if __name__ == '__main__':
     pass

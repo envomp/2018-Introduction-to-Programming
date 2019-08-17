@@ -38,7 +38,7 @@ spetsiaalset *flag*i `r'C:\directory\taltech\file.txt''`, mis muudab kõik sümb
   * `r+` ehk **read/write** - faili lugemine ja muutmine. Kirjutab eelmist sisu üle;
   * `a+` ehk **append and read** - faili lugemine ja uue sisu lisamine. Ei kirjuta eelmist sisu üle.
 
-`open()` meetod tagastab **faili objekti** (*file object*), millest(sse) edasi saab lugeda(kirjutada) andmeid. Kui faili pole olemas, seda luuakse ja avatakse automaatselt, Te ei pea faili ise looma.
+`open()` meetod tagastab **faili objekti** (*file object*), millest(sse) edasi saab lugeda(kirjutada) andmeid.
 
 ### Failist lugemine
 
@@ -296,7 +296,7 @@ Teie peate realiseerima järgmised meetodid:
 
 * `sort_results(competitors_list: list, results: dict) -> dict` - võtab vastu järjendi koos osalejate nimedega ja filtreeritud tulemuste sõnastiku. Sorteerib tulemusi nii, et inimene, kes sõi rohkem kooke, asub eespool. Kui mitmel inimesel on sama söödud kookide arv, siis kõrgemat kohta saab see, kes on registreeritud osalejate nimekirjas eespool. Näiteks kui Mati tulemus on 5 kooki ja Kati tulemus on 5 kooki ning Kati asub nimekirjas eespool, siis kõrgemat kohta saab Kati (näiteks Kati saab 4nda koha ja Mati saab 5nda).
 
-* `announce_winner(results: dict) -> str` - võtab vastu filtreeritud tulemuste sõnastiku ning kuulutab välja võitja. Võitja on see inimene, kes suutis kõige rohkem kooke ära süüa. Tagastab sõne kujul `'The winner of the "Pie Eating Competition" is {name} with {result} pies eaten.'`, kus `{name}` on asendatud võitja nimega ja `{results}` tema tulemusega.
+* `announce_winner(results: dict) -> str` - võtab vastu filtreeritud ja sorteeritud tulemuste sõnastiku ning kuulutab välja võitja. Võitja on see inimene, kes suutis kõige rohkem kooke ära süüa. Tagastab sõne kujul `'The winner of the "Pie Eating Competition" is {name} with {result} pies eaten.'`, kus `{name}` on asendatud võitja nimega ja `{results}` tema tulemusega.
 
 * `write_results_csv(competitors_list: str, results: str, file_to_write) -> None` - võtab vastu registreeritud osalejate nimekirja faili nime, tulemuste faili nime ja faili nime, kuhu filtreeritud ja sorteeritud tulemused kirjutada. Uues tulemuste failis on kolm veergu:
 
@@ -375,7 +375,7 @@ def announce_winner(results: dict) -> str:
     You have to return a string following this format (without curly brackets):
     'The winner of the "Pie Eating Competition" is {name} with {result} pies eaten.'
 
-    :param results: is the filtered results dictionary.
+    :param results: is the filtered and sorted results dictionary.
     :return: a correct winner announcement.
     """
     pass
