@@ -38,7 +38,7 @@ spetsiaalset *flag*i `r'C:\directory\taltech\file.txt''`, mis muudab kõik sümb
   * `r+` ehk **read/write** - faili lugemine ja muutmine. Kirjutab eelmist sisu üle;
   * `a+` ehk **append and read** - faili lugemine ja uue sisu lisamine. Ei kirjuta eelmist sisu üle.
 
-`open()` meetod tagastab **faili objekti** (*file object*), millest(sse) edasi saab lugeda(kirjutada) andmeid.
+`open()` meetod tagastab **faili objekti** (*file object*), millest(sse) edasi saab lugeda(kirjutada) andmeid. Kui faili pole olemas, seda luuakse ja avatakse automaatselt, Te ei pea faili ise looma.
 
 ### Failist lugemine
 
@@ -268,7 +268,7 @@ Mõned tähelepanekud:
 
 ### Sõnastik (`dict`)
 
-Selles ülesandes peate tegelema ka sellise pythoni andmestruktuuriga nagu sõnastik ehk `dict`. Infot sellest, kuidas töötada sõnastikega, leiate [pydocist](https://ained.ttu.ee/pydoc/dict.html).
+Selles ülesandes peate tegelema ka sellise pythoni andmestruktuuriga nagu sõnastik ehk `dict`. Infot sellest, kuidas töötada sõnastikega, leiate [pydocist](https://ained.ttu.ee/pydoc/dict.html). Sõnastiku [sorteerimine](https://thispointer.com/python-how-to-sort-a-dictionary-by-key-or-value/), sorteerimine [mitme võtme järgi](https://stackoverflow.com/questions/34170515/sort-dictionary-by-multiple-values).
 
 ## Ülesanne
 
@@ -284,15 +284,125 @@ Teile on antud kaks faili:
 
 1. [*Competitors_list*](https://srv-file6.gofile.io/download/iS2iJQ/results.txt) - siin on nimekiri registreeritud osalejatest. Formaat: `Eesnini Perenimi`.
 
-2. [*Results*](https://srv-file6.gofile.io/download/iS2iJQ/competitors_list.txt) - siin on võistluse tulemused. Formaat: `Eesnimi Perenimi - tulemus`.
+2. [*Results*](https://srv-file6.gofile.io/download/d6jl05/results.txt) - siin on võistluse tulemused. Formaat: `Eesnimi Perenimi - tulemus`.
 
 Teie peate realiseerima järgmised meetodid:
 
-TODO: add the descriptions of all methods.
+* `get_competitors_list(filename) -> list` - võtab vastu faili nime, mis hoiab endas osalejate nimed ning tagastab järjendi koos nimedega;
+
+* `get_results_dict(filename) -> dict` - võtab vastu faili nime, mis hoiab endas tulemused ning tagastab `dict` objekti, kus nimed on võtmed ja tulemused on väärtused.
+
+* `competitors_filter(competitors_list: str, results: str) -> dict` - parameeter `competitors_list` on faili nimi, mis hoiab endas osalejate nimed ning `results` on faili nimi, mis hoiab endas tulemused. Peab eemaldama tulemustest illegaalsete osalejate nimed ja tulemused. Illegaalne osaleja on see, kelle nime pole registreeritud osalejate nimekirjas. Peab kasutama meetodeid `get_competitors_list` ja `get_results_dict`.
+
+* `sort_results(competitors_list: list, results: dict) -> dict` - võtab vastu järjendi koos osalejate nimedega ja filtreeritud tulemuste sõnastiku. Sorteerib tulemusi nii, et inimene, kes sõi rohkem kooke, asub eespool. Kui mitmel inimesel on sama söödud kookide arv, siis kõrgemat kohta saab see, kes on registreeritud osalejate nimekirjas eespool. Näiteks kui Mati tulemus on 5 kooki ja Kati tulemus on 5 kooki ning Kati asub nimekirjas eespool, siis kõrgemat kohta saab Kati (näiteks Kati saab 4nda koha ja Mati saab 5nda).
+
+* `announce_winner(results: dict) -> str` - võtab vastu filtreeritud tulemuste sõnastiku ning kuulutab välja võitja. Võitja on see inimene, kes suutis kõige rohkem kooke ära süüa. Tagastab sõne kujul `'The winner of the "Pie Eating Competition" is {name} with {result} pies eaten.'`, kus `{name}` on asendatud võitja nimega ja `{results}` tema tulemusega.
+
+* `write_results_csv(competitors_list: str, results: str, file_to_write) -> None` - võtab vastu registreeritud osalejate nimekirja faili nime, tulemuste faili nime ja faili nime, kuhu filtreeritud ja sorteeritud tulemused kirjutada. Uues tulemuste failis on kolm veergu:
+
+    1. **Place** - osaleja koht;
+    2. **Name** - osaleja nimi;
+    3. **Result** - osaleja saadud tulemus.
+
+    Selles meetodis tuleks kasutada meetodeid `competitors_filter` ja `sort_results`.
 
 ### Mall
 
 ```python
+"""Pies Eating Competition."""
+import csv
+
+
+def get_competitors_list(filename) -> list:
+    """
+    Get the names of all registered competitors.
+
+    :param filename: is the path to the file with the names of competitors.
+    :return: a list containing the names of competitors.
+    """
+    pass
+
+
+def get_results_dict(filename) -> dict:
+    """
+    Get the results and store them in the dictionary.
+
+    Results are following the format 'Firstname Lastname - result'.
+    You have to return a dict, where the names of the competitors
+    are keys and the results are values.
+
+    :param filename: is the path to the file with the results.
+    :return: a dict containing names as keys and results as values.
+    """
+    pass
+
+
+def competitors_filter(competitors_list: str, results: str) -> dict:
+    """
+    Filter out all illegal competitors.
+
+    Illegal competitor is the one, whose name is not in the competitors list.
+    You have to return a results dict, which doesn't contain illegal competitors results.
+    You should use the methods defined above.
+
+    :param competitors_list: is the path to the file with the names of competitors.
+    :param results: is the path to the file with the results.
+    :return: a dict with correct results.
+    """
+    pass
+
+
+def sort_results(competitors_list: list, results: dict) -> dict:
+    """
+    Sort the filtered results dictionary.
+
+    In order to find the winner you have to sort the results.
+    The more pies the competitor has eaten, the better place they get.
+    If there are multiple competitors with the same results, the better place
+    goes to the one, who is on the higher place in the names list.
+
+    :param competitors_list: is the list of the registered competitors.
+    :param results: is the filtered results dictionary.
+    :return: a sorted results dictionary.
+    """
+    pass
+
+
+def announce_winner(results: dict) -> str:
+    """
+    Announce the winner of the competition.
+
+    You have to return a string following this format (without curly brackets):
+    'The winner of the "Pie Eating Competition" is {name} with {result} pies eaten.'
+
+    :param results: is the filtered results dictionary.
+    :return: a correct winner announcement.
+    """
+    pass
+
+
+def write_results_csv(competitors_list: str, results: str, file_to_write) -> None:
+    """
+    Write the results to csv file.
+
+    The csv file must contain three columns:
+    1. Place;
+    2. Name;
+    3. Result.
+
+    This method should use competiors_filter and sort_results methods.
+
+    :param competitors_list: is the path to the file with the names of competitors.
+    :param results: is the path to the file with the results.
+    :param file_to_write: is the name of the csv file.
+    :return: None
+    """
+    pass
+
+# Some examples:
+if __name__ == '__main__':
+    # TODO: Add some examples here.
+    pass
 
 ```
 
