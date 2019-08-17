@@ -46,5 +46,5 @@ def test_different_numbers():
 
 @pytest.mark.timeout(1.0)
 def test_random():
-    number == randint(2, 1000))
+    number = randint(2, 1000)
     assert prime_number_identifier(number) == test_prime_number_identifier(number)
