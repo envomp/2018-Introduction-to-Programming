@@ -26,9 +26,9 @@ Kui kahes tekkinud sõnes on sama palju tähti, siis tagastada sõne, mis paikne
 - ``sort_list(string_list)`` - Sisendiks on sõnedest koosnev järjend. Funktsioon peab tagastama sama järjendi filtreerides välja täishäälikud ning sorteerides järjendi sõne pikuse järgi. 
 Sorteerimiseks on soovitav kasutada ``filter_vowels()``, ``longest_filtered_word()`` või mõlemat funktsiooni. Tühja sisendjärjendi saamisel tagastada tühi järjend.
 
-```
 Mall:
 
+```python
 """Filtering."""
 
 
