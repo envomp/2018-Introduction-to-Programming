@@ -9,7 +9,6 @@ NB! Ei tohi kasutada sisseehitatud moodulit, mis teie eest teisendused ära teek
 
 Kümnendarv antakse ette täisarvuna (integer), kahendarv sõnena (string).
 
-``
 ```
 dec_to_binary(3) -> "11"
 binary_to_dec("11") -> 3
