@@ -62,7 +62,8 @@ def sort_results(competitors_list: list, results: dict) -> dict:
     :param results: is the filtered results dictionary.
     :return: a sorted results dictionary.
     """
-    return dict(sorted(results.items(), key=lambda x: (x[1], competitors_list.index(x[0])), reverse=True))
+    by_index = dict(sorted(results.items(), key=lambda x: competitors_list.index(x[0])))
+    return dict(sorted(by_index.items(), key=lambda x: x[1], reverse=True))
 
 
 def announce_winner(results: dict) -> str:
@@ -98,13 +99,9 @@ def write_results_csv(competitors_list: str, results: str, file_to_write) -> Non
         place, name, result = 'Place', 'Name', 'Result'
         writer.writerow([place, name, result])
 
-        filtered_dict = competitors_filter(competitors_list, results)
         competitors = get_competitors_list(competitors_list)
+        filtered_dict = competitors_filter(competitors_list, results)
         sorted_dict = sort_results(competitors, filtered_dict)
 
-        for index, name, result in enumerate(sorted_dict.items(), start=1):
-            writer.writerow([index, name, result])
-
-
-if __name__ == '__main__':
-    pass
+        for index, item in enumerate(sorted_dict.items(), start=1):
+            writer.writerow([index, item[0], item[1]])
