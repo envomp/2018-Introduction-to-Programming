@@ -75,7 +75,8 @@ def determine_winner(user_choice: str, name: str, reverse: bool=False) -> str:
     Determine the winner returns a string that has information about who won.
 
     You should use the functions that you wrote before. You should use ask_user_choice function
-    to validate the user choice and use ask_user_name for representing a correct name. If the
+    to validate the user choice and use ask_user_name for representing a correct name. If the 
+    function parameter reverse is true, then you should also reverse the player name.
     :param user_choice: it should be rock, paper, or scissors
     :param name: the player name
     :param reverse: boolean value
