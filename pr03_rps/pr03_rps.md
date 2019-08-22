@@ -1,5 +1,7 @@
 # PR 03 
 
+Tee kaust nimega `pr03_rps` ja sinna kausta lisa fail nimega 
+
 ## Teooria
 
 Selle nädala teemaks on sõne. Ülesanede eesmärgiks on anda põgus ülevaade, kuidas töödelda ja vorminada sõnesid (*stringe*). 
@@ -17,7 +19,7 @@ ask_user_name('KRISTJAN') # Kristjan
 Seega on sul võimalik siin kasutada esimest funktsiooni  `ask_user_name`.
 
 ```
-reverse_name('iris') # Siri
+reverse_user_name('iris') # Siri
 ```
 
 * funktsioon `ask_user_choice`, mis küsib kasutaja valikut. Valik on järgnev - 'rock', 'paper', 'scissors', kuid tuleb tähele panna, et korrektne on ka 'ROCK'
@@ -50,7 +52,7 @@ def ask_user_name(name: str) -> str:
     """
     pass
 
-def reverse_name(name: str) -> str:
+def reverse_user_name(name: str) -> str:
     """
     Function that takes in name as a parameter and reverses the name. The name should also be capitalized.
 
@@ -104,7 +106,7 @@ def play_game() -> None:
 
 
 if __name__ == "__main__":
-  print(ask_user_name('ago'))  # Ago
+    print(ask_user_name('ago'))  # Ago
     print(ask_user_name('AGO'))  # Ago
     print(ask_user_name('MaRtInA'))  # Martina
 
@@ -128,7 +130,7 @@ if __name__ == "__main__":
     # play_game() # Kommenteeri see rida välja kui kõik funktsioonid on valmis
 ```
 
-## Lisa lugemist
+## Lisalugemist
 
 ### Sõne 
 
