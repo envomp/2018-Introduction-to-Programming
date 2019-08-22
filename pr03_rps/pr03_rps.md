@@ -5,33 +5,37 @@ Tee kaust nimega `pr03_rps` ja sinna kausta lisa fail nimega `pr03_rps.py`
 ## Teooria
 
 Selle nädala teemaks on sõne. Ülesande eesmärgiks on anda põgus ülevaade, kuidas töödelda ja vormindada sõnesid (*stringe*). 
+Ülesande käigus loome klassikalise kivi-paber-käärid mängu.
 Proovi ülesannet lahendada samas järjekorras nagu funktsioonid on antud. 
 
 ## Ülesanne
 
-* funktsioon `ask_user_name`, mis küsib kasutaja nime ja tagastab nime korrektselt, näiteks: 
+* funktsioon `ask_user_name`, mis saab sisendiks mängija nime ja tagastab selle korrektses formaadis, näiteks: 
 ```
 ask_user_name('kristjan') # Kristjan
 ask_user_name('KRISTJAN') # Kristjan
 ```
 
-* funktsioon `reverse_user_name`, mis küsib kasutaja nime ja pöörab selle tagurpidi. NB! Oluline on, et ümberpööratud nimi algab suure tähega.
+* funktsioon `reverse_user_name`, mis saab sisendiks mängija nime ja pöörab selle tagurpidi. NB! Oluline on, et ümberpööratud nimi algab suure tähega.
 Seega on sul võimalik kasutada siin esimest funktsiooni  `ask_user_name`.
 
 ```
 reverse_user_name('iris') # Siri
 ```
 
-* funktsioon `ask_user_choice`, mis küsib kasutaja valikut. Valik on järgnev - 'rock', 'paper', 'scissors', kuid tuleb tähele panna, et korrektne on ka 'ROCK'
+* funktsioon `ask_user_choice`, mis küsib kasutaja valikut. 
+* valikuvõimalused on 'rock', 'paper', 'scissors', kuid tuleb tähele panna, et sisendiks sobivad ka suurtähtedega sõned, näiteks 'ROCK'.
 ```
 print(ask_user_choice('midagi on viltu'))  # Sorry, you entered unknown command.
 ```
-* funktsioon `determine_winner`, saab sisendiks mängija nime, mängija valiku, arvuti valiku ning reverse_name, mis on boolean 
- väärtus (True või False). Vaikimisi on see False.
-* Funktsioon tagastab sõne, mis on järgneva malli järgi koostatud.
+* funktsioon `determine_winner`, saab sisendiks mängija nime, mängija valiku, arvuti valiku ning booleani `reverse_name`, mis on vaikimisi False.
+* funktsioon tagastab sõne, mis on järgneva malli järgi koostatud.
+
 Kui reverse_name on True, siis tuleb nimi ümber pööratada ja kasutada seda malli sees. 
 `{player_name} had {player_choice} and computer had {computer_choice}, hence {winner} wins.`
-Viigi korral tuleks tagastada: `{player_name} had {player_choice} and computer had {computer_choice}, hence it is a draw.`
+
+Viigi korral tuleks kasutada formaati `{player_name} had {player_choice} and computer had {computer_choice}, hence it is a draw.`
+
 Kui mingi sisend on ebakorrektne, näiteks kasutaja on oma valikuks sisestanud `water`, siis peaks funktsioon tagastama `There is a problem determining the winner.`
 
 ```
@@ -47,7 +51,7 @@ print(determine_winner('scissors', 'Marko', '123')) # There is a problem determi
 
 def ask_user_name(name: str) -> str:
     """
-    Simple function that asks player name and capitalizes the name.
+    Simple function gets player name as input and capitalizes it.
 
     :param name: name of the player
     :return: A name that is capitalized.
@@ -56,7 +60,7 @@ def ask_user_name(name: str) -> str:
 
 def reverse_user_name(name: str) -> str:
     """
-    Function that takes in name as a parameter and reverses the name. The name should also be capitalized.
+    Function that takes in name as a parameter and reverses its letters. The name should also be capitalized.
 
     :param name: name of the player
     :return: A name that is reversed.
@@ -81,8 +85,8 @@ def determine_winner(name: str, user_choice: str, computer_choice: str, reverse_
 
     You should use the functions that you wrote before. You should use ask_user_choice function
     to validate the user choice and use ask_user_name for representing a correct name. If the 
-    function parameter reverse is true, then you should also reverse the player name.NB! Use the
-    previous functions that you have written!
+    function parameter reverse is true, then you should also reverse the player name.
+    NB! Use the previous functions that you have written!
     
     :param name:player name 
     :param user_choice: 
