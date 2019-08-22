@@ -1,4 +1,4 @@
-Pokemon
+EX14 Pokemon
 ========
 
 Fail Gitis: ``ex14_pokemon/pokemon.py`` .
