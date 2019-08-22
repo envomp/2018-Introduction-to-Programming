@@ -26,7 +26,9 @@ reverse_user_name('iris') # Siri
 ```
 print(ask_user_choice('midagi on viltu'))  # Sorry, you entered unknown command.
 ```
-* funktsioon `determine_winner`, saab sisendiks mängija nime, mängija valiku ja arvuti valiku ning reverse_name. Funktsioon tagastab sõne, mis on järgneva malli järgi koostatud.
+* funktsioon `determine_winner`, saab sisendiks mängija nime, mängija valiku, arvuti valiku ning reverse_name, mis on boolean 
+ väärtus (True või False) Vaikimisi on see False.
+* Funktsioon tagastab sõne, mis on järgneva malli järgi koostatud.
 Kui reverse_name on True, siis tuleb nimi ümber pööratada ja kasutada seda malli sees. 
 `{player_name} had {player_choice} and computer had {computer_choice}, hence {winner} wins.`
 Viigi korral tuleks tagastada: `{player_name} had {player_choice} and computer had {computer_choice}, hence it is a draw.`
