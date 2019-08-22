@@ -4,19 +4,19 @@ Tee kaust nimega `pr03_rps` ja sinna kausta lisa fail nimega `pr03_rps.py`
 
 ## Teooria
 
-Selle nädala teemaks on sõne. Ülesanede eesmärgiks on anda põgus ülevaade, kuidas töödelda ja vorminada sõnesid (*stringe*). 
-Proovi ülesannet lahendada samas järjekorras nagu on funktsioonid antud. 
+Selle nädala teemaks on sõne. Ülesande eesmärgiks on anda põgus ülevaade, kuidas töödelda ja vormindada sõnesid (*stringe*). 
+Proovi ülesannet lahendada samas järjekorras nagu funktsioonid on antud. 
 
 ## Ülesanne
 
-* funktsioon `ask_user_name`, mis küsib kasutaja nime ja tagastab nime korrektselt näiteks: 
+* funktsioon `ask_user_name`, mis küsib kasutaja nime ja tagastab nime korrektselt, näiteks: 
 ```
 ask_user_name('kristjan') # Kristjan
 ask_user_name('KRISTJAN') # Kristjan
 ```
 
-* funktsioon `reverse_name`, mis küsib kasuaja nime ja pöörab selle tagurpidi. NB! Oluline oleks, et ümberpööratud nimi algaks suure tähega.
-Seega on sul võimalik siin kasutada esimest funktsiooni  `ask_user_name`.
+* funktsioon `reverse_user_name`, mis küsib kasutaja nime ja pöörab selle tagurpidi. NB! Oluline on, et ümberpööratud nimi algab suure tähega.
+Seega on sul võimalik kasutada siin esimest funktsiooni  `ask_user_name`.
 
 ```
 reverse_user_name('iris') # Siri
