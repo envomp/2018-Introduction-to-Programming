@@ -24,7 +24,7 @@ reverse_user_name('iris') # Siri
 ```
 
 * funktsioon `ask_user_choice`, mis küsib kasutaja valikut. 
-* valikuvõimalused on 'rock', 'paper', 'scissors', kuid tuleb tähele panna, et sisendiks sobivad ka suurtähtedega sõned, näiteks 'ROCK'.
+Valikuvõimalused on 'rock', 'paper', 'scissors', kuid tuleb tähele panna, et sisendiks sobivad ka suurtähtedega sõned, näiteks 'ROCK'.
 ```
 print(ask_user_choice('midagi on viltu'))  # Sorry, you entered unknown command.
 ```
