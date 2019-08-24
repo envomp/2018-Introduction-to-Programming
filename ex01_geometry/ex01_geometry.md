@@ -1,4 +1,4 @@
-**Geometry**
+#Geometry
 
 Sinu esimeseks on ülesnadeks on luua programm, mis peaks märgatavalt lihtsustama iga algklassiõpilase elu.
 Nimelt peab programm küsima kasutaja käest, mis kujundi pindalat ta soovib välja arvutada ja siis sisestada vajalikud
@@ -24,6 +24,8 @@ Näidisväljund:
     Please insert geometric shape:circle
     Please insert radius or side length in cm:9
     The area is 254.34 cm^2
+    
+**Abimaterjal**
     
 ***print***
 
@@ -107,6 +109,7 @@ tingimus on täitetud kasutame võtmesõna ``elif``.
 Lisaks võib lugeda: 
 
 https://www.tutorialsteacher.com/python/math-module
+
 https://www.mathopenref.com/triangleequilateralarea.html
 
 
