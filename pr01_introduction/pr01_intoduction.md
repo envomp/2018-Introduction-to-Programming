@@ -44,8 +44,9 @@ https://ained.ttu.ee/pydoc/input.html
         print("a and b are equal")
     else:
         print("a is greater than b")
-        
     
+ või
+
     university = "taltech"
     if university == "taltech":
         print("taltech")
@@ -82,6 +83,7 @@ Programmi algoritm võiks olla järgmine:
     
         #Your code goes here!
     
+       
     if __name__ == "__main__":   # <- This line is needed for automatic testing
         introduce()
     
