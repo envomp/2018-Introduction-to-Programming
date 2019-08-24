@@ -2,37 +2,37 @@
 
 Sinu esimeseks on ülesnadeks on luua programm, mis peaks märgatavalt lihtsustama iga algklassiõpilase elu.
 Nimelt peab programm küsima kasutaja käest, mis kujundi pindalat ta soovib välja arvutada ja siis sisestada vajalikud
-mõõtmed (raadius või külje pikkus).Valikuteks on ring, ruut või võrdkülgne kolmnurk. 
+mõõtmed (raadius või külje pikkus). Valikuteks on ring, ruut või kolmnurk(``"circle", "square", "triangle"``).
+Ülesande lihtsustamiseks oletame, et kolmurk võib olla ainult võrdkülgne.
 
-Ülesande lahendamise algoritm peaks olema järgmine:
+Ülesande lahendamise algoritm peab olema järgmine:
 
 1) Programm küsib sisendit ``Please insert geometric shape:``
 2) Programm küsib kujundi mõõtmed ``Please insert radius or side length in cm:``
-3) Vastavalt sisestatud peab programm pritima saadud pindala koos mõõtühikutega(``cm^2``). 
-Muul juhul printib programm ``Shape is not supported.``
+3) Vastavalt sisestatud kujundile peab programm printima saadud pindala koos mõõtühikutega(``cm^2``). 
+Muul juhul prindib programm ``Shape is not supported.``
 
 
-Näidisväljund
+Näidisväljund:
     
     Please insert geometric shape:triangle
     Please insert radius or side length in cm:3
-    The area is 1.299038105676658 cm^2
+    The area is 3.8971143170299736 cm^2
     
     
     Please insert geometric shape:circle
     Please insert radius or side length in cm:9
     The area is 254.34 cm^2
     
-**print**
+***print***
 
 ``print`` funktsioon võimaldab printida erinevaid väärtusi konsooli.
 
     print("Hello") # prints "Hello" to the console
 
-**Muutuja**
+***Muutuja***
 
 <https://ained.ttu.ee/pydoc/variable.html>
-`
 
 Muutujasse on võimalik salvestada erinevaid väärtusi.
 
@@ -53,7 +53,7 @@ Näide, kus küsimuse "How old are you" vastus salvestatakse muutujasse ``age``.
 
     age = input("How old are you?") # waits for user to enter age.
 
-**Sõne**
+***Sõne***
 
 <https://ained.ttu.ee/pydoc/string.html?highlight=konvertida>
 
@@ -68,7 +68,7 @@ täisarvuks ``int`` võib kood visata erindi või käituda veidralt.
     a = "12" + "3"
     print(a) # prints "123"
 
-**Tingimuslause** (``if-elif-else``)
+***Tingimuslause*** (``if-elif-else``)
  
  <https://ained.ttu.ee/pydoc/if_statements.html>
 
@@ -106,6 +106,9 @@ tingimus on täitetud kasutame võtmesõna ``elif``.
 Lisaks võib lugeda: 
 
 https://www.tutorialsteacher.com/python/math-module
+https://www.mathopenref.com/triangleequilateralarea.html
+
+
         
 ***MALL***
 
@@ -120,3 +123,5 @@ https://www.tutorialsteacher.com/python/math-module
         calculate_area()
 
 
+
+P.S Kolmnurga pindala välja arvutamisel piisab kui π on 3.14.
