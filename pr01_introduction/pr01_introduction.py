@@ -7,7 +7,7 @@ def introduce():
     elif answer == "No":
         print(f"Don`t worry, {name}! You will learn everything you need.")
     else:
-        print("Please answer Yes or No !")
+        print("Please answer Yes or No!")
 
 
 if __name__ == "__main__":  # <- This line is needed for automatic testing
