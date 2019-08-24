@@ -1,4 +1,4 @@
-#Geometry
+# Geometry
 
 Sinu esimeseks on ülesnadeks on luua programm, mis peaks märgatavalt lihtsustama iga algklassiõpilase elu.
 Nimelt peab programm küsima kasutaja käest, mis kujundi pindalat ta soovib välja arvutada ja siis sisestada vajalikud
