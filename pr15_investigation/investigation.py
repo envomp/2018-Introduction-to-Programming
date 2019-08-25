@@ -29,6 +29,16 @@ def filter_list_by_street(suspect_list, street_name):
     """
 
 
+def filter_list_by_gender(suspect_list, gender):
+    """
+    Return list of suspects of given gender or whose gender is "undefined."
+
+    :param suspect_list: list of Suspect objects
+    :param gender: string "Felmale" or "Male"
+    :return: list of suspects of given gender or whose gender is "Undefined"
+    """
+
+
 def filer_list_by_age(suspect_list, bottom_age, upper_age):
     """
     Filter out suspects who are younger than the bottom_age and older than the upper_age.
@@ -37,16 +47,6 @@ def filer_list_by_age(suspect_list, bottom_age, upper_age):
     :param bottom_age: int age
     :param upper_age: int age
     :return:
-    """
-
-
-def filter_list_by_gender(suspect_list, gender):
-    """
-    Return list of suspects of given gender or whose gender is "undefined."
-
-    :param suspect_list: list of Suspect objects
-    :param gender: string "Felmale" or "Male"
-    :return: list of suspects of given gender or whose gender is "Undefined"
     """
 
 
