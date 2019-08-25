@@ -1,6 +1,6 @@
 # PR 03 
 
-Tee kaust nimega `pr03_rps` ja sinna kausta lisa fail nimega `pr03_rps.py`
+Tee kaust nimega `pr03_rps` ja sinna kausta lisa fail nimega `rps.py`
 
 ## Teooria
 

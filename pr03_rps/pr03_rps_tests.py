@@ -1,7 +1,7 @@
 import pytest
 from random import choice
 import string
-from pr03_rps import reverse_user_name, ask_user_choice, determine_winner
+from rps import reverse_user_name, ask_user_choice, determine_winner
 from random import randint
 
 
