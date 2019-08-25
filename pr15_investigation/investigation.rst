@@ -47,7 +47,7 @@ Mall
 
     def filter_list_by_gender(suspect_list, gender):
         """
-        Return list of suspects of given gender or whose gender is "undefined."
+        Return list of suspects of given gender or whose gender is "undefined".
 
         :param suspect_list: list of Suspect objects
         :param gender: string "Felmale" or "Male"
