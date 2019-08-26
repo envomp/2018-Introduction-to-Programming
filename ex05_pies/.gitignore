@@ -1,5 +1,6 @@
 competitors_list.txt
 results.txt
-results_test.csv
+correct_results.csv
 *.JPG
 /__*
+/.*

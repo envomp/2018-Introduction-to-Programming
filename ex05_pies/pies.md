@@ -220,7 +220,7 @@ with open('example.txt', 'r') as file:
 
 *Comma-Separated-Values* ehk **CSV** on failitüüp, kus andmete eraldamiseks teineteisest kasutatakse koma (vajadusel saab kasutada ka muud sobivat sümbolit). CSV faili võib vaadela tabelina, kus on olemas read ja veergud. Veergude päised on üldjuhul defineeritud faili esimeses reas ning edasi tulevad andmed.
 
-![Näide csv failist](https://srv-file6.gofile.io/download/iS2iJQ/csv_example.JPG)
+![Näide csv failist](https://ained.ttu.ee/pydoc/images/csv_example.JPG)
 
 Pyhton pakub CSV failide töötlemiseks sisseehitatud mooduli originaalse nimega `csv`. Peamised kaks meetodit, mida kasutame:
 
@@ -258,7 +258,7 @@ Pyhton pakub CSV failide töötlemiseks sisseehitatud mooduli originaalse nimega
 
     Näite põhjal koostatud fail näeb niimoodi välja:
 
-    ![Uus csv fail](https://srv-file6.gofile.io/download/iS2iJQ/new_csv_example.JPG)
+    ![Uus csv fail](https://ained.ttu.ee/pydoc/images/new_csv_example.JPG)
 
 Mõned tähelepanekud:
 
@@ -282,38 +282,40 @@ Kujutage ette, et Teid paluti korrastada ühe võistluse tulemusi. Võistluses o
 
 Teile on antud kaks faili:
 
-1. [*Competitors_list*](https://srv-file6.gofile.io/download/iS2iJQ/results.txt) - siin on nimekiri registreeritud osalejatest. Formaat: `Eesnini Perenimi`.
+1. [*Competitors_list*](https://gitlab.cs.ttu.ee/iti0102/pydoc/raw/master/images/competitors_list.txt?inline=false) - siin on nimekiri registreeritud osalejatest. Formaat: `Eesnini Perenimi`.
 
-2. [*Results*](https://srv-file6.gofile.io/download/d6jl05/results.txt) - siin on võistluse tulemused. Formaat: `Eesnimi Perenimi - tulemus`.
+2. [*Results*](https://gitlab.cs.ttu.ee/iti0102/pydoc/raw/master/images/results.txt?inline=false) - siin on võistluse tulemused. Formaat: `Eesnimi Perenimi - tulemus`.
 
 Teie peate realiseerima järgmised meetodid:
 
-* `get_competitors_list(filename) -> list` - võtab vastu faili nime, mis hoiab endas osalejate nimed ning tagastab järjendi koos nimedega;
+* `get_competitors_list(filename) -> list` - võtab vastu registreeritud osalejate nimekirja faili asukoha ning tagastab järjendi koos nimedega;
 
-* `get_results_dict(filename) -> dict` - võtab vastu faili nime, mis hoiab endas tulemused ning tagastab `dict` objekti, kus nimed on võtmed ja tulemused on väärtused.
+* `get_results_dict(filename) -> dict` - võtab vastu filtreerimata tulemuste faili asukoha ning tagastab `dict` objekti, kus osalejate nimed on võtmed ja nende tulemused on väärtused.
 
-* `competitors_filter(competitors_list: str, results: str) -> dict` - parameeter `competitors_list` on faili nimi, mis hoiab endas osalejate nimed ning `results` on faili nimi, mis hoiab endas tulemused. Peab eemaldama tulemustest illegaalsete osalejate nimed ja tulemused. Illegaalne osaleja on see, kelle nime pole registreeritud osalejate nimekirjas. Peab kasutama meetodeid `get_competitors_list` ja `get_results_dict`.
+* `competitors_filter(competitors_list: str, results: str) -> dict` - võtab vastu registreeritud osalejate nimekirja faili asukoha ja filtreerimata tulemuste faili asukoha. Peab filtreerima tulemusi, eemaldades illegaalsete osalejate tulemused. Illegaalne osaleja on see, kelle nime pole registreeritud osalejate nimekirjas. Tagastab filtreeritud tulemuste sõnastiku. Peaks kasutama meetodeid `get_competitors_list` ja `get_results_dict`.
 
-* `sort_results(competitors_list: list, results: dict) -> dict` - võtab vastu järjendi koos osalejate nimedega ja filtreeritud tulemuste sõnastiku. Sorteerib tulemusi nii, et inimene, kes sõi rohkem kooke, asub eespool. Kui mitmel inimesel on sama söödud kookide arv, siis kõrgemat kohta saab see, kes on registreeritud osalejate nimekirjas eespool. Näiteks kui Mati tulemus on 5 kooki ja Kati tulemus on 5 kooki ning Kati asub nimekirjas eespool, siis kõrgemat kohta saab Kati (näiteks Kati saab 4nda koha ja Mati saab 5nda).
+* `sort_results(competitors_list: list, results: dict) -> dict` - võtab vastu järjendi koos registreeritud osalejate nimedega ja filtreeritud tulemuste sõnastiku. Sorteerib tulemusi söödud kookide arvu järgi kahanevalt. Kui mitmel inimesel on sama söödud kookide arv, siis kõrgemat kohta saab see, kes on registreeritud osalejate nimekirjas eespool. Näiteks kui Mati tulemus on 5 kooki ja Kati tulemus on 5 kooki ning Kati asub nimekirjas eespool, siis kõrgemat kohta saab Kati (näiteks Kati saab 4nda koha ja Mati saab 5nda).
 
-* `announce_winner(results: dict) -> str` - võtab vastu filtreeritud ja sorteeritud tulemuste sõnastiku ning kuulutab välja võitja. Võitja on see inimene, kes suutis kõige rohkem kooke ära süüa. Tagastab sõne kujul `'The winner of the "Pie Eating Competition" is {name} with {result} pies eaten.'`, kus `{name}` on asendatud võitja nimega ja `{results}` tema tulemusega.
+* `announce_winner(results: dict) -> str` - võtab vastu filtreeritud ja sorteeritud tulemuste sõnastiku ning kuulutab välja võitja. Võitja on see inimene, kes suutis kõige rohkem kooke ära süüa. Tagastab sõne kujul `The winner of the "Pie Eating Competition" is {name} with {result} pies eaten.`, kus `{name}` on asendatud võitja nimega ja `{results}` tema tulemusega.
 
-* `write_results_csv(competitors_list: str, results: str, file_to_write) -> None` - võtab vastu registreeritud osalejate nimekirja faili nime, tulemuste faili nime ja faili nime, kuhu filtreeritud ja sorteeritud tulemused kirjutada. Uues tulemuste failis on kolm veergu:
+* `write_results_csv(competitors_list: str, results: str, file_to_write: str) -> None` - võtab vastu registreeritud osalejate nimekirja faili asukoha, filtreerimata tulemuste faili asukoha ja faili asukoha, kuhu filtreeritud ja sorteeritud tulemused kirjutada. Uues tulemuste failis peab olema kolm veergu:
 
     1. **Place** - osaleja koht;
     2. **Name** - osaleja nimi;
     3. **Result** - osaleja saadud tulemus.
+
+    Kohad peavad algama numbrist 1 (mitte 0) ehk võitja koht peab olema 1, järgmine tuleb 2 koht jne.
 
     Selles meetodis tuleks kasutada meetodeid `competitors_filter` ja `sort_results`.
 
 ### Mall
 
 ```python
-"""Pies Eating Competition."""
+"""Ex05_pies solved."""
 import csv
 
 
-def get_competitors_list(filename) -> list:
+def get_competitors_list(filename: str) -> list:
     """
     Get the names of all registered competitors.
 
@@ -323,7 +325,7 @@ def get_competitors_list(filename) -> list:
     pass
 
 
-def get_results_dict(filename) -> dict:
+def get_results_dict(filename: str) -> dict:
     """
     Get the results and store them in the dictionary.
 
@@ -337,16 +339,16 @@ def get_results_dict(filename) -> dict:
     pass
 
 
-def competitors_filter(competitors_list: str, results: str) -> dict:
+def competitors_filter(path_to_competitors: str, path_to_results: str) -> dict:
     """
     Filter out all illegal competitors.
 
-    Illegal competitor is the one, whose name is not in the competitors list.
-    You have to return a results dict, which doesn't contain illegal competitors results.
+    Illegal competitor is the one, whose name is not in the registered competitors list.
+    You have to return a results dict, which doesn't contain the results of illegal competitors.
     You should use the methods defined above.
 
-    :param competitors_list: is the path to the file with the names of competitors.
-    :param results: is the path to the file with the results.
+    :param path_to_competitors: is the path to the file with the names of competitors.
+    :param path_to_results: is the path to the file with the results.
     :return: a dict with correct results.
     """
     pass
@@ -357,9 +359,14 @@ def sort_results(competitors_list: list, results: dict) -> dict:
     Sort the filtered results dictionary.
 
     In order to find the winner you have to sort the results.
-    The more pies the competitor has eaten, the better place they get.
-    If there are multiple competitors with the same results, the better place
-    goes to the one, who is on the higher place in the names list.
+    Results have to be sorted based on the cakes eaten by the competitors.
+    The sorted results must be in a descending order.
+    This means that the more cakes the competitor has eaten the better place they get.
+    If there are multiple competitors with the same result the better place goes to the
+    competitor, whose place in the registered competitors list is higher.
+    For example, if Mati and Kati both have 5 pies eaten and Kati is on a higher place
+    than Mati in the registered competitors list, then the better place must go to Kati
+    (i.e. Kati gets 4th place and mati gets 5th).
 
     :param competitors_list: is the list of the registered competitors.
     :param results: is the filtered results dictionary.
@@ -376,12 +383,12 @@ def announce_winner(results: dict) -> str:
     'The winner of the "Pie Eating Competition" is {name} with {result} pies eaten.'
 
     :param results: is the filtered and sorted results dictionary.
-    :return: a correct winner announcement.
+    :return: a correct string.
     """
     pass
 
 
-def write_results_csv(competitors_list: str, results: str, file_to_write) -> None:
+def write_results_csv(path_to_competitors: str, path_to_results: str, file_to_write: str) -> None:
     """
     Write the results to csv file.
 
@@ -390,21 +397,65 @@ def write_results_csv(competitors_list: str, results: str, file_to_write) -> Non
     2. Name;
     3. Result.
 
-    This method should use competiors_filter and sort_results methods.
-
-    :param competitors_list: is the path to the file with the names of competitors.
-    :param results: is the path to the file with the results.
+    :param path_to_competitors: is the path to the file with the names of competitors.
+    :param path_to_results: is the path to the file with the results.
     :param file_to_write: is the name of the csv file.
     :return: None
     """
     pass
 
-# Some examples:
+
+# Some examples based on the given files:
 if __name__ == '__main__':
-    # TODO: Add some examples here.
-    pass
+    competitors = get_competitors_list('competitors_list.txt')
+    results = get_results_dict('results.txt')
+    filtered_results = competitors_filter('competitors_list.txt', 'results.txt')
+    sorted_results = sort_results(competitors, filtered_results)
+
+    print('Check the legths:')
+    print(len(competitors))  # -> 66
+    print(len(results))  # -> 93
+    print(len(filtered_results))  # -> 66
+    print(len(sorted_results))  # -> 66
+
+    print('Check results for certain competitors:')
+    print(results['Marina Eley'])  # -> 35
+    print(results['Takako Vena'])  # -> 7
+    print(results['So Koziel'])  # -> 5
+    print(results['Macy Tenenbaum'] == 22)  # -> True
+    print(results['Edwina Alaniz'] == 48)  # -> False
+
+    print('Check presence of the illegal competitors:')
+    print('Tiffanie Mcdaniel' not in filtered_results)  # -> True
+    print('Ela Gallow' not in filtered_results)  # -> True
+    print('Sam Cheney' not in filtered_results)  # -> True
+    print('Jayme Malachi' not in filtered_results)  # -> True
+    print('Sabine Danos' not in filtered_results)  # -> True
+
+    print('Check the order of the sorted results (must be descending):')
+    values = list(sorted_results.values())
+    print(all(values[i] >= values[i + 1] for i in range(65)))  # -> True
+
+    print('Check places for certain competitors:')
+    keys = list(sorted_results.keys())
+    print(keys.index('Ewa Grothe') + 1)  # -> 5
+    print(keys.index('Cedrick Span') + 1)  # -> 20
+    print(keys.index('Morris Ragusa') + 1)  # -> 37
+    print(keys.index('Jaak Aaviksoo') + 1)  # -> 23
+    print(keys.index('Ago Luberg') + 1)  # -> 66
+
+    print('Check the format of the winner announcement:')
+    print(announce_winner(sorted_results) ==
+          'The winner of the "Pie Eating Competition" is Luetta Bloomer with 42 pies eaten.')  # -> True
+
+    print('Write the results to CSV file:')
+    write_results_csv('competitors_list.txt', 'results.txt', 'correct_results.csv')
 
 ```
+
+### Üks osa korrektselt koostatud failist
+
+![Üks osa korrektselt koostatud failist](https://ained.ttu.ee/pydoc/images/part_of_correct_results.JPG)
 
 ## Viited
 
@@ -415,3 +466,4 @@ if __name__ == '__main__':
 * [*csv* moodul](https://docs.python.org/3/library/csv.html)
 * [Hea *tutorial* failide teemal](https://dbader.org/blog/python-file-io)
 * [*String literals*](https://docs.python.org/3/reference/lexical_analysis.html#index-22)
+* [Ametlik dokumentatsioon sõnastikust](https://docs.python.org/3/library/stdtypes.html#dict)

@@ -1,7 +1,8 @@
 """Tests for ex05_pies."""
 import pytest
 import random
-from pies_solved import *  # TODO: Change import to 'pies'.
+from pies_solved import get_competitors_list, get_results_dict, competitors_filter,\
+    sort_results, announce_winner, write_results_csv
 
 
 COMPETITORS_1 = 'test_files/test_competitors1.txt'
@@ -47,14 +48,15 @@ def _test_results_for_random_competitors(path_to_file: str, min_k: int, max_k: i
     """
     actual = get_results_dict(path_to_file)
     expected = _get_results(path_to_file)
-    keys = random.choices(list(expected.keys()), k=random.randint(min_k, max_k))
+    keys = random.choices(list(expected.keys()),
+                          k=random.randint(min_k, max_k))
     for k in keys:
         assert actual[k] == expected[k]
 
 
 @pytest.mark.timeout(1.0)
 @pytest.mark.parametrize('competitor', ['Suzanne Vosburgh', 'Minh Buzbee', 'Hui Holly', 'Elmo Maya', 'Faye Muma'])
-def test_get_results_dict_result_for_certain_competitor_1(competitor: str):
+def test_get_results_dict_result_for_certain_competitors_1(competitor: str):
     """Check whether the result is correct for certain competitor."""
     actual = get_results_dict(RESULTS_1)
     expected = _get_results(RESULTS_1)
@@ -63,7 +65,7 @@ def test_get_results_dict_result_for_certain_competitor_1(competitor: str):
 
 @pytest.mark.timeout(1.0)
 @pytest.mark.parametrize('competitor', ['Retha Cooperman', 'Alfreda Lafave', 'Frederic Woods', 'Fredric Cronin'])
-def test_get_results_dict_results_for_certain_competitor_2(competitor: str):
+def test_get_results_dict_results_for_certain_competitors_2(competitor: str):
     """Check whether the result is correct for certain competitor."""
     actual = get_results_dict(RESULTS_2)
     expected = _get_results(RESULTS_2)
@@ -91,15 +93,16 @@ def test_competitors_filter_correct_length():
     assert len(competitors_filter(COMPETITORS_2, RESULTS_2)) == 50
 
 
-def _get_illegal_competitors(competitors: str, results: str) -> list:
+def _get_illegal_competitors(path_to_competitors: str, path_to_results: str) -> list:
     """
     Get illegal competitors for tests.
 
-    :param competitors: is the path to the test_competitorsX.txt.
-    :param results: is path to the test_resultsX.txt.
+    :param path_to_competitors: is the path to the test_competitorsX.txt.
+    :param path_to_results: is the path to the test_resultsX.txt.
     :return: a list with illegal competitors.
     """
-    with open(competitors) as c_file, open(results) as r_file:
+    with open(path_to_competitors) as c_file, \
+            open(path_to_results) as r_file:
         names = c_file.read()
         results = [line.strip().split(' - ')[0] for line in r_file.readlines()]
         return [n for n in results if n not in names]
@@ -109,50 +112,127 @@ def _get_illegal_competitors(competitors: str, results: str) -> list:
 @pytest.mark.parametrize('competitor', _get_illegal_competitors(COMPETITORS_1, RESULTS_1))
 def test_competitors_filter_remove_illegal_competitors_1(competitor: str):
     """Check whether all illegal competitors have been filtered out correctly."""
-    dict_ = competitors_filter(COMPETITORS_1, RESULTS_1)
-    assert competitor not in dict_
+    filtered = competitors_filter(COMPETITORS_1, RESULTS_1)
+    assert competitor not in filtered
 
 
 @pytest.mark.timeout(1.0)
 @pytest.mark.parametrize('competitor', _get_illegal_competitors(COMPETITORS_2, RESULTS_2))
 def test_competitors_filter_remove_illegal_competitors_2(competitor: str):
     """Check whether all illegal competitors have been filtered out correctly."""
-    dict_ = competitors_filter(COMPETITORS_2, RESULTS_2)
-    assert competitor not in dict_
+    filtered = competitors_filter(COMPETITORS_2, RESULTS_2)
+    assert competitor not in filtered
 
 
-competitors_list = [
-    'Detra Speirs', 'Suzanne Vosburgh', 'Garland Blann',
-    'Amelia Gahagan', 'Quintin Fiorentino', 'Lorean Aldridge'
-]
-results_dict = {
-    'Garland Blann': 15, 'Lorean Aldridge': 3, 'Quintin Fiorentino': 10,
-    'Suzanne Vosburgh': 25, 'Detra Speirs': 25, 'Amelia Gahagan': 11
-}
-results_same = {
-    'Quintin Fiorentino': 14, 'Amelia Gahagan': 14, 'Garland Blann': 14,
-    'Lorean Aldridge': 14, 'Detra Speirs': 14, 'Suzanne Vosburgh': 14
-}
+def _get_data_for_sorting(path_to_list: str, path_to_results: str) -> tuple:
+    """
+    Get the needed data to test sorting functionality.
+
+    :param path_to_list: is the path to the test_competitorsX.txt.
+    :param path_to_results: is the path to the test_resultsX.txt.
+    """
+    competitors = get_competitors_list(path_to_list)
+    results = competitors_filter(path_to_list, path_to_results)
+    return competitors, results
+
+
+def _test_sorting_order(competitors: list, results: dict) -> None:
+    """
+    Check whether the sorted results are in correct order.
+
+    :param competitors: is the list of the registered competitors.
+    :param results: is the filtered results dictionary.
+    :return: None.
+    """
+    sorted_ = sort_results(competitors, results)
+    values = list(sorted_.values())
+    assert all(values[i] >= values[i + 1] for i in range(len(values) - 1))
+
+
+def _test_places_for_certain_competitors(path_to_list: str, path_to_results: str, competitor: str, place: int) -> None:
+    """
+    Check the places for certain competitors.
+
+    :param path_to_list: is the path to the test_competitorsX.txt.
+    :param path_to_results: is the path to the test_resultsX.txt.
+    :param competitor: is the name of the competitor.
+    :param place: is the expected place of the competitor.
+    :return: None.
+    """
+    competitors, results = _get_data_for_sorting(path_to_list, path_to_results)
+    sorted_ = sort_results(competitors, results)
+    keys = list(sorted_.keys())
+    assert keys.index(competitor) + 1 == place
+
+
+def _test_winner_announcement(competitors: list, results: dict, name: str, result: int) -> None:
+    """
+    Check the format of the winner announcement.
+
+    :param competitors: is the list of the registered competitors.
+    :param results: is the filtered results dictionary.
+    :param name: is the name of expected winner.
+    :param result: is the result of expected winner.
+    :return: None.
+    """
+    sorted_ = sort_results(competitors, results)
+    actual = announce_winner(sorted_)
+    expected = f'The winner of the "Pie Eating Competition" is {name} with {result} pies eaten.'
+    assert actual == expected
 
 
 @pytest.mark.timeout(1.0)
 def test_sort_results_correct_length():
     """Check the length of the sorted results dictionary."""
-    assert len(sort_results(competitors_list, results_dict)) == 6
+    competitors1, results1 = _get_data_for_sorting(COMPETITORS_1, RESULTS_1)
+    competitors2, results2 = _get_data_for_sorting(COMPETITORS_2, RESULTS_2)
+
+    assert len(sort_results(competitors1, results1)) == 20
+    assert len(sort_results(competitors2, results2)) == 50
 
 
 @pytest.mark.timeout(1.0)
 def test_sort_results_descending_order():
     """Check whether the sorted results are in descending order."""
-    actual = sort_results(competitors_list, results_dict)
-    values = list(actual.values())
-    assert all(values[i] >= values[i + 1] for i in range(5))
+    competitors1, results1 = _get_data_for_sorting(COMPETITORS_1, RESULTS_1)
+    competitors2, results2 = _get_data_for_sorting(COMPETITORS_2, RESULTS_2)
+
+    _test_sorting_order(competitors1, results1)
+    _test_sorting_order(competitors2, results2)
+
+
+@pytest.mark.timeout(1.0)
+@pytest.mark.parametrize(
+    'competitor,place',
+    [('Audrea Fines', 5), ('Delora Deforest', 11), ('June Ambrosino', 14)]
+)
+def test_sort_results_places_for_certain_competitors_1(competitor, place):
+    """Check the places for certain competitors."""
+    _test_places_for_certain_competitors(COMPETITORS_1, RESULTS_1, competitor, place)
+
+
+@pytest.mark.timeout(1.0)
+@pytest.mark.parametrize(
+    'competitor,place',
+    [('Roger Aylor', 8), ('Suellen Lor', 13), ('Ming Lynam', 34), ('Emory Elms', 39), ('Nery Nagle', 48)]
+)
+def test_sort_results_places_for_certain_competitors_2(competitor, place):
+    """Check the places for certain competitors."""
+    _test_places_for_certain_competitors(COMPETITORS_2, RESULTS_2, competitor, place)
 
 
 @pytest.mark.timeout(1.0)
 def test_sort_results_competitors_with_same_results():
     """Check whether the competitors with same results are sorted by their place in list."""
-    actual = sort_results(competitors_list, results_same)
+    competitors_list = [
+        'Detra Speirs', 'Suzanne Vosburgh', 'Garland Blann',
+        'Amelia Gahagan', 'Quintin Fiorentino', 'Lorean Aldridge'
+    ]
+    same_results = {
+        'Quintin Fiorentino': 14, 'Amelia Gahagan': 14, 'Garland Blann': 14,
+        'Lorean Aldridge': 14, 'Detra Speirs': 14, 'Suzanne Vosburgh': 14
+    }
+    actual = sort_results(competitors_list, same_results)
     expected = {
         'Detra Speirs': 14, 'Suzanne Vosburgh': 14, 'Garland Blann': 14,
         'Amelia Gahagan': 14, 'Quintin Fiorentino': 14, 'Lorean Aldridge': 14
@@ -163,18 +243,21 @@ def test_sort_results_competitors_with_same_results():
 @pytest.mark.timeout(1.0)
 def test_announce_winner_correct_format():
     """Check the format of the winner announcement."""
-    sorted_ = sort_results(competitors_list, results_dict)
-    actual = announce_winner(sorted_)
-    expected = "The winner of the \"Pie Eating Competition\" is Detra Speirs with 25 pies eaten."
-    assert actual == expected
+    competitors1, results1 = _get_data_for_sorting(COMPETITORS_1, RESULTS_1)
+    competitors2, results2 = _get_data_for_sorting(COMPETITORS_2, RESULTS_2)
+
+    _test_winner_announcement(competitors1, results1, 'Faye Muma', 15)
+    _test_winner_announcement(competitors2, results2, 'Maryetta Delafuente', 23)
 
 
 @pytest.mark.timeout(1.0)
 def test_write_results_csv_correct_file():
-    # For file from exercise
+    """Check the written results .csv file."""
+    # For files from exercise
     with open('actual_results.csv', mode='w+') as actual, \
-            open('results_test.csv') as expected:
-        write_results_csv('competitors_list.txt', 'results.txt', 'actual_results.csv')
+            open('correct_results.csv') as expected:
+        write_results_csv('competitors_list.txt',
+                          'results.txt', 'actual_results.csv')
         assert actual.read() == expected.read()
 
     # For test_competitors1.txt / test_results1.txt
