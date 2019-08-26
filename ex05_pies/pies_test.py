@@ -1,7 +1,7 @@
 """Tests for ex05_pies."""
 import pytest
 import random
-from pies_solved import get_competitors_list, get_results_dict, competitors_filter,\
+from pies import get_competitors_list, get_results_dict, competitors_filter,\
     sort_results, announce_winner, write_results_csv
 
 
