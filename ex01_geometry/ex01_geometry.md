@@ -48,7 +48,7 @@ Muutujasse on võimalik salvestada erinevaid väärtusi.
     number = 42 # saves int 42 to variable named named number
     print(number) # prints 42 to the console
 
-[***Sisendi lugemine standardsisendist (``input``)***](https://ained.ttu.ee/pydoc/input.html)
+[***Sisendi lugemine standardsisendist(input)***](https://ained.ttu.ee/pydoc/input.html)
 
 
 ``input`` funktsiooniga saab küsida kasutajalt sisendit. Sisendit
