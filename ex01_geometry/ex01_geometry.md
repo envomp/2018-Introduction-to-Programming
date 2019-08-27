@@ -128,4 +128,4 @@ https://www.mathopenref.com/triangleequilateralarea.html
 
 
 
-P.S Kolmnurga pindala välja arvutamisel piisab kui π on 3.14.
+P.S Ringi pindala välja arvutamisel piisab kui π on 3.14.
