@@ -1,29 +1,36 @@
 # Geometry
 
-Sinu esimeseks on ülesnadeks on luua programm, mis peaks märgatavalt lihtsustama iga algklassiõpilase elu.
-Nimelt peab programm küsima kasutaja käest, mis kujundi pindalat ta soovib välja arvutada ja siis sisestada vajalikud
+Sinu esimeseks ülesandeks on luua programm, mis peaks märgatavalt lihtsustama iga algklassiõpilase elu.
+Nimelt peab programm küsima kasutaja käest, mis kujundi pindala ta soovib välja arvutada ja siis sisestada vajalikud
 mõõtmed (raadius või külje pikkus). Valikuteks on ring, ruut või kolmnurk(``"circle", "square", "triangle"``).
 Ülesande lihtsustamiseks oletame, et kolmurk võib olla ainult võrdkülgne.
 
 Ülesande lahendamise algoritm peab olema järgmine:
 
-1) Programm küsib sisendit ``Please insert geometric shape:``
-2) Programm küsib kujundi mõõtmed ``Please insert radius or side length in cm:``
-3) Vastavalt sisestatud kujundile peab programm printima saadud pindala koos mõõtühikutega(``cm^2``). 
+1) Programm küsib sisendit ``"Please insert geometric shape:"``
+2) Programm küsib kujundi mõõtmed ``"Please insert radius or side length in cm:"``
+3) Vastavalt sisestatud kujundile peab programm printima saadud pindala koos mõõtühikutega(``"cm^2"``). 
 
-Muul juhul prindib programm ``Shape is not supported.``
+Muul juhul prindib programm ``"Shape is not supported."``
+
+Kui vastuseks ei tule täpne arv, siis tuleb vastust ümardada ``kahe komakohani``.
+
+**Ümardamise kohta saab lugeda [siit](https://ained.ttu.ee/pydoc/math.html#umardamine)**
 
 
 Näidisväljund:
     
     Please insert geometric shape:triangle
     Please insert radius or side length in cm:3
-    The area is 3.8971143170299736 cm^2
-    
+    The area is 3.9 cm^2
     
     Please insert geometric shape:circle
     Please insert radius or side length in cm:9
     The area is 254.34 cm^2
+    
+    Please insert geometric shape:square
+    Please insert radius or side length in cm:2.25
+    The area is 5.06 cm^2
     
 **Abimaterjal**
     
@@ -33,19 +40,16 @@ Näidisväljund:
 
     print("Hello") # prints "Hello" to the console
 
-***Muutuja***
-
-<https://ained.ttu.ee/pydoc/variable.html>
+[***Muutuja***](https://ained.ttu.ee/pydoc/variable.html)
 
 Muutujasse on võimalik salvestada erinevaid väärtusi.
 
 
-    number = 42 # saves int 12 to variable named named number
+    number = 42 # saves int 42 to variable named named number
     print(number) # prints 42 to the console
 
-Sisendi lugemine standardsisendist (``input``)
+[***Sisendi lugemine standardsisendist (``input``)***](https://ained.ttu.ee/pydoc/input.html)
 
-<https://ained.ttu.ee/pydoc/input.html>
 
 ``input`` funktsiooniga saab küsida kasutajalt sisendit. Sisendit
 küsides tuleb tähele panna, et muutujasse salvestatakse sisestatud
@@ -56,11 +60,7 @@ Näide, kus küsimuse "How old are you" vastus salvestatakse muutujasse ``age``.
 
     age = input("How old are you?") # waits for user to enter age.
 
-***Sõne***
-
-<https://ained.ttu.ee/pydoc/string.html?highlight=konvertida>
-
-konverteerimine ujukomaarvuks(``float``).
+[***Sõne(String) konverteerimine ujukomaarvuks(``float``).***](https://ained.ttu.ee/pydoc/string.html?highlight=konvertida)
 
     number = float("12.2") # now I can to math with 12.2
     print(number + 3) # prints 15.2
@@ -71,9 +71,7 @@ täisarvuks ``int`` võib kood visata erindi või käituda veidralt.
     a = "12" + "3"
     print(a) # prints "123"
 
-***Tingimuslause*** (``if-elif-else``)
- 
- <https://ained.ttu.ee/pydoc/if_statements.html>
+[***Tingimuslause*** (``if-elif-else``)](https://ained.ttu.ee/pydoc/if_statements.html)
 
 Tingimuslause võimaldab käivitada mingit koodi osa, kui on täitetud
 mingi kindel tingimus.
@@ -106,6 +104,14 @@ tingimus on täitetud kasutame võtmesõna ``elif``.
     else:
         print("Number is is between 0 and 30.")
         
+ 
+***[Ümardamine](https://ained.ttu.ee/pydoc/math.html#umardamine)***
+
+    print(round(10)) # -> 10
+    print(round(10.7)) # -> 11
+    print(round(5.5)) # -> 6
+    print(round(2.665, 2)) # -> 2.67
+       
 Lisaks võib lugeda: 
 
 https://www.tutorialsteacher.com/python/math-module

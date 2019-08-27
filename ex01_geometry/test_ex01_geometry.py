@@ -22,7 +22,7 @@ class MockStdin():
 def run_introduction_script(runner, shape, dimension) -> "tuple[str, str]":
     script_name = "ex01_geometry.py"
     working_dir = os.path.dirname(os.path.abspath(__file__))
-    script = runner.run('python3.7', script_name, stdin=MockStdin([shape, dimension]),
+    script = runner.run('python', script_name, stdin=MockStdin([shape, dimension]),
                         cwd=working_dir)
     return script.stdout, script.stderr
 
@@ -55,7 +55,7 @@ def test_geometry_triangle_example_output(script_runner):
     shape = "triangle"
     output, _ = run_introduction_script(script_runner, shape, dimension)
 
-    expected_output_text = f"The area is {float(dimension)**2 / 4 * math.sqrt(3)} cm^2"
+    expected_output_text = f"The area is {round(float(dimension)**2 / 4 * math.sqrt(3), 2)} cm^2"
     assert expected_output_text in output
 
 
@@ -67,7 +67,7 @@ def test_geometry_circle_example_output(script_runner):
     shape = "circle"
     output, _ = run_introduction_script(script_runner, shape, dimension)
 
-    expected_output_text = f"The area is {float(dimension)**2 * 3.14} cm^2"
+    expected_output_text = f"The area is {round(float(dimension)**2 * 3.14, 2)} cm^2"
     assert expected_output_text in output
 
 
@@ -79,7 +79,7 @@ def test_geometry_square_random_output(script_runner):
     shape = "square"
     output, _ = run_introduction_script(script_runner, shape, dimension)
 
-    expected_output_text = f"The area is {float(dimension)**2} cm^2"
+    expected_output_text = f"The area is {round(float(dimension)**2, 2)} cm^2"
     assert expected_output_text in output
 
 
@@ -91,7 +91,7 @@ def test_geometry_circle_random_output(script_runner):
     shape = "circle"
     output, _ = run_introduction_script(script_runner, shape, dimension)
 
-    expected_output_text = f"The area is {float(dimension)**2 * 3.14} cm^2"
+    expected_output_text = f"The area is {round(float(dimension)**2 * 3.14, 2)} cm^2"
     assert expected_output_text in output
 
 
