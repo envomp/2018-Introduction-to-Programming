@@ -55,7 +55,8 @@ https://ained.ttu.ee/pydoc/input.html
     else:
         print("tlu")
 
-https://ained.ttu.ee/pydoc/if_statements.html?highlight=tingimuslause
+https://ained.ttu.ee/pydoc/if_statements.html
+
 https://www.w3schools.com/python/python_conditions.asp
 
 **Ülesanne**
