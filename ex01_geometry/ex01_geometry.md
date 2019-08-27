@@ -48,7 +48,7 @@ Muutujasse on võimalik salvestada erinevaid väärtusi.
     number = 42 # saves int 42 to variable named named number
     print(number) # prints 42 to the console
 
-[***Sisendi lugemine standardsisendist(input)***](https://ained.ttu.ee/pydoc/input.html)
+[***Sisendi lugemine standardsisendist***(``input``)](https://ained.ttu.ee/pydoc/input.html)
 
 
 ``input`` funktsiooniga saab küsida kasutajalt sisendit. Sisendit
@@ -60,7 +60,7 @@ Näide, kus küsimuse "How old are you" vastus salvestatakse muutujasse ``age``.
 
     age = input("How old are you?") # waits for user to enter age.
 
-[***Sõne(String) konverteerimine ujukomaarvuks(``float``).***](https://ained.ttu.ee/pydoc/string.html?highlight=konvertida)
+[***Sõne(String) konverteerimine ujukomaarvuks***(``float``)](https://ained.ttu.ee/pydoc/string.html?highlight=konvertida)
 
     number = float("12.2") # now I can to math with 12.2
     print(number + 3) # prints 15.2
