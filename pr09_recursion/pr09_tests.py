@@ -8,6 +8,14 @@ from recursion import x_sum_loop, x_sum_recursion, remove_nums_and_reverse, task
 # X_SUM_LOOP
 
 
+@pytest.mark.timeout(10.0)
+def test_x_sum_loop_has_iteration():
+    try:
+        x_sum_loop([3, 4, 5, 6] * 9999, 1)
+    except RecursionError:
+        pytest.fail("Where is iteration?")
+
+
 @pytest.mark.timeout(1.0)
 def test_x_sum_loop_examples():
     assert not x_sum_loop([], 3)
@@ -48,6 +56,7 @@ def test_x_sum_loop_negative_x():
 
 @pytest.mark.timeout(1.0)
 def test_x_sum_loop():
+    test_x_sum_loop_has_iteration()
     test_x_sum_loop_examples()
     test_x_sum_loop_empty_list()
     test_x_sum_loop_insufficient_x()
@@ -58,10 +67,10 @@ def test_x_sum_loop():
 # X_SUM_RECURSION
 
 
-@pytest.mark.timeout(1.0)
-def test_x_sum_recursion_recursion():
+@pytest.mark.timeout(10.0)
+def test_x_sum_recursion_has_recursion():
     try:
-        x_sum_recursion([1, 1] * 999**99999, 99**99999)
+        x_sum_recursion([3, 4, 5, 6] * 9999, 1)
         pytest.fail("Where is recursion?")
     except RecursionError:
         pass
@@ -108,7 +117,7 @@ def test_x_sum_recursion_negative_x():
 
 @pytest.mark.timeout(1.0)
 def test_x_sum_recursion():
-    #test_x_sum_recursion_recursion()
+    test_x_sum_recursion_has_recursion()
     test_x_sum_recursion_examples()
     test_x_sum_recursion_empty_list()
     test_x_sum_recursion_insufficient_x()
@@ -119,10 +128,10 @@ def test_x_sum_recursion():
 # REMOVE_NUMS_AND_REVERSE
 
 
-@pytest.mark.timeout(1.0)
-def test_remove_nums_and_reverse_recursion():
+@pytest.mark.timeout(10.0)
+def test_remove_nums_and_reverse_has_recursion():
     try:
-        remove_nums_and_reverse("9823yfhui" * 9**99)
+        remove_nums_and_reverse("9823yfhui" * 9999)
         pytest.fail("Where is recursion?")
     except RecursionError:
         pass
@@ -162,7 +171,7 @@ def test_remove_nums_and_reverse_nums_and_other():
 
 @pytest.mark.timeout(1.0)
 def test_remove_nums_and_reverse():
-    #test_remove_nums_and_reverse_recursion()
+    test_remove_nums_and_reverse_has_recursion()
     test_remove_nums_and_reverse_examples()
     test_remove_nums_and_reverse_empty_string()
     test_remove_nums_and_reverse_no_nums()
@@ -173,10 +182,10 @@ def test_remove_nums_and_reverse():
 # TASK1
 
 
-@pytest.mark.timeout(1.0)
-def test_task1_recursion():
+@pytest.mark.timeout(10.0)
+def test_task1_has_recursion():
     try:
-        task1("hk" * 99**9999 + "h")
+        task1("hk" * 9999 + "h")
         pytest.fail("Where is recursion?")
     except RecursionError:
         pass
@@ -204,13 +213,21 @@ def test_task1_even_length():
 
 @pytest.mark.timeout(1.0)
 def test_task1():
-    #test_task1_recursion()
+    test_task1_has_recursion()
     test_task1_empty_string()
     test_task1_odd_length()
     test_task1_even_length()
 
 
 # TASK2
+
+
+@pytest.mark.timeout(10.0)
+def test_task2_has_iteration():
+    try:
+        task2("meoww" * 9999)
+    except RecursionError:
+        pytest.fail("Where is iteration?")
 
 
 @pytest.mark.timeout(1.0)
@@ -236,6 +253,7 @@ def test_task2_change_string():
 
 @pytest.mark.timeout(1.0)
 def test_task2():
+    test_task2_has_iteration()
     test_task2_empty_string()
     test_task2_no_changes()
     test_task2_change_string()
