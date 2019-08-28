@@ -2,6 +2,8 @@
 
 
 import pytest
+from recursion import x_sum_loop, x_sum_recursion, remove_nums_and_reverse, task1, task2
+
 
 # X_SUM_LOOP
 
