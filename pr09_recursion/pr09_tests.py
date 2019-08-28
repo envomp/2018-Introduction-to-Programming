@@ -3,9 +3,44 @@
 
 import pytest
 from recursion import x_sum_loop, x_sum_recursion, remove_nums_and_reverse, task1, task2
+from random import randint, choices
+import string
 
 
 # X_SUM_LOOP
+
+def my_x_sum(nums, x):
+    if len(nums) == 0 or x == 0:
+        return 0
+    sum = 0
+    if x < 0:
+        nums.reverse()
+        x = -x
+    for i in range(x - 1, len(nums), x):
+        sum += nums[i]
+    return sum
+
+
+def my_reverse_and_remove_nums(string):
+    nums = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+    if len(string) == 0:
+        return ""
+    elif string[0] in nums:
+        return remove_nums_and_reverse(string[1:])
+    return remove_nums_and_reverse(string[1:]) + string[0]
+
+
+def my_task2(string):
+    if len(string) < 2:
+        return string
+    answer = string[0]
+    prev = string[0]
+    for c in string[1:]:
+        if prev == c:
+            answer += "-"
+        answer += c
+        prev = c
+    return answer
 
 
 @pytest.mark.timeout(10.0)
@@ -49,9 +84,28 @@ def test_x_sum_loop_positive_x():
 @pytest.mark.timeout(1.0)
 def test_x_sum_loop_negative_x():
     assert x_sum_loop([5, 2, 4, -3], -2) == 9
-    assert x_sum_recursion([3, 3, 3, 3, 2], -1) == 14
-    assert x_sum_recursion([5, 2, 4, -3], -2) == 9
-    assert x_sum_recursion([5, 4, 3], -5) == 0
+    assert x_sum_loop([3, 3, 3, 3, 2], -1) == 14
+    assert x_sum_loop([5, 2, 4, -3], -2) == 9
+    assert x_sum_loop([5, 4, 3], -5) == 0
+
+
+@pytest.mark.timeout(2.0)
+def test_x_sum_loop_random_pos_index():
+    data = []
+    for _ in range(randint(5, 200)):
+        data.append(randint(-2000, 2000))
+    multiplier = randint(1, 30)
+    assert x_sum_loop(data.copy(), multiplier) == my_x_sum(data.copy(), multiplier)
+
+
+@pytest.mark.timeout(2.0)
+def test_x_sum_loop_random_neg_index():
+    data = []
+    for _ in range(randint(5, 200)):
+        data.append(randint(-2000, 2000))
+    multiplier = randint(-30, -1)
+    #print(data)
+    assert x_sum_loop(data.copy(), multiplier) == my_x_sum(data.copy(), multiplier)
 
 
 @pytest.mark.timeout(1.0)
@@ -62,6 +116,8 @@ def test_x_sum_loop():
     test_x_sum_loop_insufficient_x()
     test_x_sum_loop_positive_x()
     test_x_sum_loop_negative_x()
+    test_x_sum_loop_random_pos_index()
+    test_x_sum_loop_random_neg_index()
 
 
 # X_SUM_RECURSION
@@ -115,6 +171,24 @@ def test_x_sum_recursion_negative_x():
     assert x_sum_recursion([9, 8, 7, 6, 5, 4, 3, 2, 1, 0], -5) == 13
 
 
+@pytest.mark.timeout(2.0)
+def test_x_sum_recursion_random_pos_index():
+    data = []
+    for _ in range(randint(5, 200)):
+        data.append(randint(-2000, 2000))
+    multiplier = randint(1, 30)
+    assert x_sum_recursion(data.copy(), multiplier) == my_x_sum(data.copy(), multiplier)
+
+
+@pytest.mark.timeout(2.0)
+def test_x_sum_recursion_random_neg_index():
+    data = []
+    for _ in range(randint(5, 200)):
+        data.append(randint(-2000, 2000))
+    multiplier = randint(-30, -1)
+    assert x_sum_recursion(data.copy(), multiplier) == my_x_sum(data.copy(), multiplier)
+
+
 @pytest.mark.timeout(1.0)
 def test_x_sum_recursion():
     test_x_sum_recursion_has_recursion()
@@ -123,6 +197,8 @@ def test_x_sum_recursion():
     test_x_sum_recursion_insufficient_x()
     test_x_sum_recursion_positive_x()
     test_x_sum_recursion_negative_x()
+    test_x_sum_recursion_random_pos_index()
+    test_x_sum_recursion_random_neg_index()
 
 
 # REMOVE_NUMS_AND_REVERSE
@@ -170,6 +246,24 @@ def test_remove_nums_and_reverse_nums_and_other():
 
 
 @pytest.mark.timeout(1.0)
+def test_remove_nums_and_reverse_random_small():
+    stringie = ''.join(choices(string.ascii_letters + string.digits, k=35))
+    assert remove_nums_and_reverse(stringie) == my_reverse_and_remove_nums(stringie)
+
+
+@pytest.mark.timeout(2.0)
+def test_remove_nums_and_reverse_random_medium():
+    stringie = ''.join(choices(string.ascii_letters + string.digits, k=350))
+    assert remove_nums_and_reverse(stringie) == my_reverse_and_remove_nums(stringie)
+
+
+@pytest.mark.timeout(3.0)
+def test_remove_nums_and_reverse_random_big():
+    stringie = ''.join(choices(string.ascii_letters + string.digits, k=900))
+    assert remove_nums_and_reverse(stringie) == my_reverse_and_remove_nums(stringie)
+
+
+@pytest.mark.timeout(.0)
 def test_remove_nums_and_reverse():
     test_remove_nums_and_reverse_has_recursion()
     test_remove_nums_and_reverse_examples()
@@ -177,6 +271,9 @@ def test_remove_nums_and_reverse():
     test_remove_nums_and_reverse_no_nums()
     test_remove_nums_and_reverse_contains_nums_only()
     test_remove_nums_and_reverse_nums_and_other()
+    test_remove_nums_and_reverse_random_small()
+    test_remove_nums_and_reverse_random_medium()
+    test_remove_nums_and_reverse_random_big()
 
 
 # TASK1
@@ -252,11 +349,32 @@ def test_task2_change_string():
 
 
 @pytest.mark.timeout(1.0)
+def test_task2_random_small():
+    stringie = ''.join(choices(string.ascii_lowercase, k=30))
+    assert task2(stringie) == my_task2(stringie)
+
+
+@pytest.mark.timeout(2.0)
+def test_task2_random_medium():
+    stringie = ''.join(choices(string.ascii_lowercase, k=300))
+    assert task2(stringie) == my_task2(stringie)
+
+
+@pytest.mark.timeout(3.0)
+def test_task2_random_big():
+    stringie = ''.join(choices(string.ascii_lowercase, k=900))
+    assert task2(stringie) == my_task2(stringie)
+
+
+@pytest.mark.timeout(1.0)
 def test_task2():
     test_task2_has_iteration()
     test_task2_empty_string()
     test_task2_no_changes()
     test_task2_change_string()
+    test_task2_random_small()
+    test_task2_random_medium()
+    test_task2_random_big()
 
 
 test_x_sum_loop()
