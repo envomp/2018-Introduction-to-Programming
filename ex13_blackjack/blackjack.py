@@ -4,7 +4,8 @@ import os
 import pkgutil
 import random
 
-from deck_solved import Deck, Card
+# from deck_solved import Deck, Card
+from pr13_api.deck_solved import Deck, Card
 from game_view import GameView, SimpleView, FancyView, Move
 from strategy import Strategy, HumanStrategy
 
@@ -122,7 +123,9 @@ class GameController:
             self.players.append(player)
 
         for i in range(bots_count):
-            bot = Player(f"Bot #{i + 1}", random.choice(strategies)(self.players, self.house), self.PLAYER_START_COINS)
+            bot = Player(f"Bot #{i + 1}",
+                         random.choice(strategies)(self.players, self.house, decks_count),
+                         self.PLAYER_START_COINS)
             self.players.append(bot)
 
     def play_round(self) -> bool:

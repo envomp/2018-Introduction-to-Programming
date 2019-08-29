@@ -79,7 +79,7 @@ import os
 import pkgutil
 import random
 
-from deck_solved import Deck, Card
+from pr13_api.deck import Deck, Card
 from game_view import GameView, FancyView, Move
 from strategy import Strategy, HumanStrategy
 
