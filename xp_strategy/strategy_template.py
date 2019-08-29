@@ -1,16 +1,3 @@
-# XP06
-
-
-Ülesandeks on kirjutada eelnevalt valmis tehtud Blackjack mängule bot.
-Selleks tuleb laiendada ette antud Strategy klassi (vaata malli). 
-Muus osas on antud tudengile vabad käed. 
-
-NB! Kaartide lugemine ja igasugune statistiline analüüsimine vms on rangelt lubatud!
-
-
-### Mall
-
-```python
 """Strategy."""
 from strategy import Strategy
 from game_view import Move
@@ -32,5 +19,3 @@ class StudentStrategy(Strategy):
 
     def on_game_end(self) -> None:
         """Called on game end."""
-
-```

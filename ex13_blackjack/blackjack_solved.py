@@ -117,7 +117,7 @@ class GameController:
 
         for i in range(players_count):
             player = Player(self.view.ask_name(i + 1),
-                            HumanStrategy(self.players, self.house, self.view),
+                            HumanStrategy(self.players, self.house, decks_count, self.view),
                             self.PLAYER_START_COINS)
             self.players.append(player)
 
