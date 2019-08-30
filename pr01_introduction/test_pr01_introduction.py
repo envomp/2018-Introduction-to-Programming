@@ -72,5 +72,5 @@ def test_introduction_answer_no_output(script_runner):
 def test_introduction_answer_else_output(script_runner):
     output, _ = run_introduction_script(script_runner, name="Bob", answer="Idk")
 
-    expected_output_text = ”Your input is incorrect!”
+    expected_output_text = "Your input is incorrect!"
     assert expected_output_text in output
