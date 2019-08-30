@@ -49,11 +49,11 @@ https://ained.ttu.ee/pydoc/input.html
 
     university = "taltech"
     if university == "taltech":
-        print("taltech")
+        print("Welcome to taltech")
     elif university == "tu":
-        print("tu")
+        print("Welcome to tu")
     else:
-        print("tlu")
+        print("See you next time!")
 
 https://ained.ttu.ee/pydoc/if_statements.html
 
@@ -73,7 +73,7 @@ Programmi algoritm võiks olla järgmine:
  
     Kui kasutaja vastab ``No``, siis printi ``Don`t worry, [Nimi]! You will learn everything you need.``
  
-    Kui kasutaja vastab midagi muud siis kuva ``Please answer Yes or No!``
+    Kui kasutaja vastab midagi muud siis kuva ``Your input is incorrect!``
     
     
 **Mall**
