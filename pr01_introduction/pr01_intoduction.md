@@ -66,7 +66,7 @@ uurib, kas kasutaja on varem programeerimisega tegelenud. Vastavalt vastustele p
 
 Programmi algoritm võiks olla järgmine:
 1) Kuva ekraanile sõnum ``Hello, my name is Python! Please type your name to continue our conversation.``
-2) Küsi kasutajalt nime ja salvesta see muutujasse.(NB! Nimeta muutujaid mõistlikult, ära vali ühetähelised muutujanimed.)
+2) Küsi kasutajalt nime ja salvesta see muutujasse.(NB! Vali mõistlikud muutujanimed, ära vali ühetähelisi nimesid.)
 3) Küsi kasutaja käest, kas ta on varem programmeerimisega tegelenud.
 4)
     Kui kasutaja vastab ``Yes``, siis printi ``Congratulations, [Nimi]! It will be a little bit easier for you.``
