@@ -122,16 +122,18 @@ https://www.mathopenref.com/triangleequilateralarea.html
         
 ***MALL***
 
-    import math
-    
-    def calculate_area():
-    """ Ask user wished shape and radius or side length and calculate area."""
-    
-        #YOUR CODE GOES HERE!
-    
-    if __name__ == '__main__':
-        calculate_area()
+```python
+import math
 
+def calculate_area():
+    """ Ask user wished shape and radius or side length and calculate area."""
+
+    #YOUR CODE GOES HERE!
+
+if __name__ == '__main__':
+    calculate_area()
+
+```
 
 
 P.S Ringi pindala välja arvutamisel piisab kui π on 3.14.
