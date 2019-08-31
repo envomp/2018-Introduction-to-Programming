@@ -1,3 +1,9 @@
+#Introduction 
+
+Kaust gitis: ‘pr01_intrdoduction’
+
+Faili nimi: ‘introductin.py’
+
 **Abimaterjal**
 
 ***Printimine:***
