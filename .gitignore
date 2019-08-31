@@ -1,15 +1,6 @@
 .idea
 .pytest_cache
-
-[a-zA-Z][a-zA-Z][0-9][0-9]_*.py
-### Tester only wants tests, every file used for testing should use test within its name
-## for example:
-## ex_test.py
-## ex_tests.py
-## test_ex.py
-## tests_ex.py
-## test.py
-## tests.py
+venv
 
 
 # Compiled source #
