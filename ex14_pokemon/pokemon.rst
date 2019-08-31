@@ -1,7 +1,7 @@
 EX14 Pokemon
 ========
 
-Fail Gitis: ``ex14_pokemon/pokemon.py`` .
+Fail Gitis: ``ex14_pokemon/ex14_pokemon.py`` .
 Kirjuta programm, mis teeb api päringu pokeapi.co pihta ja korrastab andmed json kujule, mis tuleb seejärel faili kirjutada.
 
 

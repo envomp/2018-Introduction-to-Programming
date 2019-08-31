@@ -1,6 +1,6 @@
 import pytest
 import random
-from pokemon import Pokemon, World, SamePokemonFightException
+from ex14_pokemon import Pokemon, World, SamePokemonFightException
 import os
 import glob
 from functools import reduce
