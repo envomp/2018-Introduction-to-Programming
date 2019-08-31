@@ -1,5 +1,50 @@
 .idea
 .pytest_cache
+
+!*test*.py ### Tester only wants tests, every file used for testing should use test within its name
+## for example:
+## ex_test.py
+## ex_tests.py
+## test_ex.py
+## tests_ex.py
+## test.py
+## tests.py
+
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+# OS generated files #
+######################
 .DS_Store
-*.py
-!test!.py
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
