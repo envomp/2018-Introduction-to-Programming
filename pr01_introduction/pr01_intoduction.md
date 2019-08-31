@@ -1,6 +1,6 @@
 # Introduction 
 
-Kaust gitis:``pr01_intrdoduction``
+Kaust gitis:``pr01_introduction``
 
 Faili nimi: ``introductin.py``
 
