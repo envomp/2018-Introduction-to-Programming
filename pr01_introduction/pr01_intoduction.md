@@ -1,8 +1,8 @@
-#Introduction 
+# Introduction 
 
-Kaust gitis: ‘pr01_intrdoduction’
+Kaust gitis:``pr01_intrdoduction``
 
-Faili nimi: ‘introductin.py’
+Faili nimi: ``introductin.py``
 
 **Abimaterjal**
 
