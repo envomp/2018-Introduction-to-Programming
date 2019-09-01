@@ -83,17 +83,20 @@ Programmi algoritm võiks olla järgmine:
     
     
 **Mall**
+```python
 
-    def introduce():
-        """Write a function which asks user name and gives suitable answer."""
+def introduce():
+    """Write a function which asks user name and gives suitable answer."""
+
+    #Your code goes here!
+
    
-    
-        #Your code goes here!
-    
-       
-    if __name__ == "__main__":   # <- This line is needed for automatic testing
-        introduce()
-    
+if __name__ == "__main__":   # <- This line is needed for automatic testing
+    introduce()
+
+```
+
+ 
 Lisaks on kasulik lugeda
 
 https://ained.ttu.ee/pydoc/style.html

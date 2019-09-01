@@ -129,10 +129,12 @@ https://www.mathopenref.com/triangleequilateralarea.html
 ```python
 import math
 
+
 def calculate_area():
     """ Ask user wished shape and radius or side length and calculate area."""
 
     #YOUR CODE GOES HERE!
+
 
 if __name__ == '__main__':
     calculate_area()
