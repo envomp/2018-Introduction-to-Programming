@@ -8,18 +8,18 @@ def mock_input_and_import_module(monkeypatch, value="a\nb\nc"):
 
 
 @pytest.mark.timeout(1.0)
-def test__less_value_is_correct(monkeypatch):
+def test__third_number_variable_is_correct(monkeypatch):
     try:
         m = mock_input_and_import_module(monkeypatch)
-        assert m.is_first_number_less_than_second_number == (19 < 7)
+        assert m.third_number == 14
     except AttributeError:
         pytest.fail('Variable not found!')
 
 
 @pytest.mark.timeout(1.0)
-def test__less_or_equal_value_is_correct(monkeypatch):
+def test__number_in_between_value_is_correct(monkeypatch):
     try:
         m = mock_input_and_import_module(monkeypatch)
-        assert m.is_first_number_less_than_or_equal_to_second_number == (19 <= 7)
+        assert m.third_number_is_between_first_and_second == (19 < 14 < 7)
     except AttributeError:
         pytest.fail('Variable not found!')
