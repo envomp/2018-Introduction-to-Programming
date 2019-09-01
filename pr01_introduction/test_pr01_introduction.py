@@ -17,7 +17,7 @@ class MockStdin():
 
 
 def run_introduction_script(runner, name, answer) -> "tuple[str, str]":
-    script_name = "pr01_introduction.py"
+    script_name = "introduction.py"
     working_dir = os.path.dirname(os.path.abspath(__file__))
     script = runner.run('python3.7', script_name, stdin=MockStdin([name, answer]),
                         cwd=working_dir)

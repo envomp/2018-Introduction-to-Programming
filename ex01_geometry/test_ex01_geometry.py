@@ -20,7 +20,7 @@ class MockStdin():
 
 
 def run_introduction_script(runner, shape, dimension) -> "tuple[str, str]":
-    script_name = "ex01_geometry.py"
+    script_name = "geometry.py"
     working_dir = os.path.dirname(os.path.abspath(__file__))
     script = runner.run('python3.7', script_name, stdin=MockStdin([shape, dimension]),
                         cwd=working_dir)

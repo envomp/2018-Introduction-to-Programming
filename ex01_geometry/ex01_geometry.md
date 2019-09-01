@@ -1,5 +1,9 @@
 # Geometry
 
+Kaust Gitis: ``ex01_geometry``
+
+Faili nimi: ``geometry.py``
+
 Sinu esimeseks ülesandeks on luua programm, mis peaks märgatavalt lihtsustama iga algklassiõpilase elu.
 Nimelt peab programm küsima kasutaja käest, mis kujundi pindala ta soovib välja arvutada ja siis sisestada vajalikud
 mõõtmed (raadius või külje pikkus). Valikuteks on ring, ruut või kolmnurk(``"circle", "square", "triangle"``).
