@@ -8,7 +8,7 @@ def mock_input_and_import_module(monkeypatch, value="a\nb\nc"):
 
 
 @pytest.mark.timeout(1.0)
-def test__first_name_variable_is_correct(monkeypatch):
+def test__first_number_variable_is_correct(monkeypatch):
     try:
         m = mock_input_and_import_module(monkeypatch)
         assert m.first_number == 19
@@ -17,7 +17,7 @@ def test__first_name_variable_is_correct(monkeypatch):
 
 
 @pytest.mark.timeout(1.0)
-def test__second_name_variable_is_correct(monkeypatch):
+def test__second_number_variable_is_correct(monkeypatch):
     try:
         m = mock_input_and_import_module(monkeypatch)
         assert m.second_number == 7
