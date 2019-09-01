@@ -4,16 +4,10 @@ from random import randint
 
 
 def test_prime_number_identifier(number: int) -> bool:
-    """
-    Identifies if number is prime.
-
-    :param number: number for check.
-    :return: boolean True if number is prime.
-    """
     if number == 0:
         return False
     if number == 1:
-        return False  # 1 is not prime number
+        return False
     if number == 2:
         return True
 
@@ -35,7 +29,17 @@ def test_one():
 
 
 @pytest.mark.timeout(1.0)
-def test_different_numbers():
+def test_small_numbers():
+    assert prime_number_identifier(1) == test_prime_number_identifier(1)
+    assert prime_number_identifier(2) == test_prime_number_identifier(2)
+    assert prime_number_identifier(4) == test_prime_number_identifier(4)
+    assert prime_number_identifier(6) == test_prime_number_identifier(6)
+    assert prime_number_identifier(7) == test_prime_number_identifier(7)
+    assert prime_number_identifier(9) == test_prime_number_identifier(9)
+
+
+@pytest.mark.timeout(1.0)
+def test_big_numbers():
     assert prime_number_identifier(11) == test_prime_number_identifier(11)
     assert prime_number_identifier(23) == test_prime_number_identifier(23)
     assert prime_number_identifier(45) == test_prime_number_identifier(45)
