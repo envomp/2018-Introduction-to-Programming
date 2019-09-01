@@ -122,7 +122,6 @@ https://www.tutorialsteacher.com/python/math-module
 
 https://www.mathopenref.com/triangleequilateralarea.html
 
-
         
 ***MALL***
 
