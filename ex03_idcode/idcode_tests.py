@@ -1,7 +1,9 @@
 """Tests for ex03 Id code."""
 import pytest
-from idcode import check_your_id, check_gender_number, check_born_order,
+from id_code import check_your_id, check_gender_number, check_born_order,
 check_leap_year, check_day_number
+
+# TODO: Tee test mis kontrollib jääknumbrit.
 
 
 def test_from_example_full_id():
