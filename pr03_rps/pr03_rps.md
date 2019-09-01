@@ -10,14 +10,14 @@ Proovi ülesannet lahendada samas järjekorras nagu funktsioonid on antud.
 
 ## Ülesanne
 
-* funktsioon `noemalize_user_name`, mis saab sisendiks mängija nime ja tagastab selle korrektses formaadis, näiteks: 
+* funktsioon `normalize_user_name`, mis saab sisendiks mängija nime ja tagastab selle korrektses formaadis, näiteks: 
 ```
-noemalize_user_name('kristjan') # Kristjan
-noemalize_user_name('KRISTJAN') # Kristjan
+normalize_user_name('kristjan') # Kristjan
+normalize_user_name('KRISTJAN') # Kristjan
 ```
 
 * funktsioon `reverse_user_name`, mis saab sisendiks mängija nime ja pöörab selle tagurpidi. NB! Oluline on, et ümberpööratud nimi algab suure tähega.
-Seega on sul võimalik kasutada siin esimest funktsiooni  `noemalize_user_name`.
+Seega on sul võimalik kasutada siin esimest funktsiooni  `normalize_user_name`.
 
 ```
 reverse_user_name('iris') # Siri
@@ -49,7 +49,7 @@ print(determine_winner('scissors', 'Marko', '123')) # There is a problem determi
 ```
 """Simple version of rock paper and scissors."""
 
-def noemalize_user_name(name: str) -> str:
+def normalize_user_name(name: str) -> str:
     """
     Simple function gets player name as input and capitalizes it.
 
@@ -84,7 +84,7 @@ def determine_winner(name: str, user_choice: str, computer_choice: str, reverse_
     Determine the winner returns a string that has information about who won.
 
     You should use the functions that you wrote before. You should use ask_user_choice function
-    to validate the user choice and use noemalize_user_name for representing a correct name. If the 
+    to validate the user choice and use normalize_user_name for representing a correct name. If the 
     function parameter reverse is true, then you should also reverse the player name.
     NB! Use the previous functions that you have written!
     
@@ -112,9 +112,9 @@ def play_game() -> None:
 
 
 if __name__ == "__main__":
-    print(noemalize_user_name('ago'))  # Ago
-    print(noemalize_user_name('AGO'))  # Ago
-    print(noemalize_user_name('MaRtInA'))  # Martina
+    print(normalize_user_name('ago'))  # Ago
+    print(normalize_user_name('AGO'))  # Ago
+    print(normalize_user_name('MaRtInA'))  # Martina
 
     print(reverse_user_name('MaRtInA'))  # Anitram
     print(reverse_user_name('AGO'))  # Oga
