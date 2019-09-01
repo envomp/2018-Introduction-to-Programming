@@ -30,7 +30,7 @@ def test_one():
 
 @pytest.mark.timeout(1.0)
 def test_small_numbers():
-    assert prime_number_identifier(1) == test_prime_number_identifier(1)
+    assert prime_number_identifier(3) == test_prime_number_identifier(3)
     assert prime_number_identifier(2) == test_prime_number_identifier(2)
     assert prime_number_identifier(4) == test_prime_number_identifier(4)
     assert prime_number_identifier(6) == test_prime_number_identifier(6)
@@ -40,12 +40,12 @@ def test_small_numbers():
 
 @pytest.mark.timeout(1.0)
 def test_big_numbers():
-    assert prime_number_identifier(11) == test_prime_number_identifier(11)
-    assert prime_number_identifier(23) == test_prime_number_identifier(23)
-    assert prime_number_identifier(45) == test_prime_number_identifier(45)
-    assert prime_number_identifier(69) == test_prime_number_identifier(69)
-    assert prime_number_identifier(78) == test_prime_number_identifier(78)
-    assert prime_number_identifier(95) == test_prime_number_identifier(95)
+    assert prime_number_identifier(6073) == test_prime_number_identifier(6073)
+    assert prime_number_identifier(5393) == test_prime_number_identifier(5393)
+    assert prime_number_identifier(5557) == test_prime_number_identifier(5557)
+    assert prime_number_identifier(5693) == test_prime_number_identifier(5693)
+    assert prime_number_identifier(7877) == test_prime_number_identifier(7877)
+    assert prime_number_identifier(7878) == test_prime_number_identifier(7878)
 
 
 @pytest.mark.timeout(1.0)
