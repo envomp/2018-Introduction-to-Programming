@@ -14,7 +14,5 @@ def test__prints_are_correct(monkeypatch):
         value = new_stdout.getvalue()
         assert f'My name is {m.first_name} {m.last_name}' in value
         assert 'I am glad to see you here' in value
-    except AttributeError:
-        pytest.fail('Variable not found!')
     finally:
         sys.stdout = sys.__stdout__

@@ -30,11 +30,8 @@ def test__asks_first_name(script_runner):
 
 @pytest.mark.timeout(1.0)
 def test__user_first_name_is_correct(monkeypatch):
-    try:
-        s = mock_input_and_import_module(monkeypatch)
-        assert s.user_first_name == 'abc'
-    except AttributeError:
-        pytest.fail('Variable not found!')
+    s = mock_input_and_import_module(monkeypatch)
+    assert s.user_first_name == 'abc'
 
 
 @pytest.mark.timeout(1.0)
@@ -46,8 +43,5 @@ def test__asks_last_name(script_runner):
 
 @pytest.mark.timeout(1.0)
 def test__user_last_name_is_correct(monkeypatch):
-    try:
-        s = mock_input_and_import_module(monkeypatch)
-        assert s.user_last_name == 'abc'
-    except AttributeError:
-        pytest.fail('Variable not found!')
+    s = mock_input_and_import_module(monkeypatch)
+    assert s.user_last_name == 'abc'
