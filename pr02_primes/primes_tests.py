@@ -3,11 +3,11 @@ from primes import prime_number_identifier
 from random import randint
 
 
-def test_prime_number_identifier(number: int) -> bool:
+def identifier(number: int) -> bool:
     if number == 0:
         return False
     if number == 1:
-        return False
+        return False  # 1 is not prime number
     if number == 2:
         return True
 
@@ -30,25 +30,25 @@ def test_one():
 
 @pytest.mark.timeout(1.0)
 def test_small_numbers():
-    assert prime_number_identifier(3) == test_prime_number_identifier(3)
-    assert prime_number_identifier(2) == test_prime_number_identifier(2)
-    assert prime_number_identifier(4) == test_prime_number_identifier(4)
-    assert prime_number_identifier(6) == test_prime_number_identifier(6)
-    assert prime_number_identifier(7) == test_prime_number_identifier(7)
-    assert prime_number_identifier(9) == test_prime_number_identifier(9)
+    assert prime_number_identifier(3)
+    assert prime_number_identifier(2)
+    assert not prime_number_identifier(4)
+    assert not prime_number_identifier(6)
+    assert prime_number_identifier(7)
+    assert not prime_number_identifier(9)
 
 
 @pytest.mark.timeout(1.0)
 def test_big_numbers():
-    assert prime_number_identifier(6073) == test_prime_number_identifier(6073)
-    assert prime_number_identifier(5393) == test_prime_number_identifier(5393)
-    assert prime_number_identifier(5557) == test_prime_number_identifier(5557)
-    assert prime_number_identifier(5693) == test_prime_number_identifier(5693)
-    assert prime_number_identifier(7877) == test_prime_number_identifier(7877)
-    assert prime_number_identifier(7878) == test_prime_number_identifier(7878)
+    assert prime_number_identifier(6073)
+    assert prime_number_identifier(5393)
+    assert prime_number_identifier(5557)
+    assert prime_number_identifier(5693)
+    assert prime_number_identifier(7877)
+    assert not prime_number_identifier(7878)
 
 
 @pytest.mark.timeout(1.0)
 def test_random():
     number = randint(2, 1000)
-    assert prime_number_identifier(number) == test_prime_number_identifier(number)
+    assert prime_number_identifier(number) == identifier(number)
