@@ -17,6 +17,7 @@ mõõtmed (raadius või külje pikkus). Valikuteks on ring, ruut või kolmnurk(`
  Kui sisestatud kujund on ring, siis küsib programm raadiust ``"Please insert radius in cm:"``
 
  Kui sisestatud kujund on ruut või kolmnurk, siis küsib programm külje pikkust ``"Please insert side length in cm:"``
+ 
 3) Vastavalt sisestatud kujundile peab programm printima saadud pindala koos mõõtühikutega(``"cm^2"``). 
 
 
