@@ -12,7 +12,12 @@ mõõtmed (raadius või külje pikkus). Valikuteks on ring, ruut või kolmnurk(`
 Ülesande lahendamise algoritm peab olema järgmine:
 
 1) Programm küsib sisendit ``"Please insert geometric shape:"``
-2) Programm küsib kujundi mõõtmed ``"Please insert radius or side length in cm:"``
+2) Programm küsib kujundi mõõtmed vastavalt sisestatud kujundile.
+
+ Kui sisestatud kujund on ring, siis küsib programm raadiust ``"Please insert radius in cm:"``
+
+ Kui sisestatud kujund on ruut või kolmnurk, siis küsib programm külje pikkust ``"Please insert side length in cm:"``
+ 
 3) Vastavalt sisestatud kujundile peab programm printima saadud pindala koos mõõtühikutega(``"cm^2"``). 
 
 
@@ -26,15 +31,15 @@ Kui vastuseks ei tule täpne arv, siis tuleb vastust ümardada ``kahe komakohani
 Näidisväljund:
     
     Please insert geometric shape:triangle
-    Please insert radius or side length in cm:3
+    Please insert side length in cm:3
     The area is 3.9 cm^2
     
     Please insert geometric shape:circle
-    Please insert radius or side length in cm:9
+    Please insert radius cm:9
     The area is 254.34 cm^2
     
     Please insert geometric shape:square
-    Please insert radius or side length in cm:2.25
+    Please insert side length in cm:2.25
     The area is 5.06 cm^2
     
 **Abimaterjal**

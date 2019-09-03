@@ -40,12 +40,29 @@ def test_geometry_ask_shape(script_runner):
 @pytest.mark.timeout(1.0)
 @pytest.mark.script_launch_mode('subprocess')
 @pytest.mark.incgroupdepend("syntax")
-def test_geomtry_ask_dimension(script_runner):
+def test_geomtry_ask_radius_circle(script_runner):
     output, _ = run_introduction_script(script_runner, shape="circle", dimension="3")
 
-    expected_output_text = "Please insert radius or side length in cm:"
+    expected_output_text = "Please insert radius in cm:"
     assert expected_output_text in output
 
+@pytest.mark.timeout(1.0)
+@pytest.mark.script_launch_mode('subprocess')
+@pytest.mark.incgroupdepend("syntax")
+def test_geomtry_ask_side_length_square(script_runner):
+    output, _ = run_introduction_script(script_runner, shape="square", dimension="3")
+
+    expected_output_text = "Please insert side length in cm:"
+    assert expected_output_text in output
+
+@pytest.mark.timeout(1.0)
+@pytest.mark.script_launch_mode('subprocess')
+@pytest.mark.incgroupdepend("syntax")
+def test_geomtry_ask_side_length_triangle(script_runner):
+    output, _ = run_introduction_script(script_runner, shape="triangle", dimension="3")
+
+    expected_output_text = "Please insert side length in cm:"
+    assert expected_output_text in output
 
 @pytest.mark.timeout(1.0)
 @pytest.mark.script_launch_mode('subprocess')
