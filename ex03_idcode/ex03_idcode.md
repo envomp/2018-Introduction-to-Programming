@@ -46,10 +46,10 @@ Numbrite tähendused:
 ## Ülesanne
 
 Ülesande peamine eesmärk on teha programm, mis suudab tuvastada, kas tegu on tõelise isikukoodiga.
-Programm koosneb mitmest funktsioonist, mis kontrollivad isikukoodis olevad erinevaid numbreid näiteks sünnikuupäeva.
+Programm koosneb mitmest funktsioonist, mis kontrollivad isikukoodis olevad erinevaid numbreid, näiteks sünnikuupäeva.
 
-- `check_your_id(id_code: str)` - peamine funktsioon, mis kasutab teisi ehk
-  kontroll-funktsioone, tagastab `True` või `False` peale kõiki tulemusi
+- `check_your_id(id_code: str)` - peamine funktsioon, mis kasutab teisi loodud
+  kontroll-funktsioone, tagastab `True` või `False` peale kõikide tulemuste
   kättesaamist. Sisendiks on isikukood sõne kujul;
 - `check_gender_number(gender_number: int)` - kontrollib soo numbrit, tagastab
   `True` või `False`;
@@ -59,21 +59,21 @@ Programm koosneb mitmest funktsioonist, mis kontrollivad isikukoodis olevad erin
   `True` või `False`;
 - `check_day_number(year_number: int, month_number: int, day_number: int)` -
   kontrollib kuupäeva numbrit; peab kindlasti vaatama seda, millises kuus on 30
-  või 31 päeva ja arvestama ka veebruari päevade arvu muutmisega, tagastab `True`
+  või 31 päeva ja arvestama ka veebruari kuupäevade arvu muutumisega, tagastab `True`
   või `False`;
   **NB! Kontrollides, kas kuus on 30 või 31 päeva, ei tohi lihtsalt
   kirja panna kõik sobivad kuud tingimuslausete sisse, proovige leida kuu numbri
   ja päevade arvu sõltuvust.**
-  **NB! Enne liigasta kontrollimist tuleb koostada isikukoodis antud aasta
-  kahest viimastest numbritest aasta terve neljakohaline number. Selleks võib
-  kasutada funktsioone, mis on mõeldud sõnumi koostamiseks!**
+  **NB! Enne liigasta kontrollimist tuleb teisaldada kahekohaline isikukoodi
+  aastanumber neljakohaliseks. Selleks võib kasutada funktsioone, mis on mõeldud 
+  sõnumi koostamiseks!**
 - `check_leap_year(year_number: int)` - abifunktsioon, mis aitab aru saada, kas
   tegemist on liigaastaga või mitte. Selle funktsiooni sisendiks on juba
   **neljakohaline** aasta number. Tagastab `True` või `False`;
-- `check_born_order(born_order: int)` - kontrollib sündinu järjenumbrit, tagastab
-  `True` või `False`;
+- `check_born_order(born_order: int)` - kontrollib sündinu järjekorranumbrit, 
+  tagastab `True` või `False`;
 - `check_control_number(id_code: str)` - kontrollib kontrollnumbri
-  korrektsust, aga kasutades algoritmi, millega luuakse need numbrid
+  korrektsust kasutades kontrollnumbri arvutamise valemit.
   (`Kontrollnumbri arvutamise algoritm`\_), tagastab `True` või `False`;
 
 ## Mall
@@ -259,7 +259,7 @@ Funktsioonid lühikese info sõnumi koostamiseks
 Sõnumi koostamine on ka ülesande kohustuslik osa, ilma selleta ei saa teste
 edukalt läbida! Lisaks, mõned nendest võivad olla abiks põhiülesande lahendamisel.
 
-## Näidie
+## Näide
 
 ```
 
