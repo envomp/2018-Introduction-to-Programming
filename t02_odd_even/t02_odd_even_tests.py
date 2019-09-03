@@ -8,7 +8,7 @@ import pytest
 def run_introduction_script(runner, value="abc"):
     script_name = "t02.py"
     working_dir = os.path.dirname(os.path.abspath(__file__))
-    script = runner.run('python', script_name, stdin=io.StringIO(value), cwd=working_dir)
+    script = runner.run('python3.7', script_name, stdin=io.StringIO(value), cwd=working_dir)
     return script
 
 input_prefix1 = "Mati\n"
