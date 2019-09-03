@@ -15,6 +15,7 @@ mõõtmed (raadius või külje pikkus). Valikuteks on ring, ruut või kolmnurk(`
 2) Programm küsib kujundi mõõtmed ``"Please insert radius or side length in cm:"``
 3) Vastavalt sisestatud kujundile peab programm printima saadud pindala koos mõõtühikutega(``"cm^2"``). 
 
+
 Muul juhul prindib programm ``"Shape is not supported."``
 
 Kui vastuseks ei tule täpne arv, siis tuleb vastust ümardada ``kahe komakohani``.
