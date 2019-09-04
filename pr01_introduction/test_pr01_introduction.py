@@ -62,7 +62,7 @@ def test_introduction_answer_no_output(script_runner):
     name = "Robert"
     output, _ = run_introduction_script(script_runner, name, answer="No")
 
-    expected_output_text = f"Don't worry, {name}! You will learn everything you need."
+    expected_output_text = f"Don`t worry, {name}! You will learn everything you need."
     assert expected_output_text in output
 
 
