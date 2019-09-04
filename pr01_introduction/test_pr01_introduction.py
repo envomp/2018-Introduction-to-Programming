@@ -53,6 +53,7 @@ def test_introduction_answer_yes_output(script_runner):
 
     expected_output_text = f"Congratulations, {name}! It will be a little bit easier for you."
     assert expected_output_text in output
+    assert "You will learn everything you need." not in output
     assert "incorrect" not in output
 
 
@@ -64,6 +65,7 @@ def test_introduction_answer_no_output(script_runner):
     output, _ = run_introduction_script(script_runner, name, answer="No")
 
     expected_output_text = f"Don`t worry, {name}! You will learn everything you need."
+    assert "It will be a little bit easier for you." not in output
     assert expected_output_text in output
     assert "incorrect" not in output
 
