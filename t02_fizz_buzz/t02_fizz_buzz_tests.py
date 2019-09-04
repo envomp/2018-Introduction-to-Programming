@@ -1,3 +1,10 @@
+import io
+import os
+import random
+
+import pytest
+
+
 def run_introduction_script(runner, value="abc"):
     script_name = "t02.py"
     working_dir = os.path.dirname(os.path.abspath(__file__))
