@@ -40,7 +40,7 @@ https://ained.ttu.ee/pydoc/input.html
  
 ***Tingimuslause kasutamine:***
 
-![if statement visualization](if_statement_visualization.png)
+![if statement visualization](https://ained.ttu.ee/pydoc/images/if_statement_visualization.png)
 
     a = 200
     b = 33
