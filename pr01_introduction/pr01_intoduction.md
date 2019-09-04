@@ -82,7 +82,16 @@ Programmi algoritm võiks olla järgmine:
  
     Kui kasutaja vastab midagi muud siis kuva ``Your input is incorrect!``
     
- 
+
+Ülesande jaoks vajalik fail `introduction.py`:
+
+```python
+"""My first program."""
+
+```
+
+Stiilinõue on, et failil oleks kirjeldus ehk kommentaar. See on ka kõik, mis teil mallis olemas on.
+
 Lisaks on kasulik lugeda
 
 https://ained.ttu.ee/pydoc/style.html
