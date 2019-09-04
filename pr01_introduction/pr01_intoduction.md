@@ -82,21 +82,6 @@ Programmi algoritm võiks olla järgmine:
  
     Kui kasutaja vastab midagi muud siis kuva ``Your input is incorrect!``
     
-    
-**Mall**
-```python
-
-def introduce():
-    """Write a function which asks user name and gives suitable answer."""
-
-    #Your code goes here!
-
-
-if __name__ == "__main__":   # <- This line is needed for automatic testing
-    introduce()
-
-```
-
  
 Lisaks on kasulik lugeda
 
