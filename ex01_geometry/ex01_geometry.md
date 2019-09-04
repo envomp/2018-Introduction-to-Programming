@@ -4,10 +4,10 @@ Kaust Gitis: ``ex01_geometry``
 
 Faili nimi: ``geometry.py``
 
-Sinu esimeseks ülesandeks on luua programm, mis peaks märgatavalt lihtsustama iga algklassiõpilase elu.
-Nimelt peab programm küsima kasutaja käest, mis kujundi pindala ta soovib välja arvutada ja siis sisestada vajalikud
-mõõtmed (raadius või külje pikkus). Valikuteks on ring, ruut või kolmnurk(``"circle", "square", "triangle"``).
-Ülesande lihtsustamiseks oletame, et kolmurk võib olla ainult võrdkülgne.
+Sinu ülesandeks on luua programm, mis peaks märgatavalt lihtsustama iga algklassiõpilase elu.
+Nimelt peab programm küsima kasutaja käest, mis kujundi pindala ta soovib välja arvutada. Seejärel tuleb sisestada vajalikud
+mõõtmed (raadius või külje pikkus). Kujundi valikuteks on ring, ruut või kolmnurk (``"circle", "square", "triangle"``).
+Ülesande lihtsustamiseks oletame, et kolmurk on võrdkülgne.
 
 Ülesande lahendamise algoritm peab olema järgmine:
 
@@ -76,25 +76,25 @@ Näide, kus küsimuse "How old are you" vastus salvestatakse muutujasse ``age``.
     print(number + 3) # prints 15.2
 
 Kui me ei muuda eelnevalt numbreid ujukomaarvuks ``float`` või
-täisarvuks ``int`` võib kood visata erindi või käituda veidralt.
+täisarvuks ``int``, võib kood visata erindi või käituda veidralt.
 
     a = "12" + "3"
     print(a) # prints "123"
 
 [***Tingimuslause*** (``if-elif-else``)](https://ained.ttu.ee/pydoc/if_statements.html)
 
-Tingimuslause võimaldab käivitada mingit koodi osa, kui on täitetud
+Tingimuslause võimaldab käivitada mingit koodi osa, kui on täidetud
 mingi kindel tingimus.
 
 Kõige lihtsam tingimuslause sisaldab võtmesõna ``if`` ja tingimust,
-mille tõeseks osutumisel käivitatakse koodiblokk, mis järgneb tingimuslausele.
-olev kood. Näiteks.
+mille tõeseks osutumisel käivitatakse koodiplokk, mis järgneb tingimuslausele.
+Näiteks.
 
     this = "that"
     if this == "that":
         print("This is that.")
 
-Kui me soovime tingimuse mitte täitumisel mingit muud koodi käivitada
+Kui me soovime tingimuse mitte täitumisel mingit muud koodi käivitada,
 siis kasutame võtmesõna ``else``.
 
     this = "not that"
@@ -104,7 +104,7 @@ siis kasutame võtmesõna ``else``.
         print("This is not that.") # this line is printed
 
 Kui me soovime tingimuse mitte täitumisel proovida, kas mõni muu
-tingimus on täitetud kasutame võtmesõna ``elif``.
+tingimus on täidetud, kasutame võtmesõna ``elif``.
 
     number = 13
     if number > 30:
@@ -132,12 +132,11 @@ https://www.mathopenref.com/triangleequilateralarea.html
 ***MALL***
 
 ```python
-"""Ask user wished shape and radius or side length and calculate area."""
+"""Ask user a shape and a radius or a side length and calculate the shape area."""
 
 ```
    
 Stiilinõue on, et failil oleks kirjeldus ehk kommentaar. See on ka kõik, mis teil mallis olemas on.
 
 
-P.S Ringi pindala välja arvutamisel piisab kui π on 3.14,
- kuid soovitatav on kasutada konstandi [math.pi](https://ained.ttu.ee/pydoc/math.html#konstantid).
+P.S Ringi pindala välja arvutamisel kasutada konstandi [math.pi](https://ained.ttu.ee/pydoc/math.html#konstantid).
