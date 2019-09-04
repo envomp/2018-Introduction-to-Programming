@@ -2,7 +2,7 @@
 
 Kaust gitis:``pr01_introduction``
 
-Faili nimi: ``introductin.py``
+Faili nimi: ``introduction.py``
 
 **Abimaterjal**
 
@@ -18,7 +18,7 @@ https://ained.ttu.ee/pydoc/variable.html
     
 ***Stringide liitmine:***
 
-    print("Welcome to " + unversity + "!")
+    print("Welcome to " + university + "!")
     
 https://ained.ttu.ee/pydoc/string.html
 
