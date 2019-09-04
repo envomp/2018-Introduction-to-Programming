@@ -35,8 +35,8 @@ Näidisväljund:
     The area is 3.9 cm^2
     
     Please insert geometric shape:circle
-    Please insert radius cm:9
-    The area is 254.34 cm^2
+    Please insert radius in cm:9
+    The area is 254.47 cm^2
     
     Please insert geometric shape:square
     Please insert side length in cm:2.25
@@ -132,19 +132,12 @@ https://www.mathopenref.com/triangleequilateralarea.html
 ***MALL***
 
 ```python
-import math
-
-
-def calculate_area():
-    """ Ask user wished shape and radius or side length and calculate area."""
-
-    #YOUR CODE GOES HERE!
-
-
-if __name__ == '__main__':
-    calculate_area()
+"""Ask user wished shape and radius or side length and calculate area."""
 
 ```
+   
+Stiilinõue on, et failil oleks kirjeldus ehk kommentaar. See on ka kõik, mis teil mallis olemas on.
 
 
-P.S Ringi pindala välja arvutamisel piisab kui π on 3.14.
+P.S Ringi pindala välja arvutamisel piisab kui π on 3.14,
+ kuid soovitatav on kasutada konstandi [math.pi](https://ained.ttu.ee/pydoc/math.html#konstantid).
