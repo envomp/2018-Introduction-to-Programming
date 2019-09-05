@@ -2,6 +2,7 @@ from queue import PriorityQueue
 
 
 class MazeSolver:
+
     def __init__(self, maze_str: str, configuration: dict = None):
         maze = []
         if configuration is None:
