@@ -19,6 +19,7 @@ def meet_me(pos1, jump_distance1, sleep1, pos2, jump_distance2, sleep2):
                 possible_answers.append(int(y))
         except ZeroDivisionError:  # TODO
             if y_current_offset_a == y_current_offset_b:
-                return int(round(alpha_a * y_current_offset_a + y_current_offset_b, 0))
+                cycle_mean = int(round(alpha_a * y_current_offset_a + y_current_offset_a, 0))
+                return -1 if cycle_mean > y_base_offset_a and cycle_mean > y_current_offset_b else cycle_mean
     possible_answers = list(filter(lambda xi: xi >= y_base_offset_a and xi >= y_current_offset_b, possible_answers))
     return -1 if possible_answers.__len__() == 0 else min(possible_answers)
