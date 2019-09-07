@@ -23,8 +23,8 @@ def meet_me(pos1, jump_distance1, sleep1, pos2, jump_distance2, sleep2):
         except ZeroDivisionError:
             if y_current_offset_a == y_current_offset_b:
                 print(alpha_b * y_current_offset_a + y_base_offset_b)
-    return -1 if possible_answers.__len__() == 0 else min(
-        filter(lambda xi: xi >= y_base_offset_a and xi >= y_current_offset_b, possible_answers))
+    possible_answers = list(filter(lambda xi: xi >= y_base_offset_a and xi >= y_current_offset_b, possible_answers))
+    return -1 if possible_answers.__len__() == 0 else min(possible_answers)
 
 
 if __name__ == '__main__':
