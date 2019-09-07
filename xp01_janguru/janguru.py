@@ -7,6 +7,9 @@ def meet_me(pos1, jump_distance1, sleep1, pos2, jump_distance2, sleep2):
 
     possible_answers = []
 
+    if pos1 + jump_distance1 == pos2 + jump_distance2:
+        return pos1 + jump_distance1
+
     for i in range(sleep1 + sleep2):
         try:
             if i >= sleep1:
@@ -15,7 +18,8 @@ def meet_me(pos1, jump_distance1, sleep1, pos2, jump_distance2, sleep2):
             else:
                 y_current_offset_a = y_base_offset_a - i * alpha_a
                 y_current_offset_b = y_base_offset_b
-            x = round((y_current_offset_b - y_current_offset_a) / (alpha_a - alpha_b), 4)
+            x = round((y_current_offset_b - y_current_offset_a) / (alpha_a - alpha_b), 0)
+            print(x)
             if not x.is_integer():
                 continue
             y = alpha_a * x + y_base_offset_a if i >= sleep1 else alpha_b * x + y_base_offset_b
@@ -31,4 +35,5 @@ def meet_me(pos1, jump_distance1, sleep1, pos2, jump_distance2, sleep2):
 
 if __name__ == '__main__':
     # print(meet_me(1, 2, 1, 1, 2, 1))
-    print(meet_me(15930, 69, 54, 926361, 55, 44))
+    print(meet_me(951691, 1979, 6445, 20486, 2109, 6855))
+    print(meet_me(3, 5, 10, 4, 1, 2) == 8)
