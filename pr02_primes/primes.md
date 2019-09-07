@@ -15,6 +15,8 @@ Kui tegemist pole algarvuga, tagastab funktsioon False.
 
 `prime_number_identifier(6) -> False`
 
+NB! Lahendamisel on väga suureks abiks allpool asuvad viited.
+
 
 ### Mall
 

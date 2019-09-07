@@ -2,7 +2,7 @@
 
 Kaust gitis:``pr01_introduction``
 
-Faili nimi: ``introductin.py``
+Faili nimi: ``introduction.py``
 
 **Abimaterjal**
 
@@ -18,7 +18,7 @@ https://ained.ttu.ee/pydoc/variable.html
     
 ***Stringide liitmine:***
 
-    print("Welcome to " + unversity + "!")
+    print("Welcome to " + university + "!")
     
 https://ained.ttu.ee/pydoc/string.html
 
@@ -40,7 +40,7 @@ https://ained.ttu.ee/pydoc/input.html
  
 ***Tingimuslause kasutamine:***
 
-![if statement visualization](if_statement_visualization.png)
+![if statement visualization](https://ained.ttu.ee/pydoc/images/if_statement_visualization.png)
 
     a = 200
     b = 33
@@ -52,6 +52,7 @@ https://ained.ttu.ee/pydoc/input.html
         print("a is greater than b")
     
  või
+ 
 
     university = "taltech"
     if university == "taltech":
@@ -81,19 +82,16 @@ Programmi algoritm võiks olla järgmine:
  
     Kui kasutaja vastab midagi muud siis kuva ``Your input is incorrect!``
     
-    
-**Mall**
 
-    def introduce():
-        """Write a function which asks user name and gives suitable answer."""
-   
-    
-        #Your code goes here!
-    
-       
-    if __name__ == "__main__":   # <- This line is needed for automatic testing
-        introduce()
-    
+Ülesande jaoks vajalik fail `introduction.py`:
+
+```python
+"""My first program."""
+
+```
+
+Stiilinõue on, et failil oleks kirjeldus ehk kommentaar. See on ka kõik, mis teil mallis olemas on.
+
 Lisaks on kasulik lugeda
 
 https://ained.ttu.ee/pydoc/style.html
