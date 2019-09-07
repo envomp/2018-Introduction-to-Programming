@@ -10,8 +10,6 @@ def calculate_area():
         print(f"The area is {round(3.14 * dimension**2, 2)} cm^2")
     elif shape == "square":
         print(f"The area is {round(dimension**2, 2)} cm^2")
-    else:
-        print("Shape is not supported.")
 
 
 if __name__ == '__main__':
