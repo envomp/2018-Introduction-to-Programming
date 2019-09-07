@@ -18,7 +18,6 @@ def meet_me(pos1, jump_distance1, sleep1, pos2, jump_distance2, sleep2):
                 y_current_offset_b = y_base_offset_b
             x = round((y_current_offset_b - y_current_offset_a) / (alpha_a - alpha_b), 10)
             y = alpha_a * x + y_base_offset_a
-            print(x)
             if (y - pos1) % jump_distance1 == (y - pos2) % jump_distance2 == 0:
                 possible_answers.append(int(y))
         except ZeroDivisionError:
@@ -26,4 +25,5 @@ def meet_me(pos1, jump_distance1, sleep1, pos2, jump_distance2, sleep2):
     return -1 if possible_answers.__len__() == 0 else min(possible_answers)
 
 
-print(meet_me(10, 7, 7, 5, 8, 6))
+if __name__ == '__main__':
+    print(meet_me(10, 7, 7, 5, 8, 6))
