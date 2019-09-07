@@ -18,8 +18,7 @@ def meet_me(pos1, jump_distance1, sleep1, pos2, jump_distance2, sleep2):
             else:
                 y_current_offset_a = y_base_offset_a - i * alpha_a
                 y_current_offset_b = y_base_offset_b
-            x = round((y_current_offset_b - y_current_offset_a) / (alpha_a - alpha_b), 2)
-            print(x)
+            x = round((y_current_offset_b - y_current_offset_a) / (alpha_a - alpha_b), 3)
             if not x.is_integer():
                 continue
             y = alpha_a * x + y_base_offset_a if i >= sleep1 else alpha_b * x + y_base_offset_b
