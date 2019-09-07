@@ -1,7 +1,9 @@
 """Primes identifier."""
+from math import sqrt
+from itertools import count, islice
 
 
-def is_prime_number(number: int) -> bool:
+def is_prime_number(n: int) -> bool:
     """
     Check if number (given in function parameter) is prime.
 
@@ -12,7 +14,14 @@ def is_prime_number(number: int) -> bool:
     :return: boolean True if number is prime or False if number is not prime.
     """
 
-    return number in [i for i in range(2, number + 1) if 0 not in [i % j for j in range(2, i)]]
+    if n < 2:
+        return False
+
+    for number in islice(count(2), int(sqrt(n) - 1)):
+        if n % number == 0:
+            return False
+
+    return True
 
 
 if __name__ == '__main__':
