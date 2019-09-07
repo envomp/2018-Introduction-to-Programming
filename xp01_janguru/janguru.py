@@ -23,7 +23,6 @@ def meet_me(pos1, jump_distance1, sleep1, pos2, jump_distance2, sleep2):
                 possible_answers.append(int(y))
         except ZeroDivisionError:
             print("TODO: PARALLEL BUNNY DRIFTING!")
-    print()
     return -1 if possible_answers.__len__() == 0 else min(possible_answers)
 
 
