@@ -3,7 +3,7 @@ def meet_me(pos1, jump_distance1, sleep1, pos2, jump_distance2, sleep2):
     y_base_offset_a, y_base_offset_b = pos1 + jump_distance1, pos2 + jump_distance2
     if pos1 + jump_distance1 == pos2 + jump_distance2:
         return pos1 + jump_distance1
-    for i in range(sleep1 + sleep2):
+    for i in range(0, sleep1 + sleep2, max(min(sleep1, sleep1) - 1, 1)):
         try:
             if i >= sleep1:
                 y_current_offset_a = y_base_offset_a
