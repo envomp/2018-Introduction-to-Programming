@@ -30,7 +30,7 @@ def binary_to_dec(binary: str) -> int:
 
 
 if __name__ == "__main__":
-    print(dec_to_binary(145))  # -> 10010001
+    print(dec_to_binary(18))  # -> 10010001
     print(dec_to_binary(245))  # -> 11110101
     print(dec_to_binary(255))  # -> 11111111
 
