@@ -12,7 +12,7 @@ def dec_to_binary(dec: int) -> str:
     while dec != 0:
         bin_ans += '0' if dec % 2 == 0 else '1'
         dec = int(dec / 2)
-    return bin_ans[::-1]
+    return "0" if not bin_ans else bin_ans[::-1]
 
 
 def binary_to_dec(binary: str) -> int:
