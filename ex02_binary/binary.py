@@ -30,10 +30,8 @@ def binary_to_dec(binary: str) -> int:
 
 
 if __name__ == "__main__":
-    print(dec_to_binary(18))  # -> 10010001
-    print(dec_to_binary(245))  # -> 11110101
-    print(dec_to_binary(255))  # -> 11111111
-
-    print(binary_to_dec("1111"))  # -> 15
-    print(binary_to_dec("10101"))  # -> 21
-    print(binary_to_dec("10010"))  # -> 18
+    assert binary_to_dec("0") == 0
+    assert binary_to_dec("1") == 1
+    assert binary_to_dec("10001101") == int("10001101", 2)
+    assert binary_to_dec("10110") == int("10110", 2)
+    assert binary_to_dec("11101") == int("11101", 2)
