@@ -25,9 +25,5 @@ def is_prime_number(n: int) -> bool:
 
 
 if __name__ == '__main__':
-    print(is_prime_number(2))  # -> True
-    print(is_prime_number(89))  # -> True
-    print(is_prime_number(23))  # -> True
-    print(is_prime_number(4))  # -> False
-    print(is_prime_number(7))  # -> True
-    print(is_prime_number(88))  # -> False
+    for x in range(5, 1, -1):
+        print(x)
