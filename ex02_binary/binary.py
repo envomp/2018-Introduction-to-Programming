@@ -10,7 +10,7 @@ def dec_to_binary(dec: int) -> str:
     """
     bin_ans = ""
     while dec != 0:
-        bin_ans += dec % 2 == 0
+        bin_ans += dec % 2
         dec //= 2
     return "0" if not bin_ans else bin_ans[::-1]
 
