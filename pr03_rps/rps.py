@@ -55,13 +55,15 @@ def determine_winner(name: str, user_choice: str, computer_choice: str, reverse_
     name = normalize_user_name(reverse_user_name(name) if reverse_name else name)
     user_choice, computer_choice = check_user_choice(user_choice), check_user_choice(computer_choice)
 
-    if user_choice not in ["rock", "paper", "scissors"] or computer_choice not in ["rock", "paper",
-                                                                                   "scissors"] or computer_choice == user_choice:
+    if user_choice not in ["rock", "paper", "scissors"] or computer_choice not in ["rock", "paper", "scissors"]:
         return "There is a problem determining the winner."
 
     hashmap = {"rock": 0, "paper": 1, "scissors": 2}
-
-    return f"{normalize_user_name(name)} had {check_user_choice(user_choice)} and computer had {check_user_choice(computer_choice)}, hence {'computer' if (3 + hashmap[user_choice] - hashmap[computer_choice]) % 3 == 2 else name} wins."
+    if user_choice == computer_choice:
+        result = f"it is a draw"
+    else:
+        result = f"{'computer' if (3 + hashmap[user_choice] - hashmap[computer_choice]) % 3 == 2 else name} wins"
+    return f"{normalize_user_name(name)} had {check_user_choice(user_choice)} and computer had {check_user_choice(computer_choice)}, hence {result}."
 
 
 def play_game() -> None:
