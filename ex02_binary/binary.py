@@ -22,11 +22,11 @@ def binary_to_dec(binary: str) -> int:
     :param binary: binary number to convert
     :return: number in decimal
     """
-    int_sum, step = 0, 1
-    for element in list(reversed(binary)):
-        int_sum += step if element == '1' else 0
-        step *= 2
-    return int_sum
+    binary = binary[::-1]
+    results = []
+    for i in range(len(binary)):
+        results.append(int(binary[i]) * (2 ** i))
+    return sum(results)
 
 
 if __name__ == "__main__":
