@@ -61,7 +61,7 @@ def determine_winner(name: str, user_choice: str, computer_choice: str, reverse_
 
     hashmap = {"rock": 0, "paper": 1, "scissors": 2}
 
-    return f"{normalize_user_name(name)} had {check_user_choice(user_choice)} and computer had {check_user_choice(user_choice)}, hence {'computer' if (3 + hashmap[user_choice] - hashmap[computer_choice]) % 3 == 2 else name} wins."
+    return f"{normalize_user_name(name)} had {check_user_choice(user_choice)} and computer had {check_user_choice(computer_choice)}, hence {'computer' if (3 + hashmap[user_choice] - hashmap[computer_choice]) % 3 == 2 else name} wins."
 
 
 def play_game() -> None:
