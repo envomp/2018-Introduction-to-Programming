@@ -81,12 +81,4 @@ def play_game() -> None:
 
 
 if __name__ == "__main__":
-    print(determine_winner('ago', 'rock', 'paper'))  # Ago had rock and computer had paper, hence computer wins.
-    print(determine_winner('ago', 'rock', 'paper', True))  # Oga had rock and computer had paper, hence computer wins.
-    print(
-        determine_winner('loORa', 'SCISSORS', 'paper'))  # Loora had scissors and computer had paper, hence Loora wins.
-    print(determine_winner('Shakira', 'waka waka', 'fire'))  # There is a problem determining the winner.
-    print(determine_winner('Shakira', 'rock',
-                           'sciSSOrs'))  # Shakira had rock and computer had scissors, hence Shakira wins.
-
-    # play_game() # Kommenteeri see rida välja kui kõik funktsioonid on valmis
+    print(f"Jõudsin koju kell kuus. {'Kõht oli tühi. Leidsin veel toitu. Sõin ära. ' * 3} ja siis oli kõht täis.")
