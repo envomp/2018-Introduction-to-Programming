@@ -2,6 +2,7 @@ import random
 import re
 import math
 
+
 sentence_indices = [["The given number ", "This number ", "Number ", "The aforementioned number ",
                      "This number, that you need to guess ", "This number that we are speaking of right now "],
                     [["consists of ", "has ", "is made up of "],
