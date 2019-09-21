@@ -1,5 +1,7 @@
-import math
+import random
 import re
+import math
+
 sentence_indices = [["The given number ", "This number ", "Number ", "The aforementioned number ",
                      "This number, that you need to guess ", "This number that we are speaking of right now "],
                     [["consists of ", "has ", "is made up of "],
@@ -15,10 +17,11 @@ class Student:
         self.possible_answers = set([x for x in range(biggest_number + 1)])
 
     def decision_branch(self, sentence: str):
+        new_sentences = []
         for start in sentence_indices[0]:
             if sentence.startswith(start):
-                sentence = sentence.replace(start, '')
-                break
+                new_sentences.append(sentence.replace(start, ''))
+        sentence = min(new_sentences, key=len)
         if any(sentence.startswith(x) for x in sentence_indices[1][0]):
             if 'binary' in sentence:
                 if any(x in sentence for x in ['zero', 'zeroes']):
@@ -137,8 +140,6 @@ def quadratic_equation_solver(a: int, b: int, c: int):
     # find two solutions
     x1 = (-b - math.sqrt(d)) / (2 * a)
     x2 = (-b + math.sqrt(d)) / (2 * a)
-
-    print(x1, x2)
     return x1, x2
 
 
