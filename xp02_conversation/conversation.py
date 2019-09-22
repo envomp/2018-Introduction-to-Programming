@@ -1,4 +1,3 @@
-import random
 import re
 import math
 
@@ -92,20 +91,11 @@ class Student:
             [x for x in range(self.biggest_number + 1) if hex_value in hex(x).replace('0x', '')])
 
     def deal_with_quadratic_equation(self, equation: str, to_multiply: bool, multiplicative: float, is_bigger: bool):
-        a = b = c = 0
-        last = '+'
-        side = False
-        for x in equation.split():
-            if re.match(r'(\d+\w\^2)', x):
-                a += (int(x[:-3]) if last in ['+', '='] else -int(x[:-3])) * (-1 if side else 1)
-            elif re.match(r'(\d+\D$)', x):
-                b += (int(x[:-1]) if last in ['+', '='] else -int(x[:-1])) * (-1 if side else 1)
-            elif re.match(r'(\d+$)', x):
-                c += (int(x) if last in ['+', '='] else -int(x)) * (-1 if side else 1)
-
-            side = side or x == '='
-            last = x
-        g = float(max(quadratic_equation_solver(a, b, c)) if is_bigger else min(quadratic_equation_solver(a, b, c)))
+        f = quadratic_equation_solver(normalize_quadratic_equation(equation))
+        if type(f) == float:
+            g = f
+        else:
+            g = float(max(f) if is_bigger else min(f))
         if to_multiply:
             g *= float(multiplicative)
         else:
@@ -133,18 +123,96 @@ class Student:
     def exclude_possible_answers(self, update: list):
         self.possible_answers = set(self.possible_answers) - set(update)
 
+    def deal_with_fractal_calculation(self, json):
+        pass
 
-def quadratic_equation_solver(a: int, b: int, c: int):
-    # calculate the discriminant
-    d = (b ** 2) - (4 * a * c)
-    # find two solutions
-    x1 = (-b - math.sqrt(d)) / (2 * a)
-    x2 = (-b + math.sqrt(d)) / (2 * a)
-    return x1, x2
+
+regex_a = r'(([-]\s*)?(\d+)?)?x2(?![0-9])'
+regex_b = r'(([-]\s*)?(\d+)?)?x1?(?![0-9])'
+regex_c = r'(?<!x)(([-]\s*)?(\d+))(?![x0-9])'
+
+
+def get_abc(eq):
+    parts = eq.split("=")
+    vals = [0, 0, 0]
+    for parti, part in enumerate(parts):
+        regexs = (regex_a, regex_b, regex_c)
+        for i, reg in enumerate(regexs):
+            for match in re.finditer(reg, part):
+                val = match.group(1)
+                val = val.replace(" ", "")
+                try:
+                    valint = int(val)
+                    if parti == 1: valint *= -1
+                    vals[i] += valint
+                except:
+                    if val == "":
+                        vals[i] = 1
+                    if val == "-":
+                        vals[i] = -1
+
+    # print(vals)
+    if (vals[0] < 0) or (vals[0] == 0 and vals[1] < 0) or ((vals[0], vals[1]) == (0, 0) and vals[2] < 0):
+        vals = [-v for v in vals]
+    return vals
+
+
+def normalize_quadratic_equation(eq):
+    xs = ("x2", "x", "")
+    vals = get_abc(eq)
+
+    if vals[0] == 0 and vals[1] == 0 and vals[2] == 0:
+        return "0 = 0"
+
+    result = ""
+    for i in range(len(vals)):
+        if vals[i] == 0:
+            continue
+        if vals[i] > 0:
+            if len(result) > 0:
+                result += " + "
+                # result += f"{vals[i] if vals[i] != 1 else ''}{xs[i]}"
+        elif vals[i] < 0:
+            if len(result) > 0:
+                result += " - "
+            else:
+                result += "-"
+        if xs[i] == "" and abs(vals[i]) == 1:
+            result += "1"
+        else:
+            result += f"{abs(vals[i]) if abs(vals[i]) != 1 else ''}{xs[i]}"
+    result += " = 0"
+    return result
+
+
+def quadratic_equation_solver(eq):
+    a, b, c = get_abc(eq)
+    if a == 0:
+        if c == 0:
+            return 0
+            # return "x = 0"
+        else:
+            if b == 0:
+                return None
+            x = -c / b
+            return x
+            # return "x = {:.3}".format(x)
+    else:
+        if (b * b - 4 * a * c) < 0:
+            return None
+        x1 = (-b + math.sqrt(b * b - 4 * a * c)) / 2 / a
+        x2 = (-b - math.sqrt(b * b - 4 * a * c)) / 2 / a
+    # print(x1, x2)
+    if abs(x1 - x2) < 0.0001:
+        return x1
+        # return "x = {:.2}".format(x1)
+    else:
+        return [min(x1, x2), max(x1, x2)]
+        # return "x1 = {:.2}, x2 = {:.2}".format(min(x1, x2), max(x1, x2))
 
 
 def find_primes_in_range(biggest_number: int):
-    return [num for num in range(2, biggest_number + 1) if not any((num % i) == 0 for i in range(2, num))]
+    return [num for num in range(2, biggest_number + 1) if not any((num % i) == 0 for i in range(2, int(math.sqrt(num)) + 1))]
 
 
 def find_composites_in_range(biggest_number: int):
