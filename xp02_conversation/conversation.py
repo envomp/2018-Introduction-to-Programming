@@ -245,4 +245,3 @@ def find_catalan_numbers(biggest_number: int):
         if catalan[-1] > biggest_number:
             return catalan[:-1]
         i += 1
-
