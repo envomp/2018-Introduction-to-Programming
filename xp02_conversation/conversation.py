@@ -9,7 +9,6 @@ sentence_indices = [["The given number ", "This number ", "Number ", "The aforem
                      ["is not ", "isn't ", "doesn't occur to be ", "doesn't happen to be ", "does not occur to be ",
                       "does not happen to be "]]]
 
-
 class Student:
     def __init__(self, biggest_number: int):
         self.biggest_number = biggest_number
