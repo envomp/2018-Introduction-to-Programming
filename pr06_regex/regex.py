@@ -15,7 +15,6 @@ def detect_email_addresses(input_data: list) -> list:
 
 if __name__ == '__main__':
     list_of_lines_emails = read_file("input_detect_email_addresses_example_1.txt")  # reading from file
-    print(list_of_lines_emails)
     print(detect_email_addresses(list_of_lines_emails))
 
     list_of_lines_keywords = read_file("input_match_specific_string_example_1.txt")
