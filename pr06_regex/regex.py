@@ -10,7 +10,7 @@ def match_specific_string(input_data: list, keyword: str) -> int:
 
 
 def detect_email_addresses(input_data: list) -> list:
-    return list(sorted(set([x.group() for y in input_data for x in re.finditer(r"\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w+)+", y)])))
+    return list(sorted(set([x.group() for y in input_data for x in re.finditer(r"([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", y)])))
 
 
 if __name__ == '__main__':
