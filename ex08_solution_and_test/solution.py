@@ -4,7 +4,7 @@ def students_study(time: int, coffee_needed: bool) -> bool:
     (19, False) -> True
     (1, True) -> False.
     """
-    return 18 <= time <= 24 or 5 <= time <= 7 and coffee_needed
+    return 18 <= time <= 24 or 5 <= time <= 17 and coffee_needed
 
 
 def lottery(a: int, b: int, c: int) -> int:
@@ -26,3 +26,7 @@ def fruit_order(small_baskets: int, big_baskets: int, ordered_amount: int) -> in
     (3, 1, 10) -> -1
     """
     pass
+
+
+if __name__ == '__main__':
+    print(students_study(17, True))
