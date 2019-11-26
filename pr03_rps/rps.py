@@ -2,6 +2,7 @@
 from random import choice
 
 
+
 def normalize_user_name(name: str) -> str:
     """
     Simple function gets player name as input and capitalizes it.

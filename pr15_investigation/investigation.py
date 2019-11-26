@@ -1,6 +1,7 @@
 """PR15 - Investigation. """
 
 
+
 class Suspect:
     """Suspect"""
 

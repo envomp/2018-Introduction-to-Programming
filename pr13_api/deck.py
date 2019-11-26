@@ -5,6 +5,7 @@ import random
 import requests
 
 
+
 class Card:
     """Simple dataclass for holding card information."""
 

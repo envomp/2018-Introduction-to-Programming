@@ -16,6 +16,7 @@ def swap_items(dic: dict) -> dict:
     return to_return
 
 
+
 def find_divisors(number: int) -> list:
     """
     The task is to find all the divisors for given number in range to the given number's value.

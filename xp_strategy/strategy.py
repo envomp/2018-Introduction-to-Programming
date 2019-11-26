@@ -3,6 +3,7 @@ from strategy import Strategy
 from game_view import Move
 
 
+
 class StudentStrategy(Strategy):
     """Student strategy class"""
 

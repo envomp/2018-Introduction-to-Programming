@@ -9,6 +9,7 @@ def match_specific_string(input_data: list, keyword: str) -> int:
     return sum([len(re.findall("(?i)" + keyword, element)) for element in input_data])
 
 
+
 def detect_email_addresses(input_data: list) -> list:
     return list(sorted(set([x.group() for y in input_data for x in re.finditer(r"([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", y)])))
 

@@ -9,7 +9,6 @@ from pr13_api.deck_solved import Deck, Card
 from game_view import GameView, SimpleView, FancyView, Move
 from strategy import Strategy, HumanStrategy
 
-
 class Hand:
     """Hand."""
 

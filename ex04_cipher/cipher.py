@@ -1,6 +1,7 @@
 from itertools import cycle
 
 
+
 def rail_pattern(n):
     r = list(range(n))
     return cycle(r + r[-2:0:-1])

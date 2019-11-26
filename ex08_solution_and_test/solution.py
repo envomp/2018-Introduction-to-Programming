@@ -7,6 +7,7 @@ def students_study(time: int, coffee_needed: bool) -> bool:
     return 18 <= time <= 24 or 5 <= time <= 17 and coffee_needed
 
 
+
 def lottery(a: int, b: int, c: int) -> int:
     """
     Return Lottery victory result 10, 5, 1, or 0 according to input values.

@@ -3,6 +3,7 @@ from math import sqrt
 from itertools import count, islice
 
 
+
 def is_prime_number(n: int) -> bool:
     """
     Check if number (given in function parameter) is prime.

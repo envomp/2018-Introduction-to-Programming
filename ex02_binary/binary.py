@@ -1,6 +1,5 @@
 """Converter."""
 
-
 def dec_to_binary(dec: int) -> str:
     """
     Convert decimal number into binary.
