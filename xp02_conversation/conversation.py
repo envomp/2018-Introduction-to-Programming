@@ -1,5 +1,6 @@
 import re
 import math
+import time
 
 sentence_indices = [["The given number ", "This number ", "Number ", "The aforementioned number ",
                      "This number, that you need to guess ", "This number that we are speaking of right now "],
@@ -83,6 +84,7 @@ class Student:
             find_composites_in_range(self.biggest_number))
 
     def deal_with_dec_value(self, decimal_value: str):
+        time.sleep(5)
         self.intersect_possible_answers(
             [x for x in range(self.biggest_number + 1) if decimal_value in str(x)])
 
