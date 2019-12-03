@@ -74,6 +74,7 @@ class Student:
             [x for x in range(self.biggest_number + 1) if bin(x).replace('0b', '').count(what_to_check) == count])
 
     def deal_with_primes(self, is_prime: bool):
+        time.sleep(5)
         self.intersect_possible_answers(
             find_primes_in_range(self.biggest_number)) if is_prime else self.exclude_possible_answers(
             find_primes_in_range(self.biggest_number))
@@ -89,6 +90,7 @@ class Student:
             [x for x in range(self.biggest_number + 1) if decimal_value in str(x)])
 
     def deal_with_hex_value(self, hex_value: str):
+        time.sleep(5)
         self.intersect_possible_answers(
             [x for x in range(self.biggest_number + 1) if hex_value in hex(x).replace('0x', '')])
 
