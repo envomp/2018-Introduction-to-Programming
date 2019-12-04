@@ -189,6 +189,7 @@ class World:
             else:
                 turn_counter += 1
 
+
     @staticmethod
     def choose_which_pokemon_hits_first(pokemon1, pokemon2):
         stack1 = [pokemon1.data['speed'], pokemon1.data['weight'], pokemon1.data['height'],
