@@ -153,6 +153,7 @@ class World:
         maybe = sorted(self.pokemons, key=lambda x: x.data['name'], reverse=False)
         return sorted(maybe, key=lambda x: x.score, reverse=True)
 
+
     def get_pokemons_sorted_by_attribute(self, attribute: str):
         """
         Get Pokemons by given format in a list sorted by the pokemon.data[attribute].
