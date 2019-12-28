@@ -188,3 +188,4 @@ def print_pages(pages: str) -> list:
         else:
             return_pages.append(int(i))
     return sorted(list(set(return_pages)))
+
