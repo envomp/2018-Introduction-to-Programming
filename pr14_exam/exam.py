@@ -100,7 +100,7 @@ def transcribe(dna_strand: str):
     "gcu" => None
 
     :param dna_strand: original DNA strand
-    :return: transcribed RNA strand in the uppercase or None
+    :return: transcribed RNA strand in the uppercase or None, Big ö
     """
     rna = {'G': 'C', 'C': 'G', 'T': 'A', 'A': 'U'}
     new_result = ''
