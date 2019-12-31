@@ -371,4 +371,3 @@ if __name__ == '__main__':
     print(quadratic_equation_solver(
         "2x2 + 3x - 4 + 0x2 - x1 + 0x1 + 12 - 12x2 = 4x2 + x1 - 2"))  # => "14x2 - x - 10 = 0"
 
-
