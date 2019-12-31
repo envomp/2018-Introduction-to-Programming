@@ -1,14 +1,3 @@
-Lines containing valid emails
-
-testtest@example.name
-testtest@dome.museum
-spoon@lol.co.jp
-firstname-lastname@example.com
-justâ€‌notâ+'''‌right@example.com
-this\ is"really"not\allowed@example.com
-
-Lines not containing valid emails
-
-â€‌(),:;<>[\]@example.com
-justâ€‌notâ€‌right@@example.com
-ggggg@.....ru
+version https://git-lfs.github.com/spec/v1
+oid sha256:cb3f0845ade29ea8b0be9c090c1926e0fdae44c56c724ebe990a73c9a5f008a7
+size 326
