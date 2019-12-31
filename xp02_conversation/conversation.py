@@ -1,47 +1,201 @@
-import operator
-
-import math
+"""Conversation."""
+from math import sqrt
 import re
-from functools import lru_cache, partial, partialmethod
-from typing import Callable
+
+regex_a = '(((?<= )|(?<=^))(- )?[0-9]*)x2( |$)'
+regex_b = '(((?<= )|(?<=^))(- )?[0-9]*)x1?( |$)'
+regex_c = '(((?<= )|(?<=^))(- )?(?<!x)[0-9]+)(?!x)( |$)'
 
 
 class Student:
-    BINARY_ONES_REGEX = re.compile(r'.(\d+) ones in its binary form.')
-    BINARY_ZERO_REGEX = re.compile(r'.(\d+) zero(?:es)? in its binary form.')
+    """Class Student."""
 
-    def __init__(self, biggest_number: int):
+    def __init__(self, biggest_number: int) -> None:
         """
         Constructor.
 
-        save biggest number into a variable that is attainable later on.
+        Save biggest number into a variable that is attainable later on.
         Create a collection of all possible results [possible_answers] <- dont rename that (can be a list or a set)
         :param biggest_number: biggest possible number(inclusive) to guess
         NB: calculating using sets is much faster compared to lists
         """
-        self.possible_answers = set([num for num in range(biggest_number + 1)])
+        self.possible_answers = set([all_possible_answers for all_possible_answers in range(biggest_number + 1)])
+        self.biggest_number = biggest_number
 
-    def decision_branch(self, sentence: str):
+    def decision_ones(self, sentence: str) -> None:
+        """
+        Decision number of ones.
+
+        :param sentence: sentence to solve
+        :return:
+        """
+        regex = '([0-9]+) ones?'
+        for match in re.finditer(regex, sentence):
+            if int(match.group(1)) >= 0:
+                self.deal_with_number_of_ones(int(match.group(1)))
+
+    def decision_zeroes(self, sentence: str) -> None:
+        """
+        Decision number of zeroes.
+
+        :param sentence: sentence to solve
+        :return:
+        """
+        regex = '([0-9]+) zeroe?s?'
+        for match in re.finditer(regex, sentence):
+            if int(match.group(1)) >= 0:
+                self.deal_with_number_of_zeroes(int(match.group(1)))
+
+    def decision_hex(self, sentence: str) -> None:
+        """
+        Decision hex.
+
+        :param sentence: sentence to solve
+        :return:
+        """
+        regex = 'hex value: "(.+)"'
+        for match in re.finditer(regex, sentence):
+            if match.group(1):
+                self.deal_with_hex_value(match.group(1))
+
+    def decision_decimal(self, sentence: str) -> None:
+        """
+        Decision decimal.
+
+        :param sentence: sentence to solve
+        :return:
+        """
+        regex = 'decimal value: "(.+)"'
+        for match in re.finditer(regex, sentence):
+            if int(match.group(1)) >= 0:
+                self.deal_with_dec_value(match.group(1))
+
+    def decision_catalan(self, sentence: str) -> None:
+        """
+        Decision catalan.
+
+        :param sentence: sentence to solve
+        :return:
+        """
+        regex = "(.*(n['o]t).+)?(catalan)"
+        for match in re.finditer(regex, sentence):
+            if match.group(3) == 'catalan':
+                is_in = True if not match.group(2) else False
+                self.deal_with_catalan_sequence(is_in)
+
+    def decision_fibonacci(self, sentence: str) -> None:
+        """
+        Decision fibonacci.
+
+        :param sentence: sentence to solve
+        :return:
+        """
+        regex = "(.*(n['o]t).+)?(fibonacci)"
+        for match in re.finditer(regex, sentence):
+            if match.group(3) == 'fibonacci':
+                is_in = True if not match.group(2) else False
+                self.deal_with_fibonacci_sequence(is_in)
+
+    def decision_composite(self, sentence: str) -> None:
+        """
+        Decision composite numbers.
+
+        :param sentence: sentence to solve
+        :return:
+        """
+        regex = "(.*(n['o]t).+)?(composite)"
+        for match in re.finditer(regex, sentence):
+            if match.group(3) == 'composite':
+                is_in = True if not match.group(2) else False
+                self.deal_with_composites(is_in)
+
+    def decision_prime(self, sentence: str) -> None:
+        """
+        Decision prime numbers.
+
+        :param sentence: sentence to solve
+        :return:
+        """
+        regex = "(.*(n['o]t).+)?(prime)"
+        for match in re.finditer(regex, sentence):
+            if match.group(3) == 'prime':
+                is_in = True if not match.group(2) else False
+                self.deal_with_primes(is_in)
+
+    def decision_inc_dec(self, sentence: str) -> None:
+        """
+        Decision increasing or decreasing.
+
+        :param sentence: sentence to solve
+        :return:
+        """
+        regex = "(.*(n['o]t).+)?(increasing|decreasing).+(order)"
+        for match in re.finditer(regex, sentence):
+            if match.group(4) == 'order':
+                to_be = True if not match.group(2) else False
+                increasing = True if match.group(3) == 'increasing' else False
+                self.deal_with_number_order(increasing, to_be)
+
+    def decision_quadratic(self, sentence: str) -> None:
+        """
+        Decision quadratic equation.
+
+        :param sentence: sentence to solve
+        :return:
+        """
+        regex = '([+-]?[0-9]+.[0-9]+) (times).*(bigger|smaller).*equation:"(.+)"|' \
+                '.*(bigger|smaller).*equation:"(.+)".* (divided) by ([+-]?[0-9]+.[0-9]+)'
+        for match in re.finditer(regex, sentence):
+            if match.group(2) == 'times':
+                multiplicative = float(match.group(1))
+                to_multiply = True
+                is_bigger = True if match.group(3) == 'bigger' else False
+                equation = match.group(4)
+            else:
+                multiplicative = float(match.group(8))
+                to_multiply = False
+                is_bigger = True if match.group(5) == 'bigger' else False
+                equation = match.group(6)
+
+            self.deal_with_quadratic_equation(equation, to_multiply, multiplicative, is_bigger)
+
+    def decision_branch(self, sentence: str) -> str:
         """
         Regex can and should be used here.
 
         :param sentence: sentence to solve
         call one of the functions bellow (within this class) and return either one of the following strings:
-        f"Possible answers are {sorted_list_of_possible_answers_in_growing_sequence)}." if there are multiple possibilities
+        f"Possible answers are {sorted_list_of_possible_answers_in_growing_sequence)}."
+        if there are multiple possibilities
         f"The number I needed to guess was {final_answer}." if the result is certain
         """
-        # binary ones
-        binary_one_match = self.BINARY_ONES_REGEX.search(sentence)
-        if binary_one_match:
-            self.deal_with_number_of_ones(int(binary_one_match.group(1)))
-            return
+        regexes = [
+            '([0-9]+) ones?',
+            '([0-9]+) zeroe?s?',
+            'hex value: "(.+)"',
+            'decimal value: "(.+)"',
+            '(.*(n[\'o]t).+)?(catalan)',
+            '(.*(n[\'o]t).+)?(fibonacci)',
+            '(.*(n[\'o]t).+)?(composite)',
+            '(.*(n[\'o]t).+)?(prime)',
+            '(.*(n[\'o]t).+)?(increasing|decreasing).+(order)',
+            '([+-]?[0-9]+.[0-9]+) (times).*(bigger|smaller).*equation:"(.+)"|'
+            '.*(bigger|smaller).*equation:"(.+)".* (divided) by ([+-]?[0-9]+.[0-9]+)'
+        ]
 
-        binary_zero_match = self.BINARY_ZERO_REGEX.search(sentence)
-        if binary_zero_match:
-            self.deal_with_number_of_zeroes(int(binary_zero_match.group(1)))
-            return
+        for i in range(len(regexes)):
+            for match in re.finditer(regexes[i], sentence):
+                if match.group(0):
+                    self.decision_ones(sentence) if i == 0 else self.decision_zeroes(sentence) if i == 1 \
+                        else self.decision_hex(sentence) if i == 2 else self.decision_decimal(sentence) if i == 3 \
+                        else self.decision_catalan(sentence) if i == 4 else self.decision_fibonacci(sentence) if i == 5\
+                        else self.decision_composite(sentence) if i == 6 else self.decision_prime(sentence) if i == 7 \
+                        else self.decision_inc_dec(sentence) if i == 8 else self.decision_quadratic(sentence)
 
-    def intersect_possible_answers(self, update: list):
+        return f"Possible answers are {sorted(self.possible_answers)}." if len(sorted(self.possible_answers)) > 1 \
+            else f"The number I needed to guess was {sorted(self.possible_answers)[0]}."
+
+    def intersect_possible_answers(self, update: list) -> None:
         """
         Logical AND between two sets.
 
@@ -49,68 +203,103 @@ class Student:
         conjunction between self.possible_answers and update
         https://en.wikipedia.org/wiki/Logical_conjunction
         """
-        self.possible_answers &= set(update)
+        self.possible_answers.intersection_update(update)
 
-    def exclude_possible_answers(self, update: list):
+    def exclude_possible_answers(self, update: list) -> None:
         """
         Logical SUBTRACTION between two sets.
 
         :param update: new list to be excluded from self.possible_answers
         update excluded from self.possible_answers
         """
-        self.possible_answers -= set(update)
+        self.possible_answers.difference_update(update)
 
-    def deal_with_number_of_zeroes(self, amount_of_zeroes: int):
+    def deal_with_number_of_zeroes(self, amount_of_zeroes: int) -> None:
         """
         Filter possible_answers to match the amount of zeroes in its binary form.
 
         :param amount_of_zeroes: number of zeroes in the correct number's binary form
         """
-        num_of_zeros_in_bin = lambda num: len(self._get_bin(num).replace('1', ''))
-        self.possible_answers = {num for num in self.possible_answers if num_of_zeros_in_bin(num) == amount_of_zeroes}
+        if amount_of_zeroes >= 0:
+            is_amount_of_zeroes = []
 
-    def deal_with_number_of_ones(self, amount_of_ones: int):
+            for i in self.possible_answers:
+                if bin(i)[2:].count("0") == amount_of_zeroes:
+                    is_amount_of_zeroes.append(i)
+
+            self.possible_answers.intersection_update(is_amount_of_zeroes)
+
+    def deal_with_number_of_ones(self, amount_of_ones: int) -> None:
         """
         Filter possible answers to match the amount of ones in its binary form.
 
-        :param amount_of_ones: number of zeroes in the correct number's binary form
+        :param amount_of_ones: number of ones in the correct number's binary form.
         """
-        num_of_ones_in_bin = lambda num: len(self._get_bin(num).replace('0', ''))
-        self.possible_answers = {num for num in self.possible_answers if num_of_ones_in_bin(num) == amount_of_ones}
+        if amount_of_ones >= 0:
+            is_amount_of_ones = []
 
-    def deal_with_primes(self, is_prime: bool):
+            for i in self.possible_answers:
+                if bin(i)[2:].count("1") == amount_of_ones:
+                    is_amount_of_ones.append(i)
+
+            self.possible_answers.intersection_update(is_amount_of_ones)
+
+    def deal_with_primes(self, is_prime: bool) -> None:
         """
         Filter possible answers to either keep or remove all primes.
 
-        Call find_primes_in_range to get all composite numbers in range.
+        Call find_primes_in_range to get all prime numbers in range.
         :param is_prime: boolean whether the number is prime or not
         """
-        pass
+        if is_prime:
+            self.possible_answers.intersection_update(find_primes_in_range(self.biggest_number))
+        else:
+            self.possible_answers.difference_update(find_primes_in_range(self.biggest_number))
 
-    def deal_with_composites(self, is_composite: bool):
+    def deal_with_composites(self, is_composite: bool) -> None:
         """
         Filter possible answers to either keep or remove all composites.
 
         Call find_composites_in_range to get all composite numbers in range.
         :param is_composite: boolean whether the number is composite or not
         """
-        pass
+        if is_composite:
+            self.possible_answers.intersection_update(find_composites_in_range(self.biggest_number))
+        else:
+            self.possible_answers.difference_update(find_composites_in_range(self.biggest_number))
 
-    def deal_with_dec_value(self, decimal_value: str):
+    def deal_with_dec_value(self, decimal_value: str) -> None:
         """
         Filter possible answers to remove all numbers that doesn't have the decimal_value in them.
 
         :param decimal_value: decimal value within the number like 9 in 192
         """
-        pass
+        is_decimal_value = []
 
-    def deal_with_hex_value(self, hex_value: str):
+        for i in self.possible_answers:
+            if decimal_value in str(i):
+                is_decimal_value.append(i)
+
+        self.possible_answers.intersection_update(is_decimal_value)
+
+    def deal_with_hex_value(self, hex_value: str) -> None:
         """
         Filter possible answers to remove all numbers that doesn't have the decimal_value in them.
 
-        :param decimal_value: hex value within the number like e in fe2
+        :param hex_value: hex value within the number like e in fe2.
         """
-        pass
+        regex = '([0-9a-fA-F]+)'
+        for match in re.finditer(regex, hex_value):
+            if match.group(1):
+                hex_value = match.group(1)
+
+        is_hex_value = []
+
+        for i in self.possible_answers:
+            if hex_value in hex(i)[2:]:
+                is_hex_value.append(i)
+
+        self.possible_answers.intersection_update(is_hex_value)
 
     def deal_with_quadratic_equation(self, equation: str, to_multiply: bool, multiplicative: float, is_bigger: bool):
         """
@@ -124,16 +313,36 @@ class Student:
         :param multiplicative: the multiplicative to multiply or divide with
         :param is_bigger: to use the bigger or smaller result of the quadratic equation(min or max from [x1, x2])
         """
-        pass
+        norm_equation = normalize_quadratic_equation(equation)
+        result = quadratic_equation_solver(norm_equation)
 
-    def deal_with_fibonacci_sequence(self, is_in: bool):
+        if result is not None:
+            if len(result) == 1:
+                x = quadratic_equation_solver(norm_equation)
+            else:
+                x1, x2 = quadratic_equation_solver(norm_equation)
+                x = max(x1, x2) if is_bigger else min(x1, x2)
+
+            multiplicative = float(multiplicative)
+
+            if to_multiply:
+                x = round(x * multiplicative)
+            elif multiplicative != 0:
+                x = round(x / multiplicative)
+
+            self.deal_with_dec_value(str(x))
+
+    def deal_with_fibonacci_sequence(self, is_in: bool) -> None:
         """
         Filter possible answers to either keep or remove all fibonacci numbers.
 
         Call find_fibonacci_numbers to get all fibonacci numbers in range.
         :param is_in: boolean whether the number is in fibonacci sequence or not
         """
-        pass
+        if is_in:
+            self.possible_answers.intersection_update(find_fibonacci_numbers(self.biggest_number))
+        else:
+            self.possible_answers.difference_update(find_fibonacci_numbers(self.biggest_number))
 
     def deal_with_catalan_sequence(self, is_in: bool):
         """
@@ -142,111 +351,108 @@ class Student:
         Call find_catalan_numbers to get all catalan numbers in range.
         :param is_in: boolean whether the number is in catalan sequence or not
         """
-        pass
+        if is_in:
+            self.possible_answers.intersection_update(find_catalan_numbers(self.biggest_number))
+        else:
+            self.possible_answers.difference_update(find_catalan_numbers(self.biggest_number))
 
-    def deal_with_number_order(self, increasing: bool, to_be: bool):
+    def deal_with_number_order(self, increasing: bool, to_be: bool) -> None:
         """
         Filter possible answers to either keep or remove all numbers with wrong order.
 
         :param increasing: boolean whether to check is in increasing or decreasing order
         :param to_be: boolean whether the number is indeed in that order
         """
-        if increasing:
-            self._filter_posible_answers(self._is_in_increasing_order, to_be)
+        inc_dec_value = []
+
+        for i in self.possible_answers:
+            num = str(i)
+            inc = increasing if len(num) > 1 else True
+
+            for j in range(0, len(num) - 1):
+                if increasing:
+                    inc = True if num[j] <= num[j + 1] else False
+                else:
+                    inc = True if num[j] >= num[j + 1] else False
+                if not inc:
+                    break
+            if inc:
+                inc_dec_value.append(i)
+
+        if to_be:
+            self.possible_answers.intersection_update(inc_dec_value)
         else:
-            self._filter_posible_answers(self._is_in_decreasing_order, to_be)
-
-    def _filter_posible_answers(self, f, positive: bool = False):
-        self.possible_answers = {num for num in self.possible_answers if (f(num) if positive else not f(num))}
-
-    @staticmethod
-    def _get_bin(num: int) -> str:
-        return '{0:b}'.format(num)
-
-    def _is_in_order(self, num: int, operator) -> bool:
-        previous = None
-        for current in str(num):
-            if previous and not operator(current, previous):
-                return False
-            previous = current
-        return True
-
-    _is_in_increasing_order = partialmethod(_is_in_order, operator=operator.gt)
-    _is_in_decreasing_order = partialmethod(_is_in_order, operator=operator.lt)
+            self.possible_answers.difference_update(inc_dec_value)
 
 
-regex_a = r'((?:- )?\d*)x2(?:[^0-9]|$)'
-regex_b = r'((?:- )?\d*)x(?:[^02-9]|$)'
-regex_c = r'((?<!x)(?:- )?\d+(?![0-9]*x))'
+def calculate_sum(regex, equation) -> int:
+    """
+    Calculate sum of equation element multipliers find by given regex.
 
-REGEX_A = re.compile(regex_a)
-REGEX_B = re.compile(regex_b)
-REGEX_C = re.compile(regex_c)
-
-
-def _convert_quantifiers_to_int(quantifier: str, change_mark=False) -> int:
-    quantifier = quantifier.replace(' ', '')  # - 2  ->  -2
-    if quantifier == '':
-        return 1 if not change_mark else -1
-    if quantifier == '-':
-        return -1 if not change_mark else 1
-    return int(quantifier) if not change_mark else - int(quantifier)
-
-
-def _process_certain_quantizer(equation: str, regex, append_plus: bool, hide_one: bool = True) -> str:
-    left_side, right_side = equation.split(' = ')
-    left_values = regex.findall(left_side)
-    right_values = regex.findall(right_side)
-    int_values = [_convert_quantifiers_to_int(q) for q in left_values]
-    int_values += [_convert_quantifiers_to_int(q, change_mark=True) for q in right_values]
-    quantifier = sum(int_values)
-    if quantifier == 1 and hide_one:
-        return '+ '
-    if quantifier == -1 and hide_one:
-        return '- '
-    str_quantifier = str(quantifier) + ' '
-    if append_plus and quantifier > 0:
-        str_quantifier = '+ ' + str_quantifier
-    return str_quantifier.strip().replace('-', '- ')
+    :param regex: regex string
+    :param equation: equation string
+    :return: sum of equation element multipliers
+    """
+    sum = 0
+    for match in re.finditer(regex, equation):
+        match = match.group(1).replace(' ', '')
+        if match != '-0' and match != '+0':
+            if match == '' or match == '+':
+                sum += 1
+            elif match == '-':
+                sum -= 1
+            else:
+                sum += int(match)
+    return sum
 
 
 def normalize_quadratic_equation(equation: str) -> str:
     """
-    Normalize the quadratic equation.
-
-    normalize_quadratic_equation("x2 + 2x = 3") => "x2 + 2x - 3 = 0"
-    normalize_quadratic_equation("0 = 3 + 1x2") => "x2 + 3 = 0"
-    normalize_quadratic_equation("2x + 2 = 2x2") => "2x2 - 2x - 2 = 0"
-    normalize_quadratic_equation("0x2 - 2x = 1") => "2x + 1 = 0"
-    normalize_quadratic_equation("0x2 - 2x = 1") => "2x + 1 = 0"
-    normalize_quadratic_equation("2x2 + 3x - 4 + 0x2 - x1 + 0x1 + 12 - 12x2 = 4x2 + x1 - 2") => "14x2 - x - 10 = 0"
+    Normalize equation.
 
     :param equation: quadratic equation to be normalized
-    https://en.wikipedia.org/wiki/Quadratic_formula
     :return: normalized equation
     """
-    x2_quantifier = _process_certain_quantizer(equation, REGEX_A, False)
+    if equation.find("=") != -1:
+        left_side = equation[:equation.find("=") - 1]
+        right_side = equation[equation.find("=") + 2:]
+    else:
+        left_side = equation
+        right_side = ""
 
-    x_quantifier = _process_certain_quantizer(equation, REGEX_B, True)
+    a = calculate_sum(regex_a, left_side) - calculate_sum(regex_a, right_side)
+    b = calculate_sum(regex_b, left_side) - calculate_sum(regex_b, right_side)
+    c = calculate_sum(regex_c, left_side) - calculate_sum(regex_c, right_side)
 
-    linear_quantifier = _process_certain_quantizer(equation, REGEX_C, True, hide_one=False)
-    # TODO If member is moved to the other side of the equation, the mark must be changed.
-    #  So spilt the equation into two parts and deal with them separately.
-    x2 = f'{x2_quantifier}x2' if x2_quantifier != '0' else ''
-    x = f' {x_quantifier}x' if x_quantifier != '0' else ''
-    c = f' {linear_quantifier}' if linear_quantifier != '0' else ''
-    equation = f'{x2}{x}{c} = 0'.strip()
-    if equation.startswith('-'):
-        equation = equation.replace('-', 'minus').replace('+', '-').replace('minus', '+')
+    if a < 0 or a == 0 and b < 0:
+        a *= -1
+        b *= -1
+        c *= -1
 
-    return equation.strip('+ ').strip()
+    equation = ("x2" if a > 0 else "-x2") if abs(a) == 1 else (str(a) + "x2") if a != 0 else ""
+
+    if len(equation) != 0:
+        equation += (" + x" if b > 0 else " - x") if abs(b) == 1 else \
+            (" - " + str(abs(b)) + "x" if b < 0 else " + " + str(b) + "x") if b != 0 else ""
+    else:
+        equation += ("x" if b > 0 else "-x") if abs(b) == 1 else (str(b) + "x") if b != 0 else ""
+
+    if len(equation) != 0:
+        if c != 0:
+            equation += " - " + str(abs(c)) if c < 0 else " + " + str(c)
+    else:
+        equation = str(abs(c))
+
+    equation += " = 0"
+
+    return equation
 
 
 def quadratic_equation_solver(equation: str):
     """
     Solve the normalized quadratic equation.
 
-    :param str: quadratic equation
+    :param equation: quadratic equation
     https://en.wikipedia.org/wiki/Quadratic_formula
     :return:
     if there are no solutions, return None.
@@ -254,32 +460,25 @@ def quadratic_equation_solver(equation: str):
     if there are 2 solutions, return them in a tuple, where smaller is first
     all numbers are returned as floats.
     """
-    find_quantifier = partial(_process_certain_quantizer, append_plus=False, hide_one=False)
+    a = calculate_sum(regex_a, equation)
+    b = calculate_sum(regex_b, equation)
+    c = calculate_sum(regex_c, equation)
 
-    def quantifier_as_int(equation: str, regex) -> int:
-        quantifier = find_quantifier(equation, regex).replace('- ', '-')
-        return int(quantifier)
-
-    a = quantifier_as_int(equation, REGEX_A)
-    b = quantifier_as_int(equation, REGEX_B)
-    c = quantifier_as_int(equation, REGEX_C)
-
-    if not a:
-        return -c / b
-    discriminant = b ** 2 - 4 * a * c
-    if discriminant < 0:
-        return None
-
-    def find_answer(a: int, b: int, operation: Callable[[int, int], int]):
-        return operation(-b, math.sqrt(discriminant)) / (2 * a)
-
-    answer1, answer2 = find_answer(a, b, operator.add), find_answer(a, b, operator.sub)
-    if answer1 == answer2:
-        return answer1
-    return tuple(sorted([answer1, answer2]))
+    if a == 0 and b != 0:
+        return - c / b
+    else:
+        discriminant = (b ** 2) - (4 * a * c)
+        if discriminant > 0:
+            x1 = (- b - sqrt(discriminant)) / (2 * a)
+            x2 = (- b + sqrt(discriminant)) / (2 * a)
+            return (x1, x2) if x1 < x2 else (x2, x1)
+        elif discriminant == 0:
+            return (- b - sqrt(discriminant)) / (2 * a)
+        else:
+            return None
 
 
-def find_primes_in_range(biggest_number: int):
+def find_primes_in_range(biggest_number: int) -> list:
     """
     Find all primes in range(end inclusive).
 
@@ -287,19 +486,25 @@ def find_primes_in_range(biggest_number: int):
     https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
     :return: list of primes
     """
+    nums = [True] * (biggest_number + 1)
+    primes = []
 
-    def is_prime(num: int) -> bool:
-        if num == 1:
-            return False
-        for i in range(2, num):
-            if num % i == 0:
-                return False
-        return True
+    for i in range(2, int(sqrt(biggest_number)) + 1):
+        if nums[i] is True:
+            for j in range(0, biggest_number):
+                index = i * i + j * i
+                if index > biggest_number:
+                    break
+                nums[index] = False
 
-    return [num for num in range(1, biggest_number + 1) if is_prime(num)]
+    for i in range(2, len(nums)):
+        if nums[i]:
+            primes.append(i)
+
+    return primes
 
 
-def find_composites_in_range(biggest_number: int):
+def find_composites_in_range(biggest_number: int) -> list:
     """
     Find all composites in range(end inclusive).
 
@@ -307,11 +512,28 @@ def find_composites_in_range(biggest_number: int):
     :return: list of composites
     :param biggest_number: all composites in range of biggest_number(included)
     """
-    primes = set(find_primes_in_range(biggest_number))
-    return [num for num in range(1, biggest_number + 1) if num not in primes]
+    composites = []
+
+    primes = find_primes_in_range(biggest_number)
+
+    for i in range(2, biggest_number + 1):
+        if i not in primes:
+            composites.append(i)
+
+    return composites
 
 
-def find_fibonacci_numbers(biggest_number: int):
+def calc_fibonacci(n: int) -> int:
+    """
+    Calculate n-th Fibonacci number.
+
+    :param n: n-th number
+    :return: n-th Fibonacci number
+    """
+    return n if n < 2 else calc_fibonacci(n - 2) + calc_fibonacci(n - 1)
+
+
+def find_fibonacci_numbers(biggest_number: int) -> list:
     """
     Find all Fibonacci numbers in range(end inclusive).
 
@@ -320,17 +542,35 @@ def find_fibonacci_numbers(biggest_number: int):
     https://en.wikipedia.org/wiki/Fibonacci_number
     :return: list of fibonacci numbers
     """
-    if biggest_number == 1:
-        return [0]
-    if biggest_number == 2:
-        return [0, 1]
-    fibonacci_numbers = [0, 1]
-    for i in range(2, biggest_number + 1):
-        fibonacci_numbers.append(fibonacci_numbers[i - 1] + fibonacci_numbers[i - 2])
-    return fibonacci_numbers[1:]
+    fibonacci = []
+
+    if biggest_number >= 0:
+        for i in range(0, biggest_number + 2):
+            if calc_fibonacci(i) > biggest_number:
+                break
+            fibonacci.append(calc_fibonacci(i))
+
+    return fibonacci
 
 
-def find_catalan_numbers(biggest_number: int):
+def calc_catalan(n: int) -> int:
+    """
+    Calculate n-th Catalan number.
+
+    :param n: n-th number
+    :return: n-th Catalan number
+    """
+    if n <= 1:
+        return 1
+
+    res = 0
+    for i in range(n):
+        res += calc_catalan(i) * calc_catalan(n - i - 1)
+
+    return res
+
+
+def find_catalan_numbers(biggest_number: int) -> list:
     """
     Find all Catalan numbers in range(end inclusive).
 
@@ -339,35 +579,20 @@ def find_catalan_numbers(biggest_number: int):
     https://en.wikipedia.org/wiki/Catalan_number
     :return: list of catalan numbers
     """
+    catalan = []
 
-    @lru_cache
-    def catalan(num: int) -> int:
-        if num <= 1:
-            return 1
-        result = 0
-        for i in range(num):
-            result += catalan(i) * catalan(num - i - 1)
+    for i in range(0, biggest_number + 1):
+        if calc_catalan(i) > biggest_number:
+            break
+        catalan.append(calc_catalan(i))
 
-        return result
-
-    catalan_numbers = []
-    for n in range(1, biggest_number + 1):
-        catalan_numbers.append(catalan(n))
-    return catalan_numbers
+    return catalan
 
 
 if __name__ == '__main__':
-    student = Student(100)
-    print(student.possible_answers)
-    student.deal_with_number_order(True, False)
-    print(student.possible_answers)
-    exit(0)
-    print(quadratic_equation_solver("x1 = 1"))
-    print(quadratic_equation_solver("x2 + 2x = 3"))  # => "x2 + 2x - 3 = 0" OK
-    print(quadratic_equation_solver("0 = 3 + 1x2"))  # => "x2 + 3 = 0"
-    print(quadratic_equation_solver("2x + 2 = 2x2"))  # => "2x2 - 2x - 2 = 0"
-    print(quadratic_equation_solver("0x2 - 2x = 1"))  # => "2x + 1 = 0"
-    print(quadratic_equation_solver("0x2 - 2x = 1"))  # => "2x + 1 = 0"
-    print(quadratic_equation_solver(
-        "2x2 + 3x - 4 + 0x2 - x1 + 0x1 + 12 - 12x2 = 4x2 + x1 - 2"))  # => "14x2 - x - 10 = 0"
-
+    test = Student(45)
+    print(test.possible_answers)
+    text = 'This number, that you need to guess is composite.'
+    print(f"server > student: {text}")
+    text = test.decision_branch(text)
+    print(f"student > server: {text}")

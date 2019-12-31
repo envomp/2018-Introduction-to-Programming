@@ -2,7 +2,6 @@
 from random import choice
 
 
-
 def normalize_user_name(name: str) -> str:
     """
     Simple function gets player name as input and capitalizes it.
@@ -33,9 +32,9 @@ def check_user_choice(choice: str) -> str:
     :param choice: user choice
     :return: choice or an error message
     """
-    if choice.lower() in ["rock", "paper", "scissors"]:
-        return choice.lower()
-    return "Sorry, you entered unknown command."
+    choices = "rock", "paper", "scissors"
+
+    return choice.lower() if choice.lower() in choices else 'Sorry, you entered unknown command.'
 
 
 def determine_winner(name: str, user_choice: str, computer_choice: str, reverse_name: bool = False) -> str:
@@ -53,23 +52,39 @@ def determine_winner(name: str, user_choice: str, computer_choice: str, reverse_
     :param reverse_name:
     :return:
     """
-    name = normalize_user_name(reverse_user_name(name) if reverse_name else name)
-    user_choice, computer_choice = check_user_choice(user_choice), check_user_choice(computer_choice)
+    name = reverse_user_name(name) if reverse_name else normalize_user_name(name)
+    user_choice = check_user_choice(user_choice)
+    computer_choice = check_user_choice(computer_choice)
+    winner = ""
 
-    if user_choice not in ["rock", "paper", "scissors"] or computer_choice not in ["rock", "paper", "scissors"]:
-        return "There is a problem determining the winner."
+    if user_choice != 'Sorry, you entered unknown command.' and \
+            computer_choice != 'Sorry, you entered unknown command.':
+        if user_choice == 'rock':
+            if computer_choice == 'paper':
+                winner = 'computer'
+            elif computer_choice == 'scissors':
+                winner = name
+        elif user_choice == 'paper':
+            if computer_choice == 'scissors':
+                winner = 'computer'
+            elif computer_choice == 'rock':
+                winner = name
+        else:  # User choice scissors
+            if computer_choice == 'rock':
+                winner = 'computer'
+            elif computer_choice == 'paper':
+                winner = name
 
-    hashmap = {"rock": 0, "paper": 1, "scissors": 2}
-    if user_choice == computer_choice:
-        result = f"it is a draw"
+        return f"{name} had {user_choice} and computer had {computer_choice}, hence {winner} wins." if winner else \
+            f"{name} had {user_choice} and computer had {computer_choice}, hence it is a draw."
     else:
-        result = f"{'computer' if (3 + hashmap[user_choice] - hashmap[computer_choice]) % 3 == 2 else name} wins"
-    return f"{normalize_user_name(name)} had {check_user_choice(user_choice)} and computer had {check_user_choice(computer_choice)}, hence {result}."
+        return 'There is a problem determining the winner.'
 
 
 def play_game() -> None:
     """
-    Enables you to play the game you just created.
+    Enable to play the game.
+
     :return:
     """
     user_name = input("What is your name? ")
@@ -82,4 +97,4 @@ def play_game() -> None:
 
 
 if __name__ == "__main__":
-    print(f"Jõudsin koju kell kuus. {'Kõht oli tühi. Leidsin veel toitu. Sõin ära. ' * 3} ja siis oli kõht täis.")
+    play_game()  # Kommenteeri see rida välja kui kõik funktsioonid on valmis

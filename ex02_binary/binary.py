@@ -1,4 +1,5 @@
-"""Converter."""
+"""Dec2bin and Bin2dec Converters."""
+
 
 def dec_to_binary(dec: int) -> str:
     """
@@ -7,11 +8,16 @@ def dec_to_binary(dec: int) -> str:
     :param dec: decimal number to convert
     :return: number in binary
     """
-    bin_ans = ""
-    while dec != 0:
-        bin_ans += str(dec % 2)
-        dec //= 2
-    return "0" if not bin_ans else bin_ans[::-1]
+    binary = ""
+
+    if dec == 0:
+        return "0"
+
+    while dec:
+        binary = str(dec % 2) + binary
+        dec = dec // 2
+
+    return binary
 
 
 def binary_to_dec(binary: str) -> int:
@@ -21,15 +27,19 @@ def binary_to_dec(binary: str) -> int:
     :param binary: binary number to convert
     :return: number in decimal
     """
-    results = 0
-    for i, e in enumerate(binary[::-1]):
-        results += int(e) * (2 ** i)
-    return results
+    dec = 0
+
+    for i in range(0, len(binary)):
+        dec += int(binary[i]) * (2 ** (len(binary) - i - 1))
+
+    return dec
 
 
 if __name__ == "__main__":
-    assert binary_to_dec("0") == 0
-    assert binary_to_dec("1") == 1
-    assert binary_to_dec("10001101") == int("10001101", 2)
-    assert binary_to_dec("10110") == int("10110", 2)
-    assert binary_to_dec("11101") == int("11101", 2)
+    print(dec_to_binary(145))  # -> 10010001
+    print(dec_to_binary(245))  # -> 11110101
+    print(dec_to_binary(255))  # -> 11111111
+
+    print(binary_to_dec("1111"))  # -> 15
+    print(binary_to_dec("10101"))  # -> 21
+    print(binary_to_dec("10010"))  # -> 18
