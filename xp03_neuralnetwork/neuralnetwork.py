@@ -292,6 +292,7 @@ def guess_animal1(image_path: str) -> str:
     return labels[index[0]]
 
 
+
 def guess_animal(image_path: str) -> str:
     """
     Read the image file and guess the animal.
