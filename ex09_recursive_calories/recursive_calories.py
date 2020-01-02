@@ -190,11 +190,16 @@ def count_strings(data: list, pos=None, result: dict = None) -> dict:
     :param result: figure out how to use it
     :return: dict of given symbols and their count
     """
-    return go_recc(1)
+    return go_recc([], 1000)
 
-def go_recc(a):
-    while True:
-        return go_recc(2 ** (a+1))
+def go_recc(items, a):
+    if a == 0:
+        return items
+    temp = []
+    for i in range(a):
+        temp.append(i)
+    items.append(temp)
+    return go_recc(items, a)
 
 
 if __name__ == "__main__":
