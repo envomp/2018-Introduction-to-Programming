@@ -190,13 +190,13 @@ def count_strings(data: list, pos=None, result: dict = None) -> dict:
     :param result: figure out how to use it
     :return: dict of given symbols and their count
     """
-    return go_recc([], 1000)
+    return go_recc([], 1)
 
 def go_recc(items, a):
-    if a == 0:
+    if a == 1000:
         return items
     temp = []
-    for i in range(a * 10000):
+    for i in range(a * 100):
         temp.append(i)
     items.append(temp)
     return go_recc(items, a - 1)
