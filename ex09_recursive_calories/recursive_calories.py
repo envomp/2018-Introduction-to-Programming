@@ -145,6 +145,7 @@ def cycle(cyclists: list, distance: float, time: int = 0, index: int = None) -> 
                  index + 1 if index < len(cyclists) - 2 else 0)
 
 
+
 def count_strings2(data: list, pos=None, result: dict = None) -> dict:
     """
     Count strings. Sliceing method.
