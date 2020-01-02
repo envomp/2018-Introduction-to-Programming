@@ -215,7 +215,7 @@ class Student:
         """
         self.possible_answers.difference_update(update)
 
-    def deal_with_number_of_zeroes(self, amount_of_zeroes: int) -> None:
+    adef deal_with_number_of_zeroes(self, amount_of_zeroes: int) -> None:
         """
         Filter possible_answers to match the amount of zeroes in its binary form.
 
@@ -247,7 +247,7 @@ class Student:
 
             self.possible_answers.intersection_update(is_amount_of_ones)
 
-    def deal_with_primes(self, is_prime: bool) -> None:
+    adef deal_with_primes(self, is_prime: bool) -> None:
         """
         Filter possible answers to either keep or remove all primes.
 
