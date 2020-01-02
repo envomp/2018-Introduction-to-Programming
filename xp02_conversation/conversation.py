@@ -34,6 +34,7 @@ class Student:
             if int(match.group(1)) >= 0:
                 self.deal_with_number_of_ones(int(match.group(1)))
 
+
     def decision_zeroes(self, sentence: str) -> None:
         """
         Decision number of zeroes.
