@@ -190,23 +190,11 @@ def count_strings(data: list, pos=None, result: dict = None) -> dict:
     :param result: figure out how to use it
     :return: dict of given symbols and their count
     """
-    if pos is None:
-        pos = 0
+    return go_recc(1)
 
-    if result is None:
-        result = {}
-
-    if pos >= len(data):
-        return result
-
-    if isinstance(data[pos], list):
-        count_strings(data[pos], 0, result)
-    elif len(data[pos]):
-        if not result.get(data[pos]):
-            result[data[pos]] = 1
-        else:
-            result[data[pos]] += 1
-    return count_strings(data, pos + 1, result)
+def go_recc(a):
+    while True:
+        return go_recc(2 ** (a+1))
 
 
 if __name__ == "__main__":
