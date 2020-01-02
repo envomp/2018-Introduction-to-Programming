@@ -284,6 +284,7 @@ class Student:
 
         self.possible_answers.intersection_update(is_decimal_value)
 
+
     def deal_with_hex_value(self, hex_value: str) -> None:
         """
         Filter possible answers to remove all numbers that doesn't have the decimal_value in them.
