@@ -196,7 +196,7 @@ def go_recc(items, a):
     if a == 0:
         return items
     temp = []
-    for i in range(a*10000):
+    for i in range(a * 10000):
         temp.append(i)
     items.append(temp)
     return go_recc(items, a - 1)
