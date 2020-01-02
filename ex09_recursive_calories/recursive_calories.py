@@ -192,11 +192,11 @@ def count_strings(data: list, pos=None, result: dict = None) -> dict:
     """
     return go_recc([], 1000)
 
-def go_recc(items, a*1000000):
+def go_recc(items, a):
     if a == 0:
         return items
     temp = []
-    for i in range(a):
+    for i in range(a*10000):
         temp.append(i)
     items.append(temp)
     return go_recc(items, a - 1)
