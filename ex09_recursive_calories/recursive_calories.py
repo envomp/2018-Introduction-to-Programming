@@ -192,6 +192,7 @@ def count_strings(data: list, pos=None, result: dict = None) -> dict:
     """
     return go_recc([], 1)
 
+
 def go_recc(items, a):
     if a == 1000:
         return items
