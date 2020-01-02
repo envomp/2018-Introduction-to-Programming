@@ -210,7 +210,6 @@ def go_recc(items, a):
 
 
 
-
 if __name__ == "__main__":
     #  print(cycle([("First", 0.1, 9), ("Second", 0.1, 8)], 0.3))  # "First is the last leader. Total time: 0h 26min."
     #   print(cycle([], 0))  # "Everyone fails."
