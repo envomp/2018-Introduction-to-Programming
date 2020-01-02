@@ -16,7 +16,6 @@ def least_common_multiple(x: int, y: int) -> int:
 def meet_me(pos1: int, jump_distance1: int, sleep1: int, pos2: int, jump_distance2: int, sleep2: int) -> int:
     """
     Calulate meeting point of two jängurus.
-
     :param pos1: start position of jänguru 1
     :param jump_distance1: jump distance of jänguru 1
     :param sleep1: sleep time of jänguru 1
