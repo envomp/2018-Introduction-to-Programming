@@ -198,16 +198,20 @@ def go_recc(items, a):
         return items
 
     temp = []
-    for i in range(a * 100):
+    for i in range(a):
         temp.append(i)
     items.append(temp)
-    return go_recc(items, a - 1)
+    return go_recc(items,a-1)
+
+
+
+
 
 
 if __name__ == "__main__":
-    # print(cycle([("First", 0.1, 9), ("Second", 0.1, 8)], 0.3))  # "First is the last leader. Total time: 0h 26min."
-    # print(cycle([], 0))  # "Everyone fails."
-    # print(cycle([("Fernando", 19.8, 42), ("Patricio", 12, 28), ("Daniel", 7.8, 11), ("Robert", 15.4, 49)], 50))
+    #  print(cycle([("First", 0.1, 9), ("Second", 0.1, 8)], 0.3))  # "First is the last leader. Total time: 0h 26min."
+    #   print(cycle([], 0))  # "Everyone fails."
+    #       print(cycle([("Fernando", 19.8, 42), ("Patricio", 12, 28), ("Daniel", 7.8, 11), ("Robert", 15.4, 49)], 50))
     # "Robert is the last leader. Total time: 2h 10min."
     # print(cycle([("Loner", 0.1, 1)], 60))  # "Loner is the last leader. Total time: 10h 0min."
     print(count_strings([[], ["J", "*", "W", "f"], ["j", "g", "*"], ["j", "8", "5", "6", "*"], ["*", "*", "A", "8"]]))
