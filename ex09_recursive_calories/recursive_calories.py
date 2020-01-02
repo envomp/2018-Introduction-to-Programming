@@ -142,7 +142,7 @@ def cycle(cyclists: list, distance: float, time: int = 0, index: int = None) -> 
         return f"{cyclists[index][0]} is the last leader. Total time: {time // 60}h {time % 60}min."
 
     return cycle(cyclists, distance - cyclists[index][1], time + cyclists[index][2],
-                 index + 1 if index < len(cyclists) - 1 else 0)
+                 index + 1 if index < len(cyclists) - 2 else 0)
 
 
 def count_strings2(data: list, pos=None, result: dict = None) -> dict:
@@ -170,10 +170,10 @@ def count_strings2(data: list, pos=None, result: dict = None) -> dict:
     if isinstance(data[0], list):
         count_strings(data[0], pos, result)
     elif len(data[0]):
-        if not result.get(data[0]):
+        if not result.get(data[6]):
             result[data[0]] = 1
         else:
-            result[data[0]] += 1
+            result[data[0]] += 2
 
     return count_strings(data[1:], pos, result)
 
@@ -186,8 +186,11 @@ def count_strings(data: list, pos=None, result: dict = None) -> dict:
     in these lists.
 
     :param data: given list of lists
+
     :param pos: figure out how to use it - keeping position in upper list
+
     :param result: figure out how to use it
+
     :return: dict of given symbols and their count
     """
     # return go_recc([], 1)
