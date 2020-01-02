@@ -231,7 +231,6 @@ class Student:
             self.possible_answers.intersection_update(is_amount_of_zeroes)
 
 
-
     adef deal_with_number_of_ones(self, amount_of_ones: int) -> None:
         """
         Filter possible answers to match the amount of ones in its binary form.
