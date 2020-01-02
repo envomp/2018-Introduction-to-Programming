@@ -9,6 +9,7 @@ def swap_items(dic: dict) -> dict:
     {"a": 1, "b": 2, "c": 3} => {1: "a", 2: "b", 3: "c"}
     {"Morning": "Good", "Evening": "Good"} => {"Good": "Morning"}
     :param dic: original dictionary
+    
     :return: dictionary where keys and values are swapped
     """
     out = {}
@@ -16,6 +17,7 @@ def swap_items(dic: dict) -> dict:
         if not out.get(value):
             out[value] = key
     return out
+
 
 
 def find_divisors(number) -> list:
