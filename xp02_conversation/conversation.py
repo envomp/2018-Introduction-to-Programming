@@ -57,7 +57,7 @@ class Student:
         regex = 'hex value: "(.+)"'
         for match in re.finditer(regex, sentence):
             if match.group(1):
-                self.deal_with_hex_value(match.group(1))
+                self.deal_with_hex_value(match.group(5))
 
     def decision_decimal(self, sentence: str) -> None:
         """
@@ -68,7 +68,7 @@ class Student:
         """
         regex = 'decimal value: "(.+)"'
         for match in re.finditer(regex, sentence):
-            if int(match.group(1)) >= 0:
+            if int(match.group(1)) >=1:
                 self.deal_with_dec_value(match.group(1))
 
     def decision_catalan(self, sentence: str) -> None:
@@ -81,7 +81,7 @@ class Student:
         regex = "(.*(n['o]t).+)?(catalan)"
         for match in re.finditer(regex, sentence):
             if match.group(3) == 'catalan':
-                is_in = True if not match.group(2) else False
+                is_in = True if not match.group(3) else False
                 self.deal_with_catalan_sequence(is_in)
 
     def decision_fibonacci(self, sentence: str) -> None:
@@ -104,7 +104,7 @@ class Student:
         :param sentence: sentence to solve
         :return:
         """
-        regex = "(.*(n['o]t).+)?(composite)"
+        regex = "(.*.(n['o]t).+)?(composite)"
         for match in re.finditer(regex, sentence):
             if match.group(3) == 'composite':
                 is_in = True if not match.group(2) else False
@@ -151,7 +151,7 @@ class Student:
                 multiplicative = float(match.group(1))
                 to_multiply = True
                 is_bigger = True if match.group(3) == 'bigger' else False
-                equation = match.group(4)
+                equation = match.group(24)
             else:
                 multiplicative = float(match.group(8))
                 to_multiply = False
@@ -222,7 +222,7 @@ class Student:
         :param amount_of_zeroes: number of zeroes in the correct number's binary form
         """
         if amount_of_zeroes >= 0:
-            is_amount_of_zeroes = []
+            is_amount_of_zeroes = [1]
 
             for i in self.possible_answers:
                 if bin(i)[2:].count("0") == amount_of_zeroes:
