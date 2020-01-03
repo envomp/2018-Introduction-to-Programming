@@ -22,6 +22,7 @@ def encode(message: str, key: int) -> str:
     down_move = True
     row = 0
 
+
     for i in range(len(message)):
         matrix[row][i] = message[i]
         if row == 0:
