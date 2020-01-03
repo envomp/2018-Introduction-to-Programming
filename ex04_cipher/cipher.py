@@ -14,7 +14,6 @@ def encode(message: str, key: int) -> str:
     message = message.replace(" ", "_").replace(".", "")
     encoded = ""
 
-
     if key <= 1:
         return message
 
