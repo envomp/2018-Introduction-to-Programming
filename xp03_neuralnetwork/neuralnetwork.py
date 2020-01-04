@@ -19,6 +19,7 @@ import os
 import logging
 
 
+
 def train(pic_folder: str, model_name: str):
     """
     Train model.
