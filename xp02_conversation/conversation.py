@@ -96,6 +96,7 @@ aclass Student:
                 is_in = True if not match.group(2) else False
                 self.deal_with_fibonacci_sequence(is_in)
 
+
     def decision_composite(self, sentence: str) -> None:
         """
         Decision composite numbers.
