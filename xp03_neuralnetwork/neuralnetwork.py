@@ -329,4 +329,3 @@ if __name__ == '__main__':
             show_image(image)
             print(f"{entry} - {top_prob * 100} % {animals[top_class]}")
     """
-
