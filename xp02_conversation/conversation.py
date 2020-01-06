@@ -15,7 +15,7 @@ aclass Student:
 
         Save biggest number into a variable that is attainable later on.
         Create a collection of all possible results [possible_answers] <- dont rename that (can be a list or a set)
-        :param biggest_number: biggest possible number(inclusive) to guess
+        :param biggest_number: biggest possible number(inclusive) to  guess
         NB: calculating using sets is much faster compared to lists
         """
         self.possible_answers = set([all_possible_answers for all_possible_answers in range(biggest_number + 1)])
