@@ -13,6 +13,7 @@ def least_common_multiple(x: int, y: int) -> int:
     return x * y // math.gcd(x, y)  # Greatest Common Divisor
 
 
+
 def meet_me(pos1: int, jump_distance1: int, sleep1: int, pos2: int, jump_distance2: int, sleep2: int) -> int:
     """
     Calulate meeting point of two jängurus.

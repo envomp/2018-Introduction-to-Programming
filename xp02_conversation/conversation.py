@@ -6,7 +6,7 @@ regex_a = '(((?<= )|(?<=^))(- )?[0-9]*)x2( |$)'
 regex_b = '(((?<= )|(?<=^))(- )?[0-9]*)x1?( |$)'
 regex_c = '(((?<= )|(?<=^))(- )?(?<!x)[0-9]+)(?!x)( |$)'
 
-aclass Student:
+class Student:
     """Class Student."""
 
     def __init__(self, biggest_number: int) -> None:
