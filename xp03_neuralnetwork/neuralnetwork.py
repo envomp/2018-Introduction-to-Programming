@@ -25,8 +25,9 @@ data_transforms = {
     ])
 }
 
+
 class ImageClassifier:
-    """Image classifier class............"""
+    """Image classifier class."""
 
     def __init__(self, device, class_count: int):
         """Initialize classifier instance."""
