@@ -9,6 +9,7 @@ class SamePokemonFightException(Exception):
     pass
 
 
+
 class PokemonFightResultsInATieException(Exception):
     """Custom exception thrown when the fight lasts longer than 100 rounds."""
 
