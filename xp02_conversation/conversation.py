@@ -160,6 +160,7 @@ class Student:
 
             self.deal_with_quadratic_equation(equation, to_multiply, multiplicative, is_bigger)
 
+
     def decision_branch(self, sentence: str) -> str:
         """
         Regex can and should be used here.
