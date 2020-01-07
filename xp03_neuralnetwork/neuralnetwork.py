@@ -25,6 +25,7 @@ data_transforms = {
     ])
 }
 
+
 class ImageClassifier:
     """Image classifier class."""
 
